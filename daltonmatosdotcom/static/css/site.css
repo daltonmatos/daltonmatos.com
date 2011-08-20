@@ -1766,3 +1766,8 @@ div.twipsy .twipsy-arrow {
 .green {
   color: #0db505;
 }
+.socialbar {
+  float: right;
+  padding-top: 20px;
+  padding-right: 5px;
+}
