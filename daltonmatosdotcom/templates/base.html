@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title> daltonmatos.com - {%block title%} {%endblock%} </title>
+    <link rel="stylesheet" type="text/css" href="/static/css/site.css" />
+  </head>
+
+
+  <body>
+
+    <div class="container maincontent">
+    <div class="topbar">
+      
+      <div class="container">
+        <h3><a href="/" class="logo"> daltonmatos<span class="green">.com </span></a></h3>
+          
+          <ul class="nav secondary-nav">
+              <li class="{{home_active}}"><a href="/">Home</a></li>
+              <li class="{{projects_active}}"><a href="/projects">Projetos</a></li>
+              <li class="{{blog_active}}"><a href="/blog">Blog</a></li>
+              <li class="{{about_active}}"><a href="/about">Sobre</a></li>
+              <li class="{{contact_active}}"><a href="/contact">Contato</a></li>
+            </ul>
+        </div>
+      </div>
+
+      <div>
+          {% block body %}
+          {% endblock %}
+      </div>
+
+
+    </div>
+  </body>
+</html>
