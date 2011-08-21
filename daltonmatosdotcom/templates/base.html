@@ -7,12 +7,11 @@
 
   <body>
 
-    <div class="container">
-    <div class="topbar">
-      
+      <div class="topbar">
         <div class="container">
-          <h3><a href="/" class="logo"> daltonmatos<span class="green">.com </span></a></h3>
-            
+              <div class="logo columns10">
+                <img src="/static/images/logo.png"/>
+              </div>
 
           <div class="socialbar">
             <a href="https://twitter.com/daltonmatos" target="_new"><img src="/static/images/twitter.png"/></a>
@@ -24,9 +23,8 @@
             <a href="http://daltonmatos.wordpress.com" target="_new"><img src="/static/images/wordpress.png"/></a>
             <a href="http://daltonmatos.wordpress.com/feed/" target="_new"><img src="/static/images/rss.png"/></a>
           </div>
-        </div>
-        <div class="container">
-            <ul class="nav secondary-nav">
+
+            <ul class="">
                 <li class="{{home_active}}"><a href="/">Home</a></li>
                 <li class="{{projects_active}}"><a href="/projects">Projetos</a></li>
                 <li class="{{blog_active}}"><a href="/blog">Blog</a></li>
@@ -36,12 +34,10 @@
         </div>
       </div>
 
-      <div class="maincontent">
+      <div class="maincontent container">
           {% block body %}
           {% endblock %}
       </div>
 
-
-    </div>
   </body>
 </html>

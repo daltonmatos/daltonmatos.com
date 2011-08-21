@@ -1105,7 +1105,7 @@ table.zebra-striped th.headerSortUp.purple, table.zebra-striped th.headerSortDow
  * ---------------------------------------------------------------------------- */
 div.topbar {
   background-color: rgba(0, 0, 0, 0.9);
-  height: 87px;
+  height: 112px;
   position: fixed;
   top: 0;
   left: 0;
@@ -1120,25 +1120,11 @@ div.topbar a {
   color: #bfbfbf;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
-div.topbar ul li a:hover, div.topbar ul li.active a, div.topbar a.logo:hover {
+div.topbar ul li a:hover, div.topbar ul li.active a {
   background-color: rgba(255, 255, 255, 0.15);
   background-color: #222;
   color: #ffffff;
   text-decoration: none;
-}
-div.topbar a.logo {
-  float: left;
-  display: block;
-  padding: 8px 20px 12px;
-  margin-left: -20px;
-  color: #ffffff;
-  font-size: 20px;
-  font-weight: 200;
-  line-height: 1;
-}
-div.topbar a.logo img {
-  float: left;
-  margin-right: 6px;
 }
 div.topbar form {
   float: left;
@@ -1761,12 +1747,12 @@ div.twipsy .twipsy-arrow {
   margin-bottom: 0;
 }
 .maincontent {
-  padding-top: 107px;
+  padding-top: 132px;
 }
 .green {
   color: #0db505;
 }
 .socialbar {
   float: right;
-  padding-top: 10px;
+  padding-top: 20px;
 }
