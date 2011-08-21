@@ -52,8 +52,8 @@ html, body {
 }
 body {
   margin: 0;
-  #font > .sans-serif(normal,@basefont,@baseline);
-  color: @gray;
+  #font > .serif(normal, @basefont, @baseline);
+  color: @black;
   text-rendering: optimizeLegibility;
 }
 
@@ -85,7 +85,7 @@ div.container-fluid {
 // Links
 a {
   color: @linkColor;
-  text-decoration: none;
+  text-decoration: underline dotted;
   line-height: inherit;
   &:hover {
     color: @linkColorHover;
