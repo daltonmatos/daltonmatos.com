@@ -37,7 +37,7 @@ header,section,footer,article,aside{display:block;}
 .row .offset11{margin-left:680px !important;}.row .offset11:first-child{margin-left:660px !important;}
 .row .offset12{margin-left:740px !important;}.row .offset12:first-child{margin-left:720px !important;}
 html,body{background-color:#fff;}
-body{margin:0;font-family:"Georgia",Times New Roman,Times,sans-serif;font-size:18px;font-weight:normal;line-height:23px;color:#000000;text-rendering:optimizeLegibility;}
+body{margin:0;font-family:"Georgia",Times New Roman,Times,sans-serif;font-size:18px;font-weight:normal;line-height:23px;color:#000000;text-rendering:optimizeLegibility;text-align:justify;}
 div.container{width:940px;margin:0 auto;}
 div.container-fluid{padding:20px;zoom:1;}div.container-fluid:after{display:block;visibility:hidden;height:0;clear:both;content:".";}
 div.container-fluid div.sidebar{float:left;width:220px;}
@@ -53,7 +53,7 @@ button.btn::-moz-focus-inner,input[type=submit].btn::-moz-focus-inner{padding:0;
 p{font-family:"Georgia",Times New Roman,Times,sans-serif;font-size:18px;font-weight:normal;line-height:23px;margin-bottom:23px;}p small{font-size:11px;color:#bfbfbf;}
 h1,h2,h3,h4,h5,h6{font-weight:bold;color:#404040;}h1 small,h2 small,h3 small,h4 small,h5 small,h6 small{color:#bfbfbf;}
 h1{font-family:"Georgia",Times New Roman,Times,sans-serif;font-size:48px;font-weight:bold;line-height:69px;margin-bottom:0px;}h1 small{font-size:18px;}
-h2{font-family:"Georgia",Times New Roman,Times,sans-serif;font-size:32px;font-weight:bold;line-height:46px;color:#808080;}h2 small{font-size:14px;}
+h2{font-family:"Georgia",Times New Roman,Times,sans-serif;font-size:32px;font-weight:bold;line-height:46px;color:#808080;padding-top:40px;}h2 small{font-size:14px;}
 h3,h4,h5,h6{line-height:46px;}
 h3{font-size:18px;}h3 small{font-size:14px;}
 h4{font-size:16px;}h4 small{font-size:12px;}
@@ -216,3 +216,4 @@ div.twipsy .twipsy-arrow{position:absolute;width:0;height:0;}
 .green{color:#0db505;}
 .socialbar{float:right;padding-top:20px;}
 .footer{height:250px;background-color:#000;}
+.small{font-family:"Georgia",Times New Roman,Times,sans-serif;font-size:14px;font-weight:bold;line-height:23px;color:#000000;}
