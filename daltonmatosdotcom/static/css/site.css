@@ -215,5 +215,5 @@ div.twipsy .twipsy-arrow{position:absolute;width:0;height:0;}
 .maincontent{padding-top:132px;}
 .green{color:#0db505;}
 .socialbar{float:right;padding-top:20px;}
-.footer{height:250px;background-color:#000;}
+.footer{height:50px;background-color:#000;margin-top:60px;padding-top:25px;font-family:"Georgia",Times New Roman,Times,sans-serif;font-size:14px;font-weight:normal;line-height:16px;color:#fff;text-align:center;}.footer a{color:#404040;text-decoration:underline;}
 .small{font-family:"Georgia",Times New Roman,Times,sans-serif;font-size:14px;font-weight:bold;line-height:23px;color:#000000;}
