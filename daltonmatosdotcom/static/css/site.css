@@ -1105,7 +1105,7 @@ table.zebra-striped th.headerSortUp.purple, table.zebra-striped th.headerSortDow
  * ---------------------------------------------------------------------------- */
 div.topbar {
   background-color: rgba(0, 0, 0, 0.9);
-  height: 100px;
+  height: 87px;
   position: fixed;
   top: 0;
   left: 0;
@@ -1761,13 +1761,12 @@ div.twipsy .twipsy-arrow {
   margin-bottom: 0;
 }
 .maincontent {
-  padding-top: 120px;
+  padding-top: 107px;
 }
 .green {
   color: #0db505;
 }
 .socialbar {
   float: right;
-  padding-top: 20px;
-  padding-right: 5px;
+  padding-top: 10px;
 }
