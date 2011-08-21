@@ -4,9 +4,13 @@ from django.conf.urls.defaults import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('mainsite.views',
     # Examples:
-    url(r'^$', 'mainsite.views.index'),
+    url(r'^$', 'index'),
+    url(r'^about', 'about'),
+    url(r'^blog', 'blog'),
+    url(r'^contact', 'contact')
+
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
