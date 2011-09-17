@@ -2,6 +2,8 @@
   <head>
     <title> daltonmatos.com - {%block title%} {%endblock%} </title>
     <link rel="stylesheet" type="text/css" href="/static/css/site.css" />
+    <script src="/static/js/jquery-1.6.4.min.js"></script>
+    <script src="/static/js/bootstrap-twipsy.js"></script>
     <script type="text/javascript">
 
       var _gaq = _gaq || [];
@@ -28,13 +30,13 @@
               </div>
 
           <div class="socialbar">
-            <a href="https://twitter.com/daltonmatos" target="_new"><img src="/static/images/twitter.png"/></a>
-            <a href="https://github.com/daltonmatos" target="_new"><img src="/static/images/octocat.png"/></a>
-            <a href="/contact"><img src="/static/images/email.png"/></a>
-            <a href="http://delicious.com/daltonmatos" target="_new"><img src="/static/images/delicious.png"/></a>
-            <a href="/contact"><img src="/static/images/googletalk.png"/></a>
-            <a href="http://google.com/profiles/daltonmatos" target="_new"><img src="/static/images/google.png"/></a>
-            <a href="http://daltonmatos.wordpress.com" target="_new"><img src="/static/images/wordpress.png"/></a>
+            <a rel='twipsy' title='@daltonmatos' href="https://twitter.com/daltonmatos" target="_new"><img src="/static/images/twitter.png"/></a>
+            <a rel='twipsy' title='github.com/daltonmatos' href="https://github.com/daltonmatos" target="_new"><img src="/static/images/octocat.png"/></a>
+            <a rel='twipsy' title='daltonmatos@gmail.com' href="/contact"><img src="/static/images/email.png"/></a>
+            <a rel='twipsy' title='delicious.com/daltonmatos' href="http://delicious.com/daltonmatos" target="_new"><img src="/static/images/delicious.png"/></a>
+            <a rel='twipsy' title='daltonmatos@gmail.com' href="/contact"><img src="/static/images/googletalk.png"/></a>
+            <a rel='twipsy' title='Dalton Barreto' href="http://google.com/profiles/daltonmatos" target="_new"><img src="/static/images/google.png"/></a>
+            <a rel='twipsy' title='daltonmatos.wordpress.com' href="http://daltonmatos.wordpress.com" target="_new"><img src="/static/images/wordpress.png"/></a>
             <a href="http://daltonmatos.wordpress.com/feed/" target="_new"><img src="/static/images/rss.png"/></a>
           </div>
 
@@ -58,6 +60,13 @@
            Css: <a href="http://twitter.github.com/bootstrap/" target="_bootstrap">twitter bootstrap</a> | Ícones: <a href="http://www.webdesignerdepot.com/2010/08/buddycons-vector-social-media-icons/" target="_icons">Buddycons</a> | Rodando com: <a href="http://wsgid.com" target="_wsgid">wsgid</a> + <a href="http://mongrel2.org" target="_mongrel2">mongrel2</a>
          </div>
       </div>
-
+      <script> 
+        $(function () {
+          $("a[rel=twipsy]").twipsy({
+            live: true,
+            placement: 'below'
+          })
+        })
+      </script> 
   </body>
 </html>
