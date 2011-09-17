@@ -6,6 +6,10 @@
 
 @topBarHeight:	    112px;
 @linkColor:         #000;
+@linkColorHover:    lighten(@linkColor, 25);
+
+//@basefont:          18px;
+//@baseline:          23px;
 
 // Core variables and mixins
 @import "../bootstrap.css/lib/mixins.less";
@@ -18,6 +22,9 @@
 @import "../bootstrap.css/lib/forms.less";
 @import "../bootstrap.css/lib/tables.less";
 @import "../bootstrap.css/lib/patterns.less";
+
+
+@import "topbar.less";
 
 .maincontent {
   padding-top: @topBarHeight + 20;
