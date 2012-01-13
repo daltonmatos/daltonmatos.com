@@ -31,14 +31,38 @@
               </div>
 
           <div class="socialbar">
-            <div class="sprite-social-twitter"><a rel='twipsy' title='@daltonmatos' href="https://twitter.com/daltonmatos" target="_new" ></a></div>
-            <a rel='twipsy' title='github.com/daltonmatos' href="https://github.com/daltonmatos" target="_new"><img src="/static/images/octocat.png"/></a>
-            <a rel='twipsy' title='daltonmatos@gmail.com' href="/contact"><img src="/static/images/email.png"/></a>
-            <a rel='twipsy' title='delicious.com/daltonmatos' href="http://delicious.com/daltonmatos" target="_new"><img src="/static/images/delicious.png"/></a>
-            <a rel='twipsy' title='daltonmatos@gmail.com' href="/contact"><img src="/static/images/googletalk.png"/></a>
-            <a rel='twipsy' title='Dalton Barreto' href="http://google.com/profiles/daltonmatos" target="_new"><img src="/static/images/google.png"/></a>
-            <a rel='twipsy' title='daltonmatos.wordpress.com' href="http://daltonmatos.wordpress.com" target="_new"><img src="/static/images/wordpress.png"/></a>
-            <a href="http://daltonmatos.wordpress.com/feed/" target="_new"><img src="/static/images/rss.png"/></a>
+            <a href="https://twitter.com/daltonmatos" target="_new">
+              <div class="sprite-social-twitter" rel='twipsy' title='@daltonmatos'></div>
+            </a>
+            
+            <a href="https://github.com/daltonmatos" target="_new">
+              <div class="sprite-social-octocat" rel='twipsy' title='github.com/daltonmatos'></div>
+            </a>
+            
+            <a href="/contact">
+              <div class="sprite-social-email" rel='twipsy' title='daltonmatos@gmail.com'></div>
+            </a>
+            
+            <a href="http://delicious.com/daltonmatos" target="_new">
+              <div class="sprite-social-delicious" rel='twipsy' title='delicious.com/daltonmatos'></div>
+            </a>
+            
+            <a href="/contact">
+              <div class="sprite-social-googletalk" rel='twipsy' title='daltonmatos@gmail.com'></div>
+            </a>
+            
+            <a href="http://google.com/profiles/daltonmatos" target="_new">
+              <div class="sprite-social-google" rel='twipsy' title='Dalton Barreto'></div>
+            </a>
+            
+            <a href="http://daltonmatos.wordpress.com" target="_new">
+              <div class="sprite-social-wordpress" rel='twipsy' title='daltonmatos.wordpress.com'></div>
+            </a>
+            
+            <a href="http://daltonmatos.wordpress.com/feed/" target="_new">
+              <div class="sprite-social-rss" rel='twipsy' title='Feed RSS'></div>
+            </a>
+
           </div>
 
             <ul>
@@ -63,7 +87,7 @@
       </div>
       <script> 
         $(function () {
-          $("a[rel=twipsy]").twipsy({
+          $("div[rel=twipsy]").twipsy({
             live: true,
             placement: 'below'
           })

@@ -2352,6 +2352,9 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
   float: right;
   padding-top: 20px;
 }
+.socialbar a {
+  float: left;
+}
 .footer {
   height: 50px;
   background-color: #000;
