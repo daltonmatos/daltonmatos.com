@@ -18,11 +18,15 @@ CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 
 DELETE_OUTPUT_DIRECTORY = True
 
-STATIC_PATHS = ['extra/CNAME', ]
+STATIC_PATHS = ['extra/favicon.png', 'extra/CNAME', ]
 EXTRA_PATH_METADATA = {
     'extra/CNAME': {
         'path': 'CNAME'
     },
+    'extra/favicon.png': {
+        'path': 'favicon.png'
+    },
+
 }
 
 # Following items are often useful when publishing
