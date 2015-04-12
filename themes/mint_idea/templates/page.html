@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block headextra %}
+    <meta http-equiv="content-language" content="cs" />
+    <meta name="author" lang="cs" content="..." />
+    <meta name="copyright" lang="cs" content="..." />
+    <meta name="description" content="..." />
+    <meta name="keywords" content="..." />
+    <meta name="robots" content="all,follow" />
+    <title> {{page.title}} </title>
+{% endblock %}
+
+{% block content%}
+
+  <div id="container" class="box">
+  <h1> {{page.title}} </h1>
+
+  <p> {{page.content}} </p>
+  </div>
+
+{% endblock %}
