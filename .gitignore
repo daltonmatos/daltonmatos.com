@@ -28,3 +28,5 @@ pip-log.txt
 
 # Data created by the unit tests
 test/unit/app-path/
+
+cache/
