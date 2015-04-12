@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs" lang="cs">
+{% block head %}
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />    
+    <link href="{{SITE_URL}}/theme/css/screen.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="{{SITE_URL}}/theme/css/typogrify.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="{{SITE_URL}}/theme/css/pygments.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <!--[if lte IE 6]>
+    <link href="{{SITE_URL}}/theme/css/msie.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <![endif]-->
+    
+    {% block headextra %}{% endblock %}
+    
+  </head>
+{% endblock %}
+
+  <body>
+    <div id="layout">
+      
+      <div id="header">
+        
+        <h1 id="logo"><a href="/" title="Home"><span class="light">daltonmatos.com</span><span class="leaf">&nbsp;</span></a></h1>
+        <hr class="noscreen" />
+     
+      <hr class="noscreen" />
+      
+      <div id="nav" class="box">
+        <ul>
+          <li><a href="/">Home<br /></a></li>
+          <li><a href="/">Blog<br /></a></li>
+					<li><a href="/">About<br /></a></li>
+					<li><a href="/"><br /></a></li>
+					<li><a href="/"><br /></a></li>
+				</ul>
+        <hr class="noscreen" />
+      </div> 
+
+{% block content %}
+
+{% endblock %}
+
+{% block footer %}
+    <div id="footer">
+      <span class="f-left">&copy; 2015 
+        <a href="/">Your name</a>
+      </span> 
+      <span class="f-right">Design: 
+        <a href="http://www.davidkohout.cz">David Kohout</a>
+      </span>
+    </div>
+{% endblock %}
+
+    </div> <!-- header -->
+  </div> <!-- layout -->
+  </body>
+</html>
