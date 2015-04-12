@@ -36,6 +36,7 @@ DEFAULT_PAGINATION = False
 
 THEME = 'themes/mint_idea'
 ARTICLE_URL = 'blog/{slug}'
+ARTICLE_PATHS = ['articles']
 ARTICLE_SAVE_AS = 'blog/{slug}/index.html'
 
 
