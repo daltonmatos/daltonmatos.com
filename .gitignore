@@ -30,3 +30,4 @@ pip-log.txt
 test/unit/app-path/
 
 cache/
+output/
