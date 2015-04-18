@@ -98,8 +98,35 @@ Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina 
 
 .. code-block:: c
 
-        #include <avr/io.h>
-        #include <util/delay.h>
+  #include <avr/io.h>
+  #include <util/delay.h>
+
+  // Arduino Pin13 is mapped to PORTB, bit 5
+  // See: http://www.arduino.cc/en/Reference/PortManipulation
+
+  extern char ASM_SYM(char n);
+
+  int main(void){
+
+    uint8_t total_blinks =  ASM_SYM(5);
+    DDRB |= _BV(PB5); /* PIN13 (internal led) as output*/
+
+    PORTB |= _BV(PB5); /* HIGH */
+    for (;;){
+      uint8_t i;
+      for (i = 0; i < total_blinks; i++){
+        PORTB |= _BV(PB5); /* HIGH */
+        _delay_ms(200);
+
+        PORTB &= ~_BV(PB5); /* LOW */
+          _delay_ms(200);
+      }
+      _delay_ms(1000);
+    }
+
+    return 0;
+  }
+
         
 
 Como vamos usar esse mesmo código para linkar com vários códigos ASM diferentes, dexamos o nome da função como uma constante (``ASM_SYM``) e vamos passar um valor para essa constante para o ``avr-gcc``, no momento de compilar esse código.
