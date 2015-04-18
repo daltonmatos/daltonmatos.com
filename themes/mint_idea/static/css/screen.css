@@ -25,9 +25,10 @@ h5 { font-size:100%; }
 
 /* layout ---------------------------------------------------------------------- */
 #layout { 
-  width:790px; 
+  width:920px; 
   margin:0 auto; 
-  text-align:left; 
+  text-align:justify;
+  text-justify: auto; 
 }
   #container { 
   padding-top: 12px;
@@ -130,15 +131,13 @@ h5 { font-size:100%; }
       #footer p { margin:0; padding-top:10px; }
 
 
-
-
 /* paragraphs -------------------------------------------------------------------- */
 p { margin:15px 0; }
 
 /* tables --------------------------------------------------------------------- */
-table { margin:15px 0; border: 1px solid #324455; border-collapse:collapse; border-spacing:0; font-size:100%; width: 100%;}
-th { text-align:center; font-weight:bold; border: 1px solid #324455;}
-th, td { padding:4px 6px; border: 1px solid #324455;}
+table { margin:15px 0; border: 0px solid #324455; border-collapse:collapse; border-spacing:0; font-size:100%;}
+th { text-align:center; font-weight:bold; border: 0px solid #324455;}
+th, td { padding:4px 6px; border: 0px solid #324455;}
 tr.table-top {background: #425364; font-weight: bold;}
 
 /* lists --------------------------------------------------------------------- */
