@@ -2,7 +2,7 @@
 :author: Dalton Barreto
 :date: 2015-04-12
 :status: draft
-
+:tags: avr, microcontrollers, avr-C, avr-assembly
 
 Contexto
 ========
