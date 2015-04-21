@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 
 {% block headextra %}
-    <meta http-equiv="content-language" content="cs" />
-    <meta name="author" lang="cs" content="..." />
-    <meta name="copyright" lang="cs" content="..." />
-    <meta name="description" content="..." />
-    <meta name="keywords" content="..." />
+<meta http-equiv="content-language" content="{{article.lang}}" />
+    <meta name="author" lang="{{article.lang}}" content="{{article.author}}" />
+    <meta name="description" content="{{article.title|striptags}}" />
+    <meta name="keywords" content="{{article.tags|join(', ')}}" />
     <meta name="robots" content="all,follow" />
     <title> {{article.title}} </title>
 {% endblock %}
