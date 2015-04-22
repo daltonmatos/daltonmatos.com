@@ -1,7 +1,7 @@
 :title: Calling C from AVR_ASsembly (AVRASM2)
 :author: Dalton Barreto
 :date: 2015-04-22
-
+:status: draft
 
 
 O código ASM (que foi convertido a partir de um .HEX) deve ter seus simbolos adicionados (ver post sobre symbol tables/relocation tables). O símbolos devem estar também na relocation table. A diferença é que o símbolo em questão não pertence a nenhuma section, ou seja, fica como *UND*. Confirmar como adicionar um simbolo com essas características.
@@ -40,23 +40,25 @@ OFFSET   TYPE              VALUE
 
 Disassembly:
 
-00000000 <main>:
-   0:   80 e0           ldi     r24, 0x00       ; 0
-   2:   0e 94 00 00     call    0       ; 0x0 <main>
-   6:   25 9a           sbi     0x04, 5 ; 4
-   8:   2d 9a           sbi     0x05, 5 ; 5
-   a:   90 e0           ldi     r25, 0x00       ; 0
-   c:   98 17           cp      r25, r24
-   e:   01 f0           breq    .+0             ; 0x10 <main+0x10>
-  10:   2d 9a           sbi     0x05, 5 ; 5
-  12:   2f ef           ldi     r18, 0xFF       ; 255
-  14:   33 ec           ldi     r19, 0xC3       ; 195
-  16:   49 e0           ldi     r20, 0x09       ; 9
-  18:   21 50           subi    r18, 0x01       ; 1
-  1a:   30 40           sbci    r19, 0x00       ; 0
-  1c:   40 40           sbci    r20, 0x00       ; 0
-  1e:   01 f4           brne    .+0             ; 0x20 <main+0x20>
-  20:   00 c0           rjmp    .+0             ; 0x22 <main+0x22>
+.. code-block:: objdump
+
+  00000000 <main>:
+     0:   80 e0           ldi     r24, 0x00       ; 0
+     2:   0e 94 00 00     call    0       ; 0x0 <main>
+     6:   25 9a           sbi     0x04, 5 ; 4
+     8:   2d 9a           sbi     0x05, 5 ; 5
+     a:   90 e0           ldi     r25, 0x00       ; 0
+     c:   98 17           cp      r25, r24
+     e:   01 f0           breq    .+0             ; 0x10 <main+0x10>
+    10:   2d 9a           sbi     0x05, 5 ; 5
+    12:   2f ef           ldi     r18, 0xFF       ; 255
+    14:   33 ec           ldi     r19, 0xC3       ; 195
+    16:   49 e0           ldi     r20, 0x09       ; 9
+    18:   21 50           subi    r18, 0x01       ; 1
+    1a:   30 40           sbci    r19, 0x00       ; 0
+    1c:   40 40           sbci    r20, 0x00       ; 0
+    1e:   01 f4           brne    .+0             ; 0x20 <main+0x20>
+    20:   00 c0           rjmp    .+0             ; 0x22 <main+0x22>
 
 
 Pela relocation table, instrução em 0x0002 deve ter seu endereço recalculado para onde estiver o símbolo _blinks.
@@ -64,27 +66,29 @@ Pela relocation table, instrução em 0x0002 deve ter seu endereço recalculado 
 
 Ver se faz diferença: A relocation table possui muitas outras entradas, quando fazemos o disassembly junto com o dump da relocation table (avr-objdump -dr ) o disassembly mostra os outros símbolos que seriam realocados, mas a maioria é rjmp. O.o!
 
-00000000 <main>:
-   0:   80 e0           ldi     r24, 0x00       ; 0
-   2:   0e 94 00 00     call    0       ; 0x0 <main>
-                        2: R_AVR_CALL   _blinks
-   6:   25 9a           sbi     0x04, 5 ; 4
-   8:   2d 9a           sbi     0x05, 5 ; 5
-   a:   90 e0           ldi     r25, 0x00       ; 0
-   c:   98 17           cp      r25, r24
-   e:   01 f0           breq    .+0             ; 0x10 <main+0x10>
-                        e: R_AVR_7_PCREL        .text.startup+0x3c
-  10:   2d 9a           sbi     0x05, 5 ; 5
-  12:   2f ef           ldi     r18, 0xFF       ; 255
-  14:   33 ec           ldi     r19, 0xC3       ; 195
-  16:   49 e0           ldi     r20, 0x09       ; 9
-  18:   21 50           subi    r18, 0x01       ; 1
-  1a:   30 40           sbci    r19, 0x00       ; 0
-  1c:   40 40           sbci    r20, 0x00       ; 0
-  1e:   01 f4           brne    .+0             ; 0x20 <main+0x20>
-                        1e: R_AVR_7_PCREL       .text.startup+0x18
-  20:   00 c0           rjmp    .+0             ; 0x22 <main+0x22>
-                        20: R_AVR_13_PCREL      .text.startup+0x22
+.. code-block:: objdump
+
+  00000000 <main>:
+     0:   80 e0           ldi     r24, 0x00       ; 0
+     2:   0e 94 00 00     call    0       ; 0x0 <main>
+                          2: R_AVR_CALL   _blinks
+     6:   25 9a           sbi     0x04, 5 ; 4
+     8:   2d 9a           sbi     0x05, 5 ; 5
+     a:   90 e0           ldi     r25, 0x00       ; 0
+     c:   98 17           cp      r25, r24
+     e:   01 f0           breq    .+0             ; 0x10 <main+0x10>
+                          e: R_AVR_7_PCREL        .text.startup+0x3c
+    10:   2d 9a           sbi     0x05, 5 ; 5
+    12:   2f ef           ldi     r18, 0xFF       ; 255
+    14:   33 ec           ldi     r19, 0xC3       ; 195
+    16:   49 e0           ldi     r20, 0x09       ; 9
+    18:   21 50           subi    r18, 0x01       ; 1
+    1a:   30 40           sbci    r19, 0x00       ; 0
+    1c:   40 40           sbci    r20, 0x00       ; 0
+    1e:   01 f4           brne    .+0             ; 0x20 <main+0x20>
+                          1e: R_AVR_7_PCREL       .text.startup+0x18
+    20:   00 c0           rjmp    .+0             ; 0x22 <main+0x22>
+                          20: R_AVR_13_PCREL      .text.startup+0x22
 
 
 Saber se isso, em um ELF gerado a partir de um .HEX isso seria necessário.
