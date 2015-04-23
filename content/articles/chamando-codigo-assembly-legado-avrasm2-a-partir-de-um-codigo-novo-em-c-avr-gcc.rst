@@ -1,7 +1,10 @@
 :title: Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc)
 :author: Dalton Barreto
 :date: 2015-04-12
+:lang: pt
 :tags: avr, microcontrollers, avr-C, avr-assembly
+:slug: chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc
+:status: published
 
 Contexto
 ========
