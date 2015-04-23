@@ -9,7 +9,7 @@
 Contexto
 ========
 
-Todos os turoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando ``avr-gcc``. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Até mesmo no AVRStudio, quando você escolhe um projeto misto (C+ASM) ele já te sugere usar o ``avr-gcc`` toolchain.
+Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando ``avr-gcc``. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Até mesmo no AVRStudio, quando você escolhe um projeto misto (C+ASM) ele já te sugere usar o ``avr-gcc`` toolchain.
 
 Nem sempre essa é a situação, principalmente quando você está lidando com sistemas legados que foram escritos há muito tempo atrás e que hoje você pode querer juntar com C por vários motivos. Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades.
 
@@ -26,7 +26,7 @@ Antes de podermos começar precisamos ter todos os nossos arquivos em um mesmo f
 Como o AVRASM2 gera Intel Hex (HEX) temos que converter esse conteúdo para elf32-avr (ELF), assim poderemos juntar esse código com nosso código compilado pelo ``avr-gcc``. Não existe uma conversão direta de HEX pra ELF, o que podemos fazer é converter de HEX para flat binary e depois para ELF. A conversão é feita com ``avr-objcopy``.
 
 
-Examplo de código AVRASM2 
+Exemplo de código AVRASM2 
 =========================
 
 Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer o processo completo.
@@ -44,7 +44,7 @@ Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer 
         clr r25
         ret 
 
-Esse código apenas soma o valor 10 ao parametro que ele receber. A linha do ``.include`` é necessária pois é nela que existem as definiçoes de resgitradores e etc para o micro controlador que estivermos usando. Nesse caso estamos usando um ATmega328P, mas poderia ser qualquer outro. Importante notar a instrução ``.org 0x0000``, isso faz com que nosso código seja posicionado no endereço de memória ``0``. Precisaremos saber disso mais adiante.
+Esse código apenas soma o valor 10 ao parametro que ele receber. A linha do ``.include`` é necessária pois é nela que existem as definiçoes de resgitradores e etc para o micro controlador que estivermos usando. Nesse caso estamos usando um ATmega328P, mas poderia ser qualquer outro AVR. Importante notar a instrução ``.org 0x0000``, isso faz com que nosso código seja posicionado no endereço de memória ``0``. Precisaremos saber disso mais adiante.
 
 O HEX gerado pelo AVRASM2 (AVRStudio 4, por exemplo) possui apenas um seção chamada ``.sec1``, então só precisamos copiá-la pra o flat binary.
 
