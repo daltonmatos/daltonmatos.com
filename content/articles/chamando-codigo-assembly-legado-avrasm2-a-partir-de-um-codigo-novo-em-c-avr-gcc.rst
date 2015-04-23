@@ -35,7 +35,7 @@ Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer 
   
       .include "m328Pdef.inc"
 
-      .org 0x000
+      .org 0x0000
 
       _blinks:
         ldi r23, 0xa
@@ -44,7 +44,7 @@ Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer 
         clr r25
         ret 
 
-Esse código apenas soma o valor 10 ao parametro que ele receber. A linha do ``.include`` é necessária pois é nela que existem as definiçoes de resgitradores e etc para o micro controlador que estivermos usando. Nesse caso estamos usando um ATmega328P, mas poderia ser qualquer outro.
+Esse código apenas soma o valor 10 ao parametro que ele receber. A linha do ``.include`` é necessária pois é nela que existem as definiçoes de resgitradores e etc para o micro controlador que estivermos usando. Nesse caso estamos usando um ATmega328P, mas poderia ser qualquer outro. Importante notar a instrução ``.org 0x0000``, isso faz com que nosso código seja posicionado no endereço de memória ``0``. Precisaremos saber disso mais adiante.
 
 O HEX gerado pelo AVRASM2 (AVRStudio 4, por exemplo) possui apenas um seção chamada ``.sec1``, então só precisamos copiá-la pra o flat binary.
 
@@ -90,7 +90,7 @@ Olhando o arquivo ELF de perto, vemos que o símbolo ``_blinks`` não está na t
   0000000a g       *ABS*	        00000000 _binary_blinks_bin_size
 
 
-Olhando esse conteúdo sabemos que a rotina ``_blinks`` começa no endereço ``0x0000``. Sabemos disso por causa da instrução ``.org 0x0000``. Então podemos usar o símbolo ``_binary_blinks_bin_start`` como sendo nosso ponto de entrada no assembly. 
+Os três símobolos ``_binary_*`` foram criados pelo ``avr-objcopy`` e marcam, respectivamente, o início, fim e tamanho total do nosso código, depois de compilado. Mesmo não tendo o símbolo ``_blinks`` podemos deduzir onde ele está. Se voltarmos no código assembly veremos que a instrução ``.org 0x0000`` está lá e sabemos que ela força o posicionamento do ínício do nosso código no endereço ``0``. Então podemos usar o símbolo ``_binary_blinks_bin_start`` como sendo nosso ponto de entrada no código assembly.
 
 Analisando o código em C
 ========================
