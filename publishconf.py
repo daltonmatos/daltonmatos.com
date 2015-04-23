@@ -14,7 +14,11 @@ SITEURL = 'http://daltonmatos.com'
 RELATIVE_URLS = False
 
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
+TRANSLATION_FEED_ATOM = 'feeds/all-%s.atom.xml'
+LANG_EN_FEED_ATOM = TRANSLATION_FEED_ATOM % "en"
+
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
+
 
 DELETE_OUTPUT_DIRECTORY = True
 
