@@ -73,7 +73,7 @@ Agora precisamos converter para ELF:
       -I binary -O elf32-avr blinks.bin blinks.elf
 
 Nesse momento temos um código asembly já pronto para ser link-editado com qualquer outro código gerado pelo avr-gcc. Mas ainda temos alguns problemas. 
-Olhando o arquivo ELF de perto, vemos que o símbolo ``_blinks`` não está na tabela de símbolos e isso será necessário para que o avr-gcc possa getrar o binário final e conseguir fazer a link-edição.
+Olhando o arquivo ELF de perto, vemos que o símbolo ``_blinks`` não está na tabela de símbolos e precisamos saber onde nossa rotina começa para podermos referenciá-la no código C.
 
 .. code-block:: objdump
 
@@ -93,7 +93,7 @@ Olhando esse conteúdo sabemos que a rotina ``_blinks`` começa no endereço ``0
 Analisando o código em C
 ========================
 
-Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina escrita em Assembly. O código é bem simples, tudo que ele faz é piscar o LED que está ligado na porta D13. Como esse código foi testando em um Arduino Nano, a porta D13 é, na verdade, o bit 5 da PORTB.
+Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina escrita em Assembly. O código é bem simples, tudo que ele faz é piscar o LED que está ligado na porta D13. Como esse código foi testando em um Arduino Nano, a porta D13 é, na verdade, o bit 5 da PORTB [#]_.
 
 
 .. code-block:: c
@@ -216,7 +216,7 @@ Agora vamos fazer o mesmo procedimento mas usando um código Assembly que faz us
     add r24, r23
     ret 
 
-O código é basicamente o mesmo, mas forçamos um ``jmp`` apenas para ilustrar nosso problema. Depois que compilamos o avrasm2 e geramos o elf final temos o seguinte:
+O código é basicamente o mesmo, mas forçamos um ``jmp`` apenas para ilustrar nosso problema. Depois que compilamos com o AVRASM2 e geramos o elf final temos o seguinte:
 
 .. code-block:: objdump
 
@@ -267,7 +267,7 @@ Olhando o assembly gerado, vemos que está tudo certo pois nosso código começa
 
 Olhando o código da nossa função ``main()`` vemos que o call é feito corretamente para o endereço ``0x0080``, mas quando olhamos para o código de nossa rotina Assembly, em ``0x0080``, vemos que o endereço para onde o ``jmp`` está indo continua sendo ``0x4`` e olhando esse endereço percebemos que certamente não é o endereço correto. Isso acontece pois o código Assembly foi compilado completamente separado do código C enão tem nehuma ideia de que vai, na verdade, ser inserido no meio de um outro binário e que por isso deveria ter seus endereços ajustados.
 
-O endereo correto para onde o ``jmp`` deveria ir é ``0x0084``. Precisamos fazer, de alguma forma, esses endereços ficarem certos. E se a gente adicionasse ``0x0080`` ao nosso código assembly? Afinal, sabemos que ele será posicionado no endereço ``0x0080`` (vimos isso no disassembly do ELF). Mudando a instrução ``.org 0x0000`` para ``.org 0x0080`` temos o seguinte no elf diassembly do ELF final.
+O endereo correto para onde o ``jmp`` deveria ir é ``0x0084``. Precisamos fazer, de alguma forma, esses endereços ficarem certos. Uma forma bem "suja" de se fazer isso é "deslocar" o código assembly em exatamente ``0x0080``. Afinal, sabemos que ele será posicionado no endereço ``0x0080`` (vimos isso no disassembly do ELF). Mudando a instrução ``.org 0x0000`` para ``.org 0x0080`` temos o seguinte no elf diassembly do ELF final.
 
 .. code-block:: objdump
 
@@ -293,7 +293,7 @@ O que temos aqui é o código da instrução ``oc 94`` e o endereço para onde o
   CSEG _blinks      00000080
   CSEG _add         00000082
 
-isso nos diz que nossa rotina ``_add`` está exatamente no endereço ``0082`` que é o mesmo endereço que vemos no disassembly do ELF, eles estão apenas representados de forma diferente [#]_.
+isso nos diz que nossa rotina ``_add`` está exatamente no endereço ``0082`` que é o mesmo endereço que vemos na codigicação da nossa instrução (``0c 94 82 00``) do ELF, eles estão apenas representados de forma diferente [#]_.
 
 Nossa rotina que estava originalmente no endereço ``0082`` está com o jmp para ``0x104``. Mas ``0x104`` é exatamente o dobro de ``0x0082`` então vamos trocar o nosso ``.org 0x0080`` para ``.org 0x0040`` e ver o que acontece.
 
@@ -357,7 +357,7 @@ Conclusoes
 
 Vimos que é possível gerar um HEX, converter pra ELF e chamar uma rotina Assembly que está dentro desse binário. Mas isso é só o início, ainda temos um longo caminho pela frente até podermos pegar um projeto Assembly realmente grande (10K+ LOC) e mesclar com C.
 
-Quando misturamos C e Assembly existem regras que devemos obedecer no momento de usar os registradores. Essas regras estão descritas nesse documento da Atmel [#]_. Antes de tentar reproduzir o que fizemos aqui em um projeto Assembly grande certifique-se de que o uso dos registradores está em conformidade com essas regras ou as chamadas ao código assembly podem simplesmente não funcionar.
+Quando misturamos C e Assembly existem regras que devemos obedecer no momento de usar os registradores. Essas regras estão descritas nesse documento da Atmel [#]_. Antes de tentar reproduzir o que fizemos aqui em um projeto Assembly maior e com funcionalidades reais certifique-se de que o uso dos registradores está em conformidade com essas regras ou as chamadas ao código assembly podem simplesmente não funcionar.
 
 
 Trabalhos futuros
@@ -366,12 +366,12 @@ Trabalhos futuros
 Ainda tenho muita pesquisa para fazer e algumas hipóteses para confirmar, mas isso é assunto para alguns próxmos posts. Isso inclui:
 
 * Como inserir simbolos na tabela de simbolos dos ELFs gerados. Isso nos daria a possibilidade de chamar rotinas que estão "no meio" do código Assembly;
-* Como trabalhar com relocação de simbolos. Quando vemos o disassembly de um ELF gerado em um projeto C+Assembly completamente feito com ``avr-gcc`` vemos que os simbolos do código assembly são adicionados em uma seção especial do ELF chamada Relocation table. Sabendo manipular esse tabela pode ser que se torne bem mais fácil o uso de código assembly, sem precisar por exemplo desse hack da instrução ``.org`` que precisamos fazer;
+* Como trabalhar com relocação de simbolos. Quando vemos o disassembly de um ELF gerado em um projeto C+Assembly feito com ``avr-gcc`` vemos que os simbolos do código assembly são adicionados em uma seção especial do ELF chamada Relocation table. Sabendo manipular esse tabela pode ser que se torne bem mais fácil o uso de código assembly, sem precisar por exemplo desse hack da instrução ``.org`` que precisamos fazer;
 * Descobrir como fazer a chamada no sentido contrário, ou seja, código assembly legado chamando código novo C. O que fizemos aqui foi apenas código C chamando código Assembly.
 
 Obrigado pela leitura e fique ligado em posts futuros sobre esse assunto. Ainda tenho muita pesquisa para fazer sobre isso.
 
 .. [#] `Intel Hex Format <http://en.wikipedia.org/wiki/Intel_HEX>`_
+.. [#] `Port Registers - Arduino.cc <http://www.arduino.cc/en/Reference/PortManipulation>`_
 .. [#] `Endianness <http://en.wikipedia.org/wiki/Endianness>`_
 .. [#] `Mixing Assembly and C with AVRGCC - Atmel Corporation <http://www.atmel.com/images/doc42055.pdf>`_
-
