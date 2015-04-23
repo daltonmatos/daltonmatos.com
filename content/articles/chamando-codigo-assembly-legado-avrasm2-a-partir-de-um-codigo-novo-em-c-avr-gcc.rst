@@ -6,9 +6,9 @@
 Contexto
 ========
 
-Todos os turoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando ``avr-gcc``. O problema em comum de todos eles é que assumem que você está começando um projeto do zero. Até mesmo no AVRStudio, quando você escolhe um projeto misto (C+ASM) ele já te sugere usar o ``avr-gcc`` toolchain.
+Todos os turoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando ``avr-gcc``. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Até mesmo no AVRStudio, quando você escolhe um projeto misto (C+ASM) ele já te sugere usar o ``avr-gcc`` toolchain.
 
-O problema é que nem sempre essa é a situação, principalmente quando você está lidando com sistemas legados que foram escritos há muito tempo atrás e que hoje você pode querer juntar com C por vários motivos. Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades.
+Nem sempre essa é a situação, principalmente quando você está lidando com sistemas legados que foram escritos há muito tempo atrás e que hoje você pode querer juntar com C por vários motivos. Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades.
 
 Muitos desses projetos ASM (todos?) feitos há muito tempo atrás provavelmente foram feitos com assemblers que não tinham em mente a junção com código C e portanto geram binários que não possuem suporte à link-edição e outras coisas necessárias para que possamos juntar as duas linguagens. Esse é o caso do AVR Studio (que usa o AVRASM2). Ele gera no final do build um arquivo no formato Intel Hex [#]_, que não possui, dentre outras coisas, suporte à link-edição.
 
@@ -128,7 +128,7 @@ Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina 
 
         
 
-Como vamos usar esse mesmo código para linkar com vários códigos ASM diferentes, dexamos o nome da função como uma constante (``ASM_SYM``) e vamos passar um valor para essa constante para o ``avr-gcc``, no momento de compilar esse código.
+Como vamos usar esse mesmo código para linkar com vários códigos ASM diferentes, deixamos o nome da função como uma constante (``ASM_SYM``) e vamos passar um valor para essa constante para o ``avr-gcc``, no momento de compilar esse código.
 
 Compilando tudo e juntando em um mesmo binário
 ==============================================
@@ -264,9 +264,9 @@ Olhando o assembly gerado, vemos que está tudo certo pois nosso código começa
     90:	0e 94 40 00 	call	0x80	; 0x80 < _binary_blinks_bin_start>
     94:	25 9a       	sbi	0x04, 5	; 4
 
-Olhando o código da nossa função ``main()`` vemos que o call é feito corretamente para o endereço ``0x0080``, mas quando olhamos para o código de nossa rotina Assembly, em ``0x0080``, vemos que o endereço para onde o ``jmp`` está indo continua sendo ``0x4`` e olhando esse endereço percebemos que certamente não é o endereço correto. Isso acontece pois o código Assembly foi compilado completamente separado do código C enão tem nehuma ideia de que vai, na verdade, ser inserido no meio de um outro binário e que por isso deveria ter seus endereços ajustados.
+Olhando o código da nossa função ``main()`` vemos que o call é feito corretamente para o endereço ``0x0080``, mas quando olhamos para o código de nossa rotina Assembly, em ``0x0080``, vemos que o endereço para onde o ``jmp`` está indo continua sendo ``0x4`` e olhando esse endereço percebemos que certamente não é o endereço correto. Isso acontece pois o código Assembly foi compilado completamente separado do código C e não tem nehuma ideia de que vai, na verdade, ser inserido no meio de um outro binário e que por isso deveria ter seus endereços ajustados.
 
-O endereo correto para onde o ``jmp`` deveria ir é ``0x0084``. Precisamos fazer, de alguma forma, esses endereços ficarem certos. Uma forma bem "suja" de se fazer isso é "deslocar" o código assembly em exatamente ``0x0080``. Afinal, sabemos que ele será posicionado no endereço ``0x0080`` (vimos isso no disassembly do ELF). Mudando a instrução ``.org 0x0000`` para ``.org 0x0080`` temos o seguinte no elf diassembly do ELF final.
+O endereço correto para onde o ``jmp`` deveria ir é ``0x0084``. Precisamos fazer, de alguma forma, esses endereços ficarem certos. Uma forma bem "suja" de se fazer isso é "deslocar" o código assembly em exatamente ``0x0080``. Afinal, sabemos que ele será posicionado no endereço ``0x0080`` (vimos isso no disassembly do ELF). Mudando a instrução ``.org 0x0000`` para ``.org 0x0080`` temos o seguinte no elf diassembly do ELF final.
 
 .. code-block:: objdump
 
