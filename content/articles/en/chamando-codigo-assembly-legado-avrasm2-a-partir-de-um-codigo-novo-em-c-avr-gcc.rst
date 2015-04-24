@@ -11,18 +11,14 @@
 
 .. #:save_as: blog/en/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/index.html
 
+Contexto
+========
 
+Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando ``avr-gcc``. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Isso significa que o código assembly deve estar na sintaxe que o ``avr-as`` (GNU Assembler) espera encontrar. Quando me refiro a "código legado" estou falando de Assembly feito no AVR Studio, usando o AVRASM2 como Assembler. A sintaxe do Assembly que o ``AVRASM2`` espera é incompatível com a que o ``avr-as`` espera, então não podemos simplesmente pegar o código e compilar com ``avr-as``.
 
-Context
-=======
+Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades. O desafio desse post é conseguir juntar dois projetos que foram feitos usando ferramentas diferentes (``avr-gcc`` e ``AVR Studio``) que, a princípio, são incompatíveis.
 
-Todos os turoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando ``avr-gcc``. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Até mesmo no AVRStudio, quando você escolhe um projeto misto (C+ASM) ele já te sugere usar o ``avr-gcc`` toolchain.
-
-Nem sempre essa é a situação, principalmente quando você está lidando com sistemas legados que foram escritos há muito tempo atrás e que hoje você pode querer juntar com C por vários motivos. Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades.
-
-Muitos desses projetos ASM (todos?) feitos há muito tempo atrás provavelmente foram feitos com assemblers que não tinham em mente a junção com código C e portanto geram binários que não possuem suporte à link-edição e outras coisas necessárias para que possamos juntar as duas linguagens. Esse é o caso do AVR Studio (que usa o AVRASM2). Ele gera no final do build um arquivo no formato Intel Hex [#]_, que não possui, dentre outras coisas, suporte à link-edição.
-
-O que vamos tentar nesse artigo é pegar um projeto feito com AVRASM2 e juntar com código escrito em C e compilado com avr-gcc.
+Muitos desses projetos ASM (todos?) feitos há muito tempo atrás provavelmente foram feitos com assemblers que não tinham em mente a junção com código C e portanto geram binários que não possuem suporte à link-edição e outras coisas necessárias para que possamos juntar as duas linguagens. Esse é o caso do ``AVR Studio`` (quando usando ``AVRASM2`` como Assembler), ele gera no final do build um arquivo no formato Intel Hex [#]_, que não possui, dentre outras coisas, suporte à link-edição.
 
 
 Preparação dos arquivos
@@ -33,7 +29,7 @@ Antes de podermos começar precisamos ter todos os nossos arquivos em um mesmo f
 Como o AVRASM2 gera Intel Hex (HEX) temos que converter esse conteúdo para elf32-avr (ELF), assim poderemos juntar esse código com nosso código compilado pelo ``avr-gcc``. Não existe uma conversão direta de HEX pra ELF, o que podemos fazer é converter de HEX para flat binary e depois para ELF. A conversão é feita com ``avr-objcopy``.
 
 
-Examplo de código AVRASM2 
+Exemplo de código AVRASM2 
 =========================
 
 Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer o processo completo.
@@ -42,7 +38,7 @@ Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer 
   
       .include "m328Pdef.inc"
 
-      .org 0x000
+      .org 0x0000
 
       _blinks:
         ldi r23, 0xa
@@ -51,7 +47,7 @@ Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer 
         clr r25
         ret 
 
-Esse código apenas soma o valor 10 ao parametro que ele receber. A linha do ``.include`` é necessária pois é nela que existem as definiçoes de resgitradores e etc para o micro controlador que estivermos usando. Nesse caso estamos usando um ATmega328P, mas poderia ser qualquer outro.
+Esse código apenas soma o valor 10 ao parametro que ele receber. A linha do ``.include`` é necessária pois é nela que existem as definiçoes de resgitradores e etc para o micro controlador que estivermos usando. Nesse caso estamos usando um ATmega328P, mas poderia ser qualquer outro AVR. Importante notar a instrução ``.org 0x0000``, isso faz com que nosso código seja posicionado no endereço de memória ``0``. Precisaremos saber disso mais adiante.
 
 O HEX gerado pelo AVRASM2 (AVRStudio 4, por exemplo) possui apenas um seção chamada ``.sec1``, então só precisamos copiá-la pra o flat binary.
 
@@ -97,7 +93,7 @@ Olhando o arquivo ELF de perto, vemos que o símbolo ``_blinks`` não está na t
   0000000a g       *ABS*	        00000000 _binary_blinks_bin_size
 
 
-Olhando esse conteúdo sabemos que a rotina ``_blinks`` começa no endereço ``0x0000``. Sabemos disso por causa da instrução ``.org 0x0000``. Então podemos usar o símbolo ``_binary_blinks_bin_start`` como sendo nosso ponto de entrada no assembly. 
+Os três símobolos ``_binary_*`` foram criados pelo ``avr-objcopy`` e marcam, respectivamente, o início, fim e tamanho total do nosso código, depois de compilado. Mesmo não tendo o símbolo ``_blinks`` podemos deduzir onde ele está. Se voltarmos no código assembly veremos que a instrução ``.org 0x0000`` está lá e sabemos que ela força o posicionamento do ínício do nosso código no endereço ``0``. Então podemos usar o símbolo ``_binary_blinks_bin_start`` como sendo nosso ponto de entrada no código assembly.
 
 Analisando o código em C
 ========================
