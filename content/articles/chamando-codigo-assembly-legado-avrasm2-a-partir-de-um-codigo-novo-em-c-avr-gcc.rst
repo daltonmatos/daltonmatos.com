@@ -9,13 +9,11 @@
 Contexto
 ========
 
-Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando ``avr-gcc``. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Até mesmo no AVRStudio, quando você escolhe um projeto misto (C+ASM) ele já te sugere usar o ``avr-gcc`` toolchain.
+Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando ``avr-gcc``. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Isso significa que o código assembly deve estar na sintaxe que o ``avr-as`` (GNU Assembler) espera encontrar. Quando me refiro a "código legado" estou falando de Assembly feito no AVR Studio, usando o AVRASM2 como Assembler. A sintaxe do Assembly que o ``AVRASM2`` espera é incompatível com a que o ``avr-as`` espera, então não podemos simplesmente pegar o código e compilar com ``avr-as``.
 
-Nem sempre essa é a situação, principalmente quando você está lidando com sistemas legados que foram escritos há muito tempo atrás e que hoje você pode querer juntar com C por vários motivos. Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades.
+Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades. O desafio desse post é conseguir juntar dois projetos que foram feitos usando ferramentas diferentes (``avr-gcc`` e ``AVR Studio``) que, a princípio, são incompatíveis.
 
-Muitos desses projetos ASM (todos?) feitos há muito tempo atrás provavelmente foram feitos com assemblers que não tinham em mente a junção com código C e portanto geram binários que não possuem suporte à link-edição e outras coisas necessárias para que possamos juntar as duas linguagens. Esse é o caso do AVR Studio (que usa o AVRASM2). Ele gera no final do build um arquivo no formato Intel Hex [#]_, que não possui, dentre outras coisas, suporte à link-edição.
-
-O que vamos tentar nesse artigo é pegar um projeto feito com AVRASM2 e juntar com código escrito em C e compilado com avr-gcc.
+Muitos desses projetos ASM (todos?) feitos há muito tempo atrás provavelmente foram feitos com assemblers que não tinham em mente a junção com código C e portanto geram binários que não possuem suporte à link-edição e outras coisas necessárias para que possamos juntar as duas linguagens. Esse é o caso do ``AVR Studio`` (quando usando ``AVRASM2`` como Assembler), ele gera no final do build um arquivo no formato Intel Hex [#]_, que não possui, dentre outras coisas, suporte à link-edição.
 
 
 Preparação dos arquivos
