@@ -216,7 +216,7 @@ Agora vamos fazer o mesmo procedimento mas usando um código Assembly que faz us
     add r24, r23
     ret 
 
-O código é basicamente o mesmo, mas forçamos um ``jmp`` apenas para ilustrar nosso problema. Depois que compilamos com o AVRASM2 e geramos o elf final temos o seguinte:
+O código é basicamente o mesmo, mas forçamos um ``jmp`` apenas para ilustrar nosso problema. Depois que compilamos com o AVRASM2 e geramos o elf temos o seguinte:
 
 .. code-block:: objdump
 
@@ -267,7 +267,7 @@ Olhando o assembly gerado, vemos que está tudo certo pois nosso código começa
 
 Olhando o código da nossa função ``main()`` vemos que o call é feito corretamente para o endereço ``0x0080``, mas quando olhamos para o código de nossa rotina Assembly, em ``0x0080``, vemos que o endereço para onde o ``jmp`` está indo continua sendo ``0x4`` e olhando esse endereço percebemos que certamente não é o endereço correto. Isso acontece pois o código Assembly foi compilado completamente separado do código C e não tem nehuma ideia de que vai, na verdade, ser inserido no meio de um outro binário e que por isso deveria ter seus endereços ajustados.
 
-O endereço correto para onde o ``jmp`` deveria ir é ``0x0084``. Precisamos fazer, de alguma forma, esses endereços ficarem certos. Uma forma bem "suja" de se fazer isso é "deslocar" o código assembly em exatamente ``0x0080``. Afinal, sabemos que ele será posicionado no endereço ``0x0080`` (vimos isso no disassembly do ELF). Mudando a instrução ``.org 0x0000`` para ``.org 0x0080`` temos o seguinte no elf diassembly do ELF final.
+O endereço correto para onde o ``jmp`` deveria ir é ``0x0084``. Precisamos fazer, de alguma forma, esses endereços ficarem certos. Uma forma bem "suja" de se fazer isso é "deslocar" o código assembly em exatamente ``0x0080``. Afinal, sabemos que ele será posicionado no endereço ``0x0080`` (vimos isso no disassembly do ELF). Mudando a instrução ``.org 0x0000`` para ``.org 0x0080`` temos o seguinte no diassembly do ELF final.
 
 .. code-block:: objdump
 
