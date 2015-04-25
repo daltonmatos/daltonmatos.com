@@ -5,34 +5,30 @@
 :translation: true
 :tags: avr, microcontrollers, avr-C, avr-assembly
 :slug: chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc
-:status: draft
+:status: published
+:url: blog/en/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc
+:save_as: blog/en/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/index.html
 
-.. #:url: blog/en/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc
+Context
+=======
 
-.. #:save_as: blog/en/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/index.html
+Every tutorial I found online about mixing C and Assembly code show how to do it in the same way, using ``avr-gcc``. The problem with this technique is that it assumes you are starting a new project. This means that the Assembly code must be in a syntax expected by ``avr-as`` (GNU Assembler). When I say "legacy code" I refer to code made with AVR Studio, using ``AVRASM2`` as the assembler. The ``AVRASM2`` syntax is incompatible with ``avr-as`` syntax, so you can't simply take the code and compile with ``avr-as``.
 
-Contexto
-========
+Depending on the size of you project it's not feasible do migrate all at once and that's where it becomes useful to mix C and Assembly, because you can write C code at the same time the system is evolving and eventualy gaining new features. The challenge of this post is to join two projects that were made using different tools (``avr-gcc`` and ``AVR Studio``) that are, at first, incompatible with each other.
 
-Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando ``avr-gcc``. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Isso significa que o código assembly deve estar na sintaxe que o ``avr-as`` (GNU Assembler) espera encontrar. Quando me refiro a "código legado" estou falando de Assembly feito no AVR Studio, usando o AVRASM2 como Assembler. A sintaxe do Assembly que o ``AVRASM2`` espera é incompatível com a que o ``avr-as`` espera, então não podemos simplesmente pegar o código e compilar com ``avr-as``.
+The majority of these legacy projects (all of them?) were made with assemblers that did not expect to be mixed with C, therefore produces binaries that do not support linking and other necessary features so we can join these two languages. This is the case of ``AVR Studio`` (when using ``AVRASM2`` as the assembler) it generates in the end a Inter Hex [#]_ file, which doest not support, amongst other things, linking.
 
-Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades. O desafio desse post é conseguir juntar dois projetos que foram feitos usando ferramentas diferentes (``avr-gcc`` e ``AVR Studio``) que, a princípio, são incompatíveis.
+Preparing the files
+===================
 
-Muitos desses projetos ASM (todos?) feitos há muito tempo atrás provavelmente foram feitos com assemblers que não tinham em mente a junção com código C e portanto geram binários que não possuem suporte à link-edição e outras coisas necessárias para que possamos juntar as duas linguagens. Esse é o caso do ``AVR Studio`` (quando usando ``AVRASM2`` como Assembler), ele gera no final do build um arquivo no formato Intel Hex [#]_, que não possui, dentre outras coisas, suporte à link-edição.
+Before we begin we need to have all files in the same format, so we can use ``avr-gcc`` to generate the final binary, which means that we need to convert all our files to a format that ``avr-gcc`` understands.
 
+Since ``AVRASM2`` generates Intel Hex we need to convert this to ``elf32-avr`` (ELF), this way we will be able to join them using ``avr-gcc``. There isn't a direct conversion between HEX and ELF, what we can do is convert from HEX to flat binary and then to ELF. The conversion is done with ``avr-objcopy``.
 
-Preparação dos arquivos
-=======================
+An AVRASM2 example
+==================
 
-Antes de podermos começar precisamos ter todos os nossos arquivos em um mesmo formato, para que possamos usar o ``avr-gcc`` para gerar nosso binário final. Isso significa que teremos que converter todos os arquivos para um formato que o ``avr-gcc`` entenda. 
-
-Como o AVRASM2 gera Intel Hex (HEX) temos que converter esse conteúdo para elf32-avr (ELF), assim poderemos juntar esse código com nosso código compilado pelo ``avr-gcc``. Não existe uma conversão direta de HEX pra ELF, o que podemos fazer é converter de HEX para flat binary e depois para ELF. A conversão é feita com ``avr-objcopy``.
-
-
-Exemplo de código AVRASM2 
-=========================
-
-Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer o processo completo.
+Let's take this example of a simple code made with ``AVRASM2`` so we can illustrate the complete process.
 
 .. code-block:: asm
   
@@ -47,9 +43,9 @@ Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer 
         clr r25
         ret 
 
-Esse código apenas soma o valor 10 ao parametro que ele receber. A linha do ``.include`` é necessária pois é nela que existem as definiçoes de resgitradores e etc para o micro controlador que estivermos usando. Nesse caso estamos usando um ATmega328P, mas poderia ser qualquer outro AVR. Importante notar a instrução ``.org 0x0000``, isso faz com que nosso código seja posicionado no endereço de memória ``0``. Precisaremos saber disso mais adiante.
+This code just adds 10 to the parameter received. The ``.include`` line is needed because it brings all register/memory definitions for the micro controller we are using. In this case we are using a ATmega328P, but you can use any other AVR. Important to note is the ``.org 0x0000`` instruction, this tells the compiler to put our code at address ``0``. We will need this later.
 
-O HEX gerado pelo AVRASM2 (AVRStudio 4, por exemplo) possui apenas um seção chamada ``.sec1``, então só precisamos copiá-la pra o flat binary.
+The HEX file generated by ``AVRASM2`` (AVR Studio, for example) has only one section named ``.sec1``, so we need to copy only this section to the flat binary.
 
 .. code-block:: objdump
 
@@ -63,22 +59,22 @@ O HEX gerado pelo AVRASM2 (AVRStudio 4, por exemplo) possui apenas um seção ch
                         CONTENTS, ALLOC, LOAD
 
 
-Copiando essa seção para o flat binary:
+Copying this section to the flat ginary:
 
 .. code-block:: shell-session
 
       $ avr-objcopy -j .sec1 -I ihex -O binary blinks.hex blinks.bin
 
 
-Agora precisamos converter para ELF:
+Now we need to convert it to ELF:
 
 .. code-block:: shell-session
 
       $ avr-objcopy  --rename-section .data=.progmem.data,contents,alloc,load,readonly,data \
       -I binary -O elf32-avr blinks.bin blinks.elf
 
-Nesse momento temos um código asembly já pronto para ser link-editado com qualquer outro código gerado pelo avr-gcc. Mas ainda temos alguns problemas. 
-Olhando o arquivo ELF de perto, vemos que o símbolo ``_blinks`` não está na tabela de símbolos e precisamos saber onde nossa rotina começa para podermos referenciá-la no código C.
+At this stage we already have a binary that we can link to our code generated by ``avr-gcc``. But we still have some problems. 
+Looking closer to the ELF we see that the symbol ``_blinks`` is not present in the symbol table and we need to know where our routine begins so we can reference it in the C code.
 
 .. code-block:: objdump
 
@@ -93,13 +89,13 @@ Olhando o arquivo ELF de perto, vemos que o símbolo ``_blinks`` não está na t
   0000000a g       *ABS*	        00000000 _binary_blinks_bin_size
 
 
-Os três símobolos ``_binary_*`` foram criados pelo ``avr-objcopy`` e marcam, respectivamente, o início, fim e tamanho total do nosso código, depois de compilado. Mesmo não tendo o símbolo ``_blinks`` podemos deduzir onde ele está. Se voltarmos no código assembly veremos que a instrução ``.org 0x0000`` está lá e sabemos que ela força o posicionamento do ínício do nosso código no endereço ``0``. Então podemos usar o símbolo ``_binary_blinks_bin_start`` como sendo nosso ponto de entrada no código assembly.
+The three ``_binary_*`` symbols were added by ``avr-objcopy`` and mean, respectivelly, the start, end and size of our code after compiled. Even with he absence of the ``_blinks`` symbol we can infer where it is. If we go back to our assembly code we will see the ``.org 0x0000`` instruction and we know that it forces our code to be located at address ``0``. So we can use the ``_binary_blinks_bin_start`` as being our entry point to the assembly code.
 
-Analisando o código em C
-========================
 
-Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina escrita em Assembly. O código é bem simples, tudo que ele faz é piscar o LED que está ligado na porta D13. Como esse código foi testando em um Arduino Nano, a porta D13 é, na verdade, o bit 5 da PORTB [#]_.
+Looking at the C code
+=====================
 
+To validate our hypothesis, let's do a C code that calls this routine written in Assembly. The code is very simple, all it does is flash the LED that is on the D13 pin. Because we are testing this code in an Arduino Nano, the D13 port is actually bit 5 of PORTB [#]_.
 
 .. code-block:: c
 
@@ -133,20 +129,19 @@ Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina 
   }
 
         
+As we will be using this same code to link with several different assembly codes, we will leave the function name as a constant (``ASM_SYM``) and we will pass a value for this constant to ``avr-gcc`` when compiling this code.
 
-Como vamos usar esse mesmo código para linkar com vários códigos ASM diferentes, deixamos o nome da função como uma constante (``ASM_SYM``) e vamos passar um valor para essa constante para o ``avr-gcc``, no momento de compilar esse código.
+Compilling all the code and linking the final binary
+====================================================
 
-Compilando tudo e juntando em um mesmo binário
-==============================================
-
-A compilação do código em C é simples, nada demais em relação aqualquer outra compilação:
+The compilation of the C code is very simple and is similtar to any other:
 
 .. code-block:: shell-session
 
   $ avr-gcc -mmcu=atmega328p -Os -DF_CPU=16000000 -DASM_SYM=_binary_blinks_bin_start -o main.elf main.c blinks.elf
 
 
-Podemos olhar o ELF gerado para saber se o código parece correto:
+We can look at the ELF to see if the code seems correct:
 
 .. code-block:: shell-session
 
@@ -189,23 +184,21 @@ Podemos olhar o ELF gerado para saber se o código parece correto:
     92:	2d 9a       	sbi	0x05, 5	; 5
 
 
+Some parts of the disassembly were ommited so we can focus on what is important. What we have to note here is where is our assembly code, which in this case is at address ``0x0080``. Looking at our ``main()`` function we can see the ``call 0x80`` instruction, this is exactly the call to our assembly routine.
 
-Algumas partes do código foram omitidas para podermos nos concentrar no que é importante. O que temos que observar aqui é onde está nosso código ASM, que nesse caso está no endereço ``0x0080``. Olhando o código da nossa função ``main`` vemos que a segunda instrução é o ``call 0x80``, que é justamente a chamada à nossa rotina Assembly.
-
-Nesse ponto, temos um ELF que precisamos converter de volta para HEX, para que possamos fazer o flash para o micro controlador.
+At this point all we need to do is convert the ELF back to HEX and flash it to our micro controller.
 
 .. code-block:: shell-session
 
   $ avr-objcopy -I elf32-avr -O ihex -j .text -j .data main.elf main.hex
 
 
-De fato, esse é um exemplo muito simples e provavelmente não representa uma situação real em que temos um projeto Assembly legado que precisa ser migrado para C. Pensando nisso, vamos analisar exemplos mais complexos de código Assembly que fazem uso de outras instruçoes como ``jmp, call, rjmp``.
+Indeed, this is a faily simplistic example and for sure does not represent a real situation with a real legacy assembly project that needs to be translated to C. So let's take a look at a more complex exmaple that make use of other instructions like ``jmp, call, rjmp``.
 
+Example of a code that uses jmp
+===============================
 
-Analisando um código que usa jmp
-================================
-
-Agora vamos fazer o mesmo procedimento mas usando um código Assembly que faz uso da instrução ``jmp``.
+Let's do the same procedure but now using an assembly code that uses the ``jmp`` instruction.
 
 .. code-block:: asm
 
@@ -221,7 +214,7 @@ Agora vamos fazer o mesmo procedimento mas usando um código Assembly que faz us
     add r24, r23
     ret 
 
-O código é basicamente o mesmo, mas forçamos um ``jmp`` apenas para ilustrar nosso problema. Depois que compilamos com o AVRASM2 e geramos o elf final temos o seguinte:
+The code is basically the same, we just forced a ``jmp`` to illustrate out point. Ater compiling with ``AVRASM2`` and converting to ELF we have the following:
 
 .. code-block:: objdump
 
@@ -235,8 +228,7 @@ O código é basicamente o mesmo, mas forçamos um ``jmp`` apenas para ilustrar 
      a:	87 0f       	add	r24, r23
      c:	08 95       	ret
 
-
-Olhando o assembly gerado, vemos que está tudo certo pois nosso código começa e ``0x0000`` e o jmp está indo para o endereço ``0x0004``, que é onde começa nossa rotina ``_add``. Sabemos disso pois a instrução ``clr r1, r1`` é traduzida para ``eor r1, r1``. Agora é hora de juntar isso ao noso código C. Vejamos o Assembly final:
+Looking at this assembly everythink looks right. Our code starts at ``0x0000`` and the ``jmp`` is going to address ``0x0004``, which is where our ``_add`` routine starts. We know this because the ``clr r1, r1`` is translated to ``eor r1, r1``. Now it's time to link all this to our C code. Let's take a look at the final assembly:
 
 .. code-block:: objdump
 
@@ -270,9 +262,9 @@ Olhando o assembly gerado, vemos que está tudo certo pois nosso código começa
     90:	0e 94 40 00 	call	0x80	; 0x80 < _binary_blinks_bin_start>
     94:	25 9a       	sbi	0x04, 5	; 4
 
-Olhando o código da nossa função ``main()`` vemos que o call é feito corretamente para o endereço ``0x0080``, mas quando olhamos para o código de nossa rotina Assembly, em ``0x0080``, vemos que o endereço para onde o ``jmp`` está indo continua sendo ``0x4`` e olhando esse endereço percebemos que certamente não é o endereço correto. Isso acontece pois o código Assembly foi compilado completamente separado do código C e não tem nehuma ideia de que vai, na verdade, ser inserido no meio de um outro binário e que por isso deveria ter seus endereços ajustados.
+Looking at our ``main()`` routine we can see that the call is correctly made to address ``0x0080``, but when we look at our assembly rotine, at ``0x0080``, we see that the address to which ``jmp`` is going is still ``0x4`` which is clearly wrong. This happens because the assembly was compiled without knowing that it would be linked to another code later, thus needing to have its addresses adjusted.
 
-O endereço correto para onde o ``jmp`` deveria ir é ``0x0084``. Precisamos fazer, de alguma forma, esses endereços ficarem certos. Uma forma bem "suja" de se fazer isso é "deslocar" o código assembly em exatamente ``0x0080``. Afinal, sabemos que ele será posicionado no endereço ``0x0080`` (vimos isso no disassembly do ELF). Mudando a instrução ``.org 0x0000`` para ``.org 0x0080`` temos o seguinte no elf diassembly do ELF final.
+The correct address should be ``0x0084``. We need to find a way to adjust these addresses to they are correct in the end. A hacky way of doing this is to "shift" our entire code by ``0x0080``. After all, we know that our assembly code will be located at ``0x0080`` in the final binary (we saw this in the ELF disassembly). Changing the ``.org 0x0000`` to ``.org 0x0080`` produces this assembly:
 
 .. code-block:: objdump
 
@@ -284,24 +276,23 @@ O endereço correto para onde o ``jmp`` deveria ir é ``0x0084``. Precisamos faz
     8a:	87 0f       	add	r24, r23
     8c:	08 95       	ret
 
-Percebemos que o endereço final ainda ficou errado. Mas vamos parar um pouco e analisar como nossa instrução de ``jmp`` foi codificada. Analisando a linha isoladamente temos o segunte:
+The final address is still wrong. But let's take a closer look on how our ``jmp`` instruction was encoded.
 
 .. code-block:: objdump
 
 
     80:	0c 94 82 00 	jmp	0x104	; 0x104 <_etext+0x22>
 
-O que temos aqui é o código da instrução ``oc 94`` e o endereço para onde o ``jmp`` deve ir, nesse caso ``82 00``. Quando compilamos nosso código com o avrasm2 podemos gerar um arquivo adicional que contem todos os labels originais do assembly (opção ``-m``) e seus endereços finais. Olhando esse arquivo temos o seguinte:
+What we have here is the opcode of the instruction ``0c 94`` and the address to which it should jump ``82 00``. When we compile our code with ``AVRASM2`` we can generate an additional map file that has all symbols and their final addresses (``-m`` option). Looking at this file we have:
 
 .. code-block:: shell-session
 
   CSEG _blinks      00000080
   CSEG _add         00000082
 
-isso nos diz que nossa rotina ``_add`` está exatamente no endereço ``0082`` que é o mesmo endereço que vemos na codigicação da nossa instrução (``0c 94 82 00``) do ELF, eles estão apenas representados de forma diferente [#]_.
+This tells us that our ``_add`` is at address ``0082`` which is the same address that we see in our encoded ``jmp`` instruction (``0c 94 82 00``), they are just represented in a different way [#]_.
 
-Nossa rotina que estava originalmente no endereço ``0082`` está com o jmp para ``0x104``. Mas ``0x104`` é exatamente o dobro de ``0x0082`` então vamos trocar o nosso ``.org 0x0080`` para ``.org 0x0040`` e ver o que acontece.
-
+Ou routine that was originally at address ``0x0082`` has a jump to ``0x104``. But ``0x104`` is exactly two times ``0x0082`` so let's change ``.org 0x0080`` to ``.org 0x0040`` and see what happens.
 
 .. code-block:: objdump
 
@@ -313,7 +304,7 @@ Nossa rotina que estava originalmente no endereço ``0082`` está com o jmp para
     8a:	87 0f       	add	r24, r23
     8c:	08 95       	ret
 
-Agora sim temos o ``jmp`` para o endereço correto! Não sei ao certo porque isso funciona mas parece dar certo. Funciona inclusive pra um código assembly em que fazemos uso de várias instruçoes de desvio ao mesmo tempo (``jmp``, ``rjmp``, ``call``):
+Now we have the ``jmp`` instruction going to the right address! I don't know exactly why this happens but it seems to work. Works also with a much more complex assembly code that uses all instructions at the same time (``jmp``, ``rjmp``, ``call``):
 
 .. code-block:: asm
 
@@ -338,7 +329,7 @@ Agora sim temos o ``jmp`` para o endereço correto! Não sei ao certo porque iss
     ldi r23, 0x5
     jmp _add1 
 
-Diassembly do ELF final:
+Final ELF desassembly:
 
 .. code-block:: objdump
 
@@ -357,24 +348,23 @@ Diassembly do ELF final:
 
 
 
-Conclusoes
-==========
+Conclusions
+===========
 
-Vimos que é possível gerar um HEX, converter pra ELF e chamar uma rotina Assembly que está dentro desse binário. Mas isso é só o início, ainda temos um longo caminho pela frente até podermos pegar um projeto Assembly realmente grande (10K+ LOC) e mesclar com C.
+We were able in this post to take an HEX, convert it to ELF and call an assembly routine inside this binary. But this is just the beginning, we have still a long path ahead until we can take a complex assembly project (10K+ LOC) and mix with C.
 
-Quando misturamos C e Assembly existem regras que devemos obedecer no momento de usar os registradores. Essas regras estão descritas nesse documento da Atmel [#]_. Antes de tentar reproduzir o que fizemos aqui em um projeto Assembly maior e com funcionalidades reais certifique-se de que o uso dos registradores está em conformidade com essas regras ou as chamadas ao código assembly podem simplesmente não funcionar.
+When we mix C and Assembly code there are rules about register usage that we need to follow. These rules are described in this Atmel document [#]_. Before you try to reproduce what we did in this post ensure that all register usage complies with those rules or your assembly code may simply not work.
 
+Future Work
+===========
 
-Trabalhos futuros
-=================
+We still have a lot of research to do and some more hypothesis to confirm, but this is the subject for future posts. This includes:
 
-Ainda tenho muita pesquisa para fazer e algumas hipóteses para confirmar, mas isso é assunto para alguns próxmos posts. Isso inclui:
+* How to insert symbols in the symbol table. This would give us the possibility to call an assembly routine that is "in the middle" of the code;
+* How symbol relocation works. When we compare the ELF generated in a C+Assembly project done with ``avr-gcc`` we see that the original assembly symbols (labels) are added to a special section of the ELF called relocatin table. Knowing how to manipulate this table can ease the usage of assembly code and we may even get rid of our ``.org`` instruction hack;
+* Find out how to do the calling in the other direction, that is, call a C function from an assembly routine. What e did here was only C code calling assembly code.
 
-* Como inserir simbolos na tabela de simbolos dos ELFs gerados. Isso nos daria a possibilidade de chamar rotinas que estão "no meio" do código Assembly;
-* Como trabalhar com relocação de simbolos. Quando vemos o disassembly de um ELF gerado em um projeto C+Assembly feito com ``avr-gcc`` vemos que os simbolos do código assembly são adicionados em uma seção especial do ELF chamada Relocation table. Sabendo manipular esse tabela pode ser que se torne bem mais fácil o uso de código assembly, sem precisar por exemplo desse hack da instrução ``.org`` que precisamos fazer;
-* Descobrir como fazer a chamada no sentido contrário, ou seja, código assembly legado chamando código novo C. O que fizemos aqui foi apenas código C chamando código Assembly.
-
-Obrigado pela leitura e fique ligado em posts futuros sobre esse assunto. Ainda tenho muita pesquisa para fazer sobre isso.
+Thank you very much for the reading and stay tuned about the future post on this same subject. There's still a lot to do.
 
 .. [#] `Intel Hex Format <http://en.wikipedia.org/wiki/Intel_HEX>`_
 .. [#] `Port Registers - Arduino.cc <http://www.arduino.cc/en/Reference/PortManipulation>`_
