@@ -22,7 +22,7 @@ CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 
 DELETE_OUTPUT_DIRECTORY = True
 
-STATIC_PATHS = ['extra/favicon.png', 'extra/CNAME', 'extra/robots.txt']
+STATIC_PATHS = ['extra/favicon.png', 'extra/CNAME', 'extra/robots.txt', 'extra/elf-add-symbol.cpp', 'extra/extract-symbols-metadata.py']
 EXTRA_PATH_METADATA = {
     'extra/CNAME': {
         'path': 'CNAME'
@@ -33,7 +33,12 @@ EXTRA_PATH_METADATA = {
     'extra/robots.txt': {
         'path': 'robots.txt'
     },
-
+    'extra/elf-add-symbol.cpp': {
+        'path': 'elf-add-symbol.cpp'
+    },
+    'extra/extract-symbols-metadata.py': {
+        'path': 'extract-symbols-metadata.py'
+    },
 }
 
 # Following items are often useful when publishing
