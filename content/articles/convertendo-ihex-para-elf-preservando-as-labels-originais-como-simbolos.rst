@@ -344,11 +344,11 @@ O que fiz foi compilar um arquivo assembly com o ``avr-gcc`` e usando a ferramen
 
 Peguei o valor ``0x112`` (campo ``Info``) e usei a macro ``ELF32_R_TYPE()`` da própria lib ELFIO [7]_. O retorno dessa chamada foi ``0x12`` que é ``18`` em decimal. Por isso no código do ``elf-add-symbol`` temos a linha ``#define R_AVR_CALL 18``.
 
-.. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `ELF Symbol Table <http://wiki.osdev.org/ELF_Tutorial#The_Symbol_Table>`_
 .. [#] `Endianness <http://en.wikipedia.org/wiki/Endianness>`_
 .. [#] `Código-fonte da ferramenta elf-add-symbol <{filename}/extra/elf-add-symbol.cpp>`_
-.. [#] `ELF Relocation Table <http://en.wikipedia.org/wiki/Endianness>`_
-.. [#] `ELF Relocation Types <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `ELF Relocation Table <http://wiki.osdev.org/ELF_Tutorial#Relocation_Sections>`_
+.. [#] `AVR ELF Relocation Types <https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=include/elf/avr.h;h=115296da404d034d0626ebe57ac2631a6849d239;hb=HEAD#l53>`_
 .. [#] `extract-symbols-metadata <{filename}/extra/extract-symbols-metadata.py>`_
 .. [#] `ElfIO - C++ library for reading and generating ELF files <http://elfio.sourceforge.net/>`_
 
