@@ -58,16 +58,15 @@ Esse código, depois de compilado e linkado com um código C produz esse disasse
     96:   80 e0           ldi     r24, 0x00       ; 0
     98:   0e 94 40 00     call    0x80    ; 0x80 <_binary_build_blink_call_asm_bin_start>
 
-Vamos analisar esse código mais de perto e ver o que está acontecendo: Vemos que nosso código assembly foi posicionado no endereço ``0x0080`` e que nossa funcção ``main()`` faz uma chamada a esse endereço (``call 0x80``). Até aí, tudo OK! Agora vamos ver como nossa rotina assembly ficou no final.
+Vamos analisar esse código mais de perto e ver o que está acontecendo: Vemos que nosso código assembly foi posicionado no endereço ``0x0080`` e que nossa funcção ``main()`` faz uma chamada a esse endereço (``call 0x80``).
 
-Olhando as duas primeiras instruçoes de nossa rotina, vemos que as duas chamadas estão indo para endereços completamente errados (``0x10`` e ``0xa``). É fácil perceber que os endereços corretos deveriam ser, respectivamente, ``0x90`` e ``0x8a``. Até aqui nenhuma novidade em relação ao que já fizemos. Acontece que podemos mostrar ao compilador onde estão nossas rotinas e fazemos isso atráves da tabela de símbolos [#]_.
-
+Olhando as duas primeiras instruçoes de nossa rotina, vemos que as duas chamadas estão indo para endereços completamente errados (``0x10`` e ``0xa``). É fácil perceber que os endereços corretos deveriam ser, respectivamente, ``0x90`` e ``0x8a``. Até aqui nenhuma novidade em relação ao que já fizemos. Acontece que podemos mostrar ao compilador onde cada uma de nossas rotinas começa e fazemos isso atráves da tabela de símbolos [#]_.
 
 Manipulando a tabela de símbolos
 ================================
 
 
-A tabela de símbolos diz ao compilador onde está cada parte do nosso código, no nosso caso, onde estão cada uma das rotinas assembly. Vamos voltar um pouco e olhar nosso código assembly compilado, mas antes de ser linkado ao código C. Se olharmos a tabela de símbolos veremos que so temos os símbolos criados pelo ``avr-objcopy`` quando convertemos de HEX para ELF.
+A tabela de símbolos diz ao compilador onde está cada parte do nosso código, no nosso caso, onde estão cada uma das rotinas assembly. Vamos voltar um pouco e olhar nosso a tabela de símbolos do nosso código assembly compilado, mas antes de ser linkado ao código C. Se olharmos bem veremos que só temos os símbolos criados pelo ``avr-objcopy`` quando convertemos de HEX para ELF.
 
 .. code-block:: text
 
@@ -92,9 +91,65 @@ E o disassembly:
     12:	99 27       	eor	r25, r25
     14:	08 95       	ret
 
-(Lembrando que nesse disasembly das duas primeiras instruçoes estão corretas pois o código ainda não foi linkado com o código C)
+(Lembrando que nesse disasembly as duas primeiras instruçoes estão corretas pois o código ainda não foi linkado com o código C)
 
-Como sabemos onde estão nossas duas rotinas (``_clear`` e ``_real_code``) podemos adicionar dois símoblos à tabela de símbolos. Como não encontrei nenhuma ferramenta que adicionasse símbolos a um ELF, escrevei meu pŕoprio código [#]_ que faz isso, chamei a ferramenta de ``elf-add-symbol``. Nossa nova tabela de símbolos ficou assim:
+Quando convertemos um HEX para ELF perdemos todas as labels (símbolos) originais do Assembly. Na verdade, só de compilar o ASM as labels já são convertidas em endereços absolutos.
+
+Acontece que o ``avrasm2`` pode gerar, no momento da compilação, dois arquivos adicionais: Um tem todos os labels e seus endereços finais (``.map, opção -m``) e o outro tem o código assembly final, ainda em formato de texto mas já com todos os endereços resolvidos (``.lst, opção -l``). Olhando o ``.lst`` vemos como ficou nossa rotina ``_blinks``:
+
+.. code-block:: text
+
+                    .org 0x0000
+                   
+                   _blinks:
+  000000 940e 0008   call _clear
+  000002 940e 0005   call _real_code
+  000004 9508        ret
+                   
+                   _real_code:
+  000005 e07a        ldi r23, 0xa
+  000006 0f87        add r24, r23
+  000007 9508        ret
+                   
+                   _clear:
+  000008 2411        clr r1
+  000009 2799        clr r25
+  00000a 9508        ret 
+
+
+Podemos perceber que a linha do ``jmp`` é codificada como ``940c 0008``. A primeira parte é o código da instrução e a segunda é o endereço para onde ela transfere o controle do código.
+
+No aquivo que contém todos as labels e seus respectivos endereços finais, temos o seguinte:
+
+
+.. code-block:: text
+
+  CSEG _blinks      00000000
+  CSEG _clear       00000008
+  CSEG _real_code   00000005
+
+Aqui temos nossos três símbolos: ``_blinks``, ``_clear`` e ``_real_code``. Olhando o disassembly do arquivo elf vemos que a primeira instrução ``jmp`` foi codificada como: ``0c 94 08 00``, que é essencialmente a mesma coisa que tínhamos no nosso arquivo ``.lst``!
+
+ELF:
+
+.. code-block:: objdump
+
+  00000000 <_blinks>:
+     0:	0e 94 08 00 	call	0x10	; 0x10 <_binary_build_blink_call_asm_bin_start+0x10>
+
+.lst:
+
+.. code-block:: text
+
+                   _blinks:
+  000000 940e 0008   call _clear
+                   
+
+A única diferença entre eles parece ser a representação do bit mais significativo [#]_. No ELF a representação está com o byte menos significativo primeiro (mais à esquerda) e no ``.lst`` está com byte menos signifcativo por último (mais à diretia). Isso significa que nossa rotina ``_clear`` que no HEX estava no endereço ``0x0008`` está agora no ELF no endereço ``0x10``.
+
+Ainda não entendo porque o código da instrução menciona o endereço ``0008`` e o disassemble mostra ``jmp 0x10`` (um é o dobro do outro!), mas percebi que a princípio os endereços sempre coincidem! Ou seja, no ELF os endereços são sempre o dobro dos respectivos endereços no HEX. Talvez isso tenha relação com como o ELF representa internamente as instruçoes. A instrução que vai para o AVR é mesmo ``0c 94 08 00`` ou seja, o ``jmp`` ira saltar para o andereço ``0008`` da memória flash do AVR, mas como estamos adicionando símbolos no ELF, precisamos obeceder o endereçamento que ele mostra.
+
+Agora que sabemos onde estão nossas duas rotinas (``_clear`` e ``_real_code``) dentro do ELF podemos adicionar dois símoblos à tabela de símbolos. Como não encontrei nenhuma ferramenta que adicionasse símbolos a um ELF, escrevei meu pŕoprio código [#]_ que faz isso, chamei a ferramenta de ``elf-add-symbol``. Nossa nova tabela de símbolos ficou assim:
 
 .. code-block:: text
 
@@ -125,13 +180,65 @@ Depois que fazemos isso, até o disassembly muda e fica mais simples de entender
     12:	99 27       	eor	r25, r25
     14:	08 95       	ret
 
-Isso já ajuda mas ainda sim quando linkamos esse código com o código em C, ficamos com alguns endereços errados. Isso porque esse código assembly é apenas **copiado** para alguma posição dentro do binário final, após a link-edição. Precisamos, de alguma forma, dizer ao compilador que o endereço das rotinas ``_real_code`` e ``_clear`` irá mudar e por isso ele deve ajustar o endereço de chamada de quaisquer instruçoes que fizerem referências a essas rotinas.
+Isso já ajuda mas quando linkamos esse código Assembly com código C, mesmo tendo manipulado a tabela de símbolos (que já é um bom começo) ainda ficamos com endreços errados. Vejamos o disassembly final:
+
+
+.. code-block:: objdump
+
+  00000080 <_blinks>:
+    80:   0e 94 08 00     call    0x10    ; 0x10 <__zero_reg__+0xf>
+    84:   0e 94 05 00     call    0xa     ; 0xa <__zero_reg__+0x9>
+    88:   08 95           ret
+
+  0000008a <_real_code>:
+    8a:   7a e0           ldi     r23, 0x0A       ; 10
+    8c:   87 0f           add     r24, r23
+    8e:   08 95           ret
+
+  00000090 <_clear>:
+    90:   11 24           eor     r1, r1
+    92:   99 27           eor     r25, r25
+    94:   08 95           ret
+
+  00000096 <main>:
+    96:   80 e0           ldi     r24, 0x00       ; 0
+    98:   0e 94 40 00     call    0x80    ; 0x80 <_blinks>
+
+
+Perceba que todo nosso codigo Assembly foi posicionado no endereço ``0x0080`` e mesmo nossas duas rotinas auxiliares tendo sido posicionadas, respectivcamente, em ``0x008a`` e ``0x0090`` as duas linhas com as chamadas ``call`` continuam achando que as rotinas estão em ``0x10`` e ``0xa``. É aí que entra a tabela de realocação. 
+
+Isso acontece porque esse código assembly é apenas **copiado** para alguma posição dentro do binário final durante o preocesso de link-edição. Precisamos então, de alguma forma, dizer ao compilador que o endereço das rotinas ``_real_code`` e ``_clear`` irá mudar e por isso ele deve ajustar o endereço de chamada de quaisquer instruçoes que fizerem referências a essas rotinas.
 
 Tabela de realocação
 ====================
 
 A Tabela de realocação [#]_ existe exatamente para dizer ao compilador quais símbolos mudarão de lugar e quais instruçoes ele deve editar e trocar o endereço final. usando a mesma ferramenta que usamos antes, vamos mexer na tabela de realocação.
 
+Para entendermos a tabela de realocação precisamos voltar ao nosso disassembly inicial, antes de ser link-editado ao código C.
+
+.. code-block:: objdump
+
+  Disassembly of section .text:
+
+  00000000 <_blinks>:
+     0:   0e 94 08 00     call    0x10    ; 0x10 <_clear>
+     4:   0e 94 05 00     call    0xa     ; 0xa <_real_code>
+     8:   08 95           ret
+
+  0000000a <_real_code>:
+     a:   7a e0           ldi     r23, 0x0A       ; 10
+     c:   87 0f           add     r24, r23
+     e:   08 95           ret
+
+  00000010 <_clear>:
+    10:   11 24           eor     r1, r1
+    12:   99 27           eor     r25, r25
+    14:   08 95           ret
+
+
+(Usamos a mesma ferramenta [#]_ que escrevi para manipular a tabela de símbolos podemos construir a tabela de realocação)
+
+Vejamos a tabela em detalhes (mais detalhes em como ela foi adicionada no fim do post [#]_):
 
 .. code-block:: text
 
@@ -140,149 +247,26 @@ A Tabela de realocação [#]_ existe exatamente para dizer ao compilador quais s
   00000000 R_AVR_CALL        _clear
   00000004 R_AVR_CALL        _real_code
 
-A tabela funciona da segunte forma. Cada seção do ELF pode ter sua tabela de realocação. Nesse caso, essa tabela de realocação "pertence" à secão ``.text``, ou seja, ela faz referencia apenas a símbolos que existem na seção ``.text``. O campo ``OFFSET`` indica o endereço da instrução que deverá ser editada (veremos isso em detalhe mais adiante). O campo ``TYPE`` indica o tipo de realocação [#]_, confesso que olhei esse valor em um elf gerado pelo avr-gcc (mais sobre isso no fim do post). O campo ``VALUE`` indica qual o símbolo será realocado.
 
-Para entendermais claramente, vamos olhar o disassembly novamente:
+A tabela funciona da segunte forma: Cada seção do ELF pode ter sua tabela de realocação. Nesse caso, essa tabela de realocação "pertence" à secão ``.text``, ou seja, ela faz referência apenas a símbolos que existem na seção ``.text``, que onde estão as instruçoes do nosso código. O campo ``OFFSET`` indica o endereço da instrução que deverá ser editada (veremos isso em detalhe mais adiante). O campo ``TYPE`` indica o tipo de realocação [#]_, confesso que olhei esse valor em um ELF gerado pelo avr-gcc (mais sobre isso no fim do post [#]_). O campo ``VALUE`` indica qual o símbolo será realocado.
 
-.. code-block:: objdump
-
-  Disassembly of section .text:
-
-  00000000 <_blinks>:
-     0:	0e 94 08 00 	call	0x10	; 0x10 <_clear>
-     4:	0e 94 05 00 	call	0xa	; 0xa <_real_code>
-     8:	08 95       	ret
-
-  0000000a <_real_code>:
-     a:	7a e0       	ldi	r23, 0x0A	; 10
-     c:	87 0f       	add	r24, r23
-     e:	08 95       	ret
-
-  00000010 <_clear>:
-    10:	11 24       	eor	r1, r1
-    12:	99 27       	eor	r25, r25
-    14:	08 95       	ret
-
-
-+ Explicar aqui, mostrando no disassembly, cada uma das linhas da relocatin table.
-
-
-
-
-
-
-Quando convertemos um HEX para ELF perdemos todas as labels originais do ASM. Na verdade só de compilar o ASM as labels já são convertidas em endereços absolutos.
-
-Mas olhando o conteúdo do arquivo ``.map`` gerado pelo avrasm2, podemos re-localizar esses símbolos no ELF final. Olhando uma instrução do ELF temos:
-
-.. code-block:: objdump
-
-
-  00000080 <_binary_build_blink_jmp_asm_bin_start>:
-    80:	0c 94 02 00 	jmp	0x4	; 0x4 <__zero_reg__+0x3>
-    84:	11 24       	eor	r1, r1
-
-O endereço ``02 00``, que na verdade é ``0002`` vai aparecer no ``.map``. Olhando lá sabemos que quaisquer labels que estavam originalmente no edereço ``0x0002`` estão agora em ``0x4``.
-
-Bônus para manipulação da tabela de realocação.
-
-
-Acontece que o avrasm2 pode gerar, no momento da compilação, dois arquivos adicionais: Um tem todos os labels e seus endereços finais (``.map``) e o outro tem o código assembly final, ainda em formato de texto mas já com todos os endereços resolvidos (``.lst``). Olhando o ``.lst`` vemos como ficou nossa rotina ``_blinks``:
+Agora vamos analisar cada uma das linhas da tabela de realocação:
 
 .. code-block:: text
 
-  .org 0x0000
-                   
-                   _blinks:
-  000000 940c 0002   jmp _add
-                   
-                   _add:
-  000002 2411        clr r1
-  000003 2799        clr r25
-  000004 e07a        ldi r23, 0xa
-  000005 0f87        add r24, r23
-  000006 9508        ret 
-
-Podemos perceber que a linha do ``jmp`` é codificada como ``940c 0002``. A primeira parte é o código da instrução e a segunda é o endereço para onde ela transfere o controle do código.
-
-No aquivo que contém todos as labels e seus respectivos endereços finais, temos o seguinte:
-
-
-.. code-block:: text
-
-  CSEG _blinks      00000000
-  CSEG _add         00000002
-
-Aqui temos nossos dois símbolos: ``_blinks`` e ``_add``. Olhando o disassembly do arquivo elf vemos que a instrução ``jmp`` foi codificada como: ``0c 94 02 00``, que é essencialmente a mesma coisa que tínhamos no nosso arquivo ``.lst``!
-
-ELF:
-
-.. code-block:: objdump
-
-  00000080 <_binary_build_blink_jmp_asm_bin_start>:
-    80:	0c 94 02 00 	jmp	0x4	; 0x4 <__zero_reg__+0x3>
-
-.lst:
-
-.. code-block:: text
-
-                   _blinks:
-  000000 940c 0002   jmp _add
-                   
-
-A única diferença entre eles parece ser a representação do bit mais significativo [#]_. No ELF a representação está com o byte menos significativo primeiro e no .lst está com byte menos signifcativo por último.
-
-Ainda não entendo porque o código da instrução menciona o endereço ``0002`` e o disassemble mostra ``jmp 0x4``, mas percebi que a primípio os endereços sempre coincidem! =D
-
-
-Criando a tabela de realocação
-==============================
-
-
-Se temos uma chamada a uma função, precisamos (muitas vezes) ajustar o endereço final da chamada. Exemplo de assembly com chamadas (e sub-chamadas):
-
-.. code-block:: objdump
-
-
-  Disassembly of section .text:
-
-  00000000 <_blinks>:
-     0:	0e 94 08 00 	call	0x10	; 0x10 <_clear>
-     4:	0e 94 05 00 	call	0xa	; 0xa <_real_code>
-     8:	08 95       	ret
-
-  0000000a <_real_code>:
-     a:	7a e0       	ldi	r23, 0x0A	; 10
-     c:	87 0f       	add	r24, r23
-     e:	08 95       	ret
-
-  00000010 <_clear>:
-    10:	11 24       	eor	r1, r1
-    12:	99 27       	eor	r25, r25
-    14:	08 95       	ret
-
-
-Reparem que as duas primeiras linhas do código são chamadas call a duas rotinas diferentes. O problema é que quando usamos esse código para ser linkado com um código C que, por exemplo, chama a rotina ``_blinks``, as duas chamadas ficam erradas no arquivo final! Pois coninuam sendo feitas pra ``0x10`` e ``0xa``, mesmo as duas rotinas ``_real_code`` e ``_clear`` tendo sido colocadas em outros endereços. Exemplo:
-
-.. code-block:: objdump
-
- asm de um main.c linkado errado.
-
-
-
-O que precisamos fazer é adicionar ao ELF uma tabela de relocação e indicar quals são as chamadas que precisam ter seus endereços realocados. Segue a tabela de realocação:
-
-.. code-block:: objdump
-
-  with_symbols_blink_call.asm.elf:     file format elf32-avr
-
-  RELOCATION RECORDS FOR [.text]:
-  OFFSET   TYPE              VALUE 
-  00000004 R_AVR_CALL        _real_code
   00000000 R_AVR_CALL        _clear
 
+Essa linha nos diz que a instrução que está na posição ``0x0000`` (``call 0x10``) está fazendo uma chamada a um rotina de nome ``_clear`` e que essa rotina estará em algum lugar no binário final. Seja qual for esse lugar, essa instrução ``call`` deve ser editada e o valor ``0x10`` deve ser trocado pelo endereço final da rotina ``_clear``.
 
-O ``OFFSET`` indica o endereço da instrução que deve o endereço do call ajustado. E o ``VALUE`` é "para onde" o call deve ir. Como os symbolos ``_real_code`` e ``_clear`` serão colocados em algum endereço no binário final, o linker saberá para qual valor ajustar os calls. Ex:
+O mesmo acontece pra a outra linha:
+
+.. code-block:: text
+
+  00000004 R_AVR_CALL        _real_code
+
+Aqui é exatamente a mesma coisa, mas a instrução que será editada é o ``call 0xa`` e o ``0xa`` será trocado pelo endereço final da rotina ``_real_code``.
+
+Agora que temos um ELF com tabela de símbolos e tabela de realocação estamos prontos para re-linkar com nosso código com o código C. Fazendo isso temos o seguinte dissasembly: 
 
 .. code-block:: objdump
 
@@ -301,64 +285,74 @@ O ``OFFSET`` indica o endereço da instrução que deve o endereço do call ajus
     92:   99 27           eor     r25, r25
     94:   08 95           ret
 
-Rotina ``_blinks`` com o endereços dos calls corretamente ajustados!
+E agora temos nosso código assembly com o endereços dos calls corretamente ajustados!
+
+Um detalhe importante é perceber que a instrução foi mesmo editada. Olhando a primaira instrução ``call``, agora ela é codificada como ``0e 94 48 00`` (antes era ``0e 94 08 00``, lembra?) e como os endereços no ELF são sempre o dobro dos endereços no HEX podemos conferir que ``0x90`` (endereço da rotina ``_clear`` no ELF) é exatamente o dobro de ``0x48``, que é o endereço que está codificado na instrução!!
+
+Esse código funciona quando gravado na memória flash do micro controlador!
 
 
-O problema dos .db e .dw
-========================
+Automatizando todo o processo
+=============================
 
-As instrucoes ``.db`` e ``.dw`` reservam espaço para dados incializados. Esses dados ficam "espalhados" pela memória flash, exatamente na posição em que são encontrados no código. Basta olhar o valor que está no arquivo .map para saber onde esse dado estará na memória flash. O problema é que não dá pra "realocar" esses simbolos (da mesma forma que podemos fazer com chamadas call). Isso porque geralmente esse valores são carregados pra um registrador específico e isso gera múltiplas instrucoes, veja:
+É claro que o que fizemos aqui foi uma análise manual de como construir todo o aparato necessário para que possamos realocar rotinas que estão espalhdas pelo nosso código Assembly legado, mas quando estamos lidando com um projeto grande precisamos fazer isso de forma automatizada. Para isso eu escrevi alguns script que me ajudam a manipular a tabela de símbolos e a tabela de realocação.
 
-.. code-block:: asm
+Primeiro escrei um script python (código abaixo) que funciona da segunte maneira:
 
-  .macro print_addr
-    ldz @0
-    movw x, z
-    call PrintNumberLF
-    lrv X1, 0
-  .endm
+Dado o conteudo do arquivo de mapa (``.map`` produzido pelo ``avrasm2``) e a saida do disassembly do ELF ele consegue encontrar o novo endereço dos símbolos dentro do ELF. Usando esse script com o código que analisamos nese post, temos a seguinte saída:
 
-   print_addr hello
-
-   hello:  .db "HELLO", 0
-
-Esse código gera esse assembly:
-
-.. code-block:: objdump
-
- 17a8:       e8 ef           ldi     r30, 0xF8       ; 248
- 17aa:       fb e0           ldi     r31, 0x0B       ; 11
- 17ac:       df 01           movw    r26, r30
- 17ae:       0e 94 49 08     call    0x1092  ; 0x1092 <_binary_main_bin_start+0x1092>
-
-Para o segunte .map:
-
-CSEG hello        00000bf8
+.. code-block:: shell-session
 
 
+  > avr-objdump -d build/blink_call.asm.elf| python2 tools/extract-symbols-metadata.py build/blink_call.asm.map
+  _blinks 0x0000
+  _clear 0x10 0x0
+  _real_code 0xa 0x4
 
-O problema é que o endereço do símbolo **já foi resolvido**! E não temos como instruir o avr-gcc para realocar esses valores, mesmo que saibamos colocar esse símbolona tabela de realocação.
+Olhando em a saída ela representa **exatamente** nossa tabela de realocação. Essa saida é estruturada da segunte forma:
 
-A princípio, **todos** os .db .dw são carregados com a macro ``ldz`` que é essa:
+.. code-block:: text
+
+ <nome_do_símbolo> <endereço_do_símbolo> <endereço_das_instruçoes_que_usam_esse_símbolo>
+
+Agora o que precisamos fazer é transformar essa saída em uma tabela de realocação, dentro o ELF. Para isso usamos a ferramenta ``elf-add-symbol`` (código abaixo). Assumindo que gravamos esse conteudo em ``build/blink_call.asm.symtab`` podemos fazer o seguinte:
+
+.. code-block:: shell-session
+
+  cat build/blink_call.asm.symtab | tools/elf-add-symbol build/blink_call.asm.elf
+
+Essa chama modifica o arquivo ``build/blink_call.asm.elf`` adicionando a tabela de símbolos e a tabela de realocação! E então estamos prontos para link-editar nosso ELF com nosso código C.
+
+Código do script python:
+************************
+
+.. code-block:: python
+
+  print "a"
 
 
+Código da ferramenta elf-add-symbol
+***********************************
 
-Estrategias para conseguir fazer funcionar os .db .dw
-=====================================================
+.. code-block:: cpp
 
- * Talvez se criarmos uma rotina pra **cada** símbolo? Assim poderíamos realocá-la no momento do linking? Como essa rotina saberá "onde foi parar" o símbolo original? Esse é o maior problema.
-
- * Ter o ssembly chamando uma rotina em C para fazer a carga do endereço do símbolo no registrador z? Assim o assebly não vai "resolver o endereço" em tempo de compilaçao, vai apenas chamar essa rotina (que pode ser realocada). Isso demandaria que todos os simbolos .db .dw fossem migrados para o C. Não dá para migrar aos poucos pois todos os símbolos que permanecerem no assembly terão o problema da mudança de endereço, quando forem linkados ao código C.
-
- * Mover todos os .db .dw pra o fim do código, olhar onde eles "vão parar" dentro do ELF e mudar a macro para adicionar um "offset" para "corrigir" o endereço do símbolo. Isso pode ser meio que "invalidado" pois todos os símbolos são carregados multiplicados por 2, pois é uma exigência da instruçao ``lpm``.
+  #include <iostream>
 
 
 
-
-
-
+Engenharia reversa para descobrir o valor do R_AVR_CALL
+=======================================================
 
 
 .. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
 .. [#] `Endianness <http://en.wikipedia.org/wiki/Endianness>`_
-.. [#] `elf-add-symbol <|filename|elf-add-symbol.cpp>`_
+.. [#] `Endianness <http://en.wikipedia.org/wiki/Endianness>`_
