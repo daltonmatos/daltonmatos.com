@@ -1,4 +1,4 @@
-:title: Ihex para ELF com simoblos
+:title: Convertendo Intel HEX para ELF32-avr criando tabela de símbolos e tabela de realocação
 :author: Dalton Barreto
 :date: 2014-04-17
 :status: draft
@@ -66,7 +66,7 @@ Manipulando a tabela de símbolos
 ================================
 
 
-A tabela de símbolos diz ao compilador onde está cada parte do nosso código, no nosso caso, onde estão cada uma das rotinas assembly. Vamos voltar um pouco e olhar nosso a tabela de símbolos do nosso código assembly compilado, recém convertido para ELF partir de um HEX. Se olharmos bem veremos que só temos os símbolos criados pelo ``avr-objcopy`` quando fizemos a conversão.
+A tabela de símbolos diz ao compilador onde está cada parte do nosso código, no nosso caso, onde estão cada uma das rotinas assembly. Vamos voltar um pouco e olhar a tabela de símbolos do nosso código assembly compilado, recém convertido para ELF partir de um HEX. Se olharmos bem veremos que só temos os símbolos criados pelo ``avr-objcopy`` quando fizemos a conversão.
 
 .. code-block:: text
 
@@ -117,7 +117,7 @@ Acontece que o ``avrasm2`` pode gerar, no momento da compilação, dois arquivos
   00000a 9508        ret 
 
 
-Podemos perceber que a linha do ``jmp`` é codificada como ``940e 0008``. A primeira parte é o código da instrução e a segunda é o endereço para onde ela transfere o controle do código.
+Podemos perceber que a linha do ``jmp`` é codificada como ``940e 0008``. A primeira parte é o código da instrução e a segunda é o endereço para onde ela transfere o controle da execução.
 
 No aquivo que contém todos as labels e seus respectivos endereços finais, temos o seguinte:
 
@@ -214,7 +214,7 @@ Isso acontece porque esse código assembly é apenas **copiado** para alguma pos
 Tabela de realocação
 ====================
 
-A Tabela de realocação [#]_ existe exatamente para dizer ao compilador quais símbolos mudarão de lugar e quais instruçoes ele deve editar e trocar o endereço final. usando a mesma ferramenta que usamos antes, vamos mexer na tabela de realocação.
+A Tabela de realocação [#]_ existe exatamente para dizer ao compilador quais símbolos mudarão de lugar e quais instruçoes ele deve editar e trocar o endereço final.
 
 Para entendermos a tabela de realocação precisamos voltar ao nosso disassembly inicial, antes de ser link-editado ao código C.
 
@@ -250,7 +250,7 @@ Vejamos a tabela em detalhes (mais detalhes em como ela foi adicionada: `Automat
   00000004 R_AVR_CALL        _real_code
 
 
-A tabela funciona da segunte forma: Cada seção do ELF pode ter sua tabela de realocação. Nesse caso, essa tabela de realocação "pertence" à secão ``.text``, ou seja, ela faz referência apenas a símbolos que existem na seção ``.text``, que é onde estão as instruçoes do nosso código. O campo ``OFFSET`` indica o endereço da instrução que deverá ser editada (veremos isso em detalhe mais adiante). O campo ``TYPE`` indica o tipo de realocação [#]_, confesso que olhei esse valor em um ELF gerado pelo avr-gcc (mais sobre isso: `Engenharia reversa para descobrir o valor do R_AVR_CALL`_). O campo ``VALUE`` indica qual símbolo será realocado.
+A tabela funciona da segunte forma: Cada seção do ELF pode ter sua tabela de realocação. Nesse caso, essa tabela de realocação "pertence" à secão ``.text``, ou seja, ela faz referência apenas a símbolos que existem na seção ``.text``, que é onde estão as instruçoes do nosso código. O campo ``OFFSET`` indica o endereço da instrução que deverá ser editada (veremos isso em detalhe mais adiante). O campo ``TYPE`` indica o tipo de realocação [#]_, confesso que olhei esse valor (``R_AVR_CALL``) em um ELF gerado pelo avr-gcc (mais sobre isso: `Engenharia reversa para descobrir o valor do R_AVR_CALL`_). O campo ``VALUE`` indica qual símbolo será realocado.
 
 Agora vamos analisar cada uma das linhas da tabela de realocação:
 
@@ -289,7 +289,7 @@ Agora que temos um ELF com tabela de símbolos e tabela de realocação estamos 
 
 E agora temos nosso código assembly com o endereços dos calls corretamente ajustados!
 
-Um detalhe importante é perceber que a instrução foi mesmo editada. Olhando a primaira instrução ``call``, agora ela é codificada como ``0e 94 48 00`` (antes era ``0e 94 08 00``, lembra?) e como os endereços no ELF são sempre o dobro dos endereços no HEX podemos conferir que ``0x90`` (endereço da rotina ``_clear`` no ELF) é exatamente o dobro de ``0x48``, que é o endereço que está codificado na instrução!!
+Um detalhe importante é perceber que a instrução foi mesmo editada. Olhando a primeira instrução ``call`` ela está codificada como ``0e 94 48 00`` (antes era ``0e 94 08 00``, lembra?) e como os endereços no ELF são sempre o dobro dos endereços no HEX podemos conferir que ``0x90`` (endereço da rotina ``_clear`` no ELF) é exatamente o dobro de ``0x48``, que é o endereço que está codificado na instrução!!
 
 Esse código funciona quando gravado na memória flash do micro controlador!
 
@@ -323,7 +323,7 @@ Agora o que precisamos fazer é transformar essa saída em uma tabela de realoca
 
   cat blink_call.asm.symtab | ./elf-add-symbol blink_call.asm.elf
 
-Essa chama modifica o arquivo ``blink_call.asm.elf`` adicionando a tabela de símbolos e a tabela de realocação! E então estamos prontos para link-editar nosso ELF com nosso código C.
+Essa chamada modifica o arquivo ``blink_call.asm.elf`` adicionando a tabela de símbolos e a tabela de realocação! E então estamos prontos para link-editar nosso ELF com nosso código C.
 
 
 
