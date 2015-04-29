@@ -323,20 +323,6 @@ Agora o que precisamos fazer é transformar essa saída em uma tabela de realoca
 
 Essa chama modifica o arquivo ``build/blink_call.asm.elf`` adicionando a tabela de símbolos e a tabela de realocação! E então estamos prontos para link-editar nosso ELF com nosso código C.
 
-Código do script python:
-************************
-
-.. code-block:: python
-
-  print "a"
-
-
-Código da ferramenta elf-add-symbol
-***********************************
-
-.. code-block:: cpp
-
-  #include <iostream>
 
 
 
@@ -344,7 +330,8 @@ Engenharia reversa para descobrir o valor do R_AVR_CALL
 =======================================================
 
 
-.. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
+.. [#] `elf-add-symbol <{filename}/extra/elf-add-symbol.cpp>`_
+.. [#] `extract-symbols-metadata <{filename}/extra/extract-symbols-metadata.py>`_
 .. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
 .. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
 .. [#] `ELF Symbol Table <http://en.wikipedia.org/wiki/Endianness>`_
