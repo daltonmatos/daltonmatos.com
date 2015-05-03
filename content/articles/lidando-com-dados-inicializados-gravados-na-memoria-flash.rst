@@ -32,6 +32,18 @@ shift z, 1
 
 call PrintString
 
+Deve darpara acessar um .db definido no assembly dessa forma:
+
+extern char *a;
+
+
+pgm_read_byte(a);
+
+e no assembly:
+
+a:
+  .db 10, 20
+
 
 asm para C
 ==========
