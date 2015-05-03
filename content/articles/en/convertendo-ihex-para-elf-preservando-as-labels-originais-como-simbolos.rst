@@ -1,6 +1,6 @@
 :title: Converting Intel Hex to ELF32-avr and creating the symbol and relocation tables
 :author: Dalton Barreto
-:date: 2014-04-17
+:date: 2015-04-17
 :status: draft
 :slug: convertendo-intel-hex-para-elf32-avr-mantendo-tabela-de-simbolos-e-tabela-de-realocacao
 :lang: en

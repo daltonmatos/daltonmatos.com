@@ -1,7 +1,7 @@
 :title: Convertendo Intel HEX para ELF32-avr criando tabela de símbolos e tabela de realocação
 :author: Dalton Barreto
-:date: 2014-04-17
-:status: draft
+:date: 2015-04-17
+:status: published
 :slug: convertendo-intel-hex-para-elf32-avr-mantendo-tabela-de-simbolos-e-tabela-de-realocacao
 
 
@@ -10,7 +10,7 @@ Esse post faz parte de uma `série de posts <{filename}chamando-codigo-assembly-
 Contexto
 ========
 
-No `post anterior <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ vimos que é possível chamar código assembly (feito com AVRASM2) a partir de codigo C (avr-gcc). Vimos também que existem algumas limitaçoes na estratégia usada, tivemos que ajustar a instrução ``.org`` no código e isso significa que temos que ajustar o código assembly toda vez que adicionarmos mais código C. Nesse post vamos ver uma outra abordagem em que isso não é mais necessário.
+No `post anterior <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ vimos que é possível chamar código assembly (feito com AVRASM2) a partir de codigo C (avr-gcc). Vimos também que existem algumas limitaçoes na estratégia usada, tivemos que ajustar a instrução ``.org`` e isso significa que tínhamos que ajustar o código assembly toda vez que adicionávamos mais código C. Nesse post vamos ver uma outra abordagem em que isso não é mais necessário.
 
 Olhando para o exemplo inicial
 ==============================
@@ -297,11 +297,11 @@ Esse código funciona quando gravado na memória flash do micro controlador!
 Automatizando todo o processo
 =============================
 
-É claro que o que fizemos aqui foi uma análise manual de como construir todo o aparato necessário para que possamos realocar rotinas que estão espalhdas pelo nosso código Assembly legado, mas quando estamos lidando com um projeto grande precisamos fazer isso de forma automatizada. Para isso eu escrevi um script que me ajuda a manipular a tabela de símbolos e a tabela de realocação.
+É claro que o que fizemos aqui foi uma análise manual de como construir todo o aparato necessário para que possamos realocar rotinas que estão espalhadas pelo nosso código Assembly legado, mas quando estamos lidando com um projeto grande precisamos fazer isso de forma automatizada. Para isso eu escrevi um script que me ajuda a manipular a tabela de símbolos e a tabela de realocação.
 
 Primeiro escrei um script python [#]_ que funciona da segunte maneira:
 
-Dado o conteudo do arquivo de mapa (``.map`` produzido pelo ``avrasm2``) e a saida do disassembly do ELF ele consegue encontrar o novo endereço dos símbolos dentro do ELF. Usando esse script com o código que analisamos nese post, temos a seguinte saída:
+Dado o conteudo do arquivo de mapa (``.map`` produzido pelo ``avrasm2``) e a saída do disassembly do ELF ele consegue encontrar o novo endereço dos símbolos dentro do ELF e também quais instruçoes possuem desvio para endereços absolutos e, portanto, precisarão ser editadas. Usando esse script com o código que analisamos nese post, temos a seguinte saída:
 
 .. code-block:: shell-session
 
