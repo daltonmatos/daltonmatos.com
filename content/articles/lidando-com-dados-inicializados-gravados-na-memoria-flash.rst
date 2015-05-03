@@ -34,7 +34,9 @@ call PrintString
 
 Deve darpara acessar um .db definido no assembly dessa forma:
 
-extern char *a;
+.. code-block:: c
+
+  extern char *a;
 
 
 pgm_read_byte(a);
