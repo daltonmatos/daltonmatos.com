@@ -20,7 +20,7 @@
       Este conteúdo também está disponivel Português: <a href="{{SITE_URL}}/blog/{{article.slug}}/"> aqui </a>
     {% endif %}
 
-
+    <p>{{article.date|strftime('%Y-%m-%d')}}, {{article.author}}</p>
   <h1> {{article.title}} </h1>
 
   <p> {{article.content}} </p>
