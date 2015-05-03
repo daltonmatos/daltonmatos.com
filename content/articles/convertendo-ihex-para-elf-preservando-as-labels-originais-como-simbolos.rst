@@ -118,7 +118,7 @@ Acontece que o ``avrasm2`` pode gerar, no momento da compilação, dois arquivos
   00000a 9508        ret 
 
 
-Podemos perceber que a linha do ``jmp`` é codificada como ``940e 0008``. A primeira parte é o código da instrução e a segunda é o endereço para onde ela transfere o controle da execução.
+Podemos perceber que a linha do ``call`` é codificada como ``940e 0008``. A primeira parte é o código da instrução e a segunda é o endereço para onde ela transfere o controle da execução.
 
 No aquivo que contém todos as labels e seus respectivos endereços finais, temos o seguinte:
 
@@ -129,7 +129,7 @@ No aquivo que contém todos as labels e seus respectivos endereços finais, temo
   CSEG _clear       00000008
   CSEG _real_code   00000005
 
-Aqui temos nossos três símbolos: ``_blinks``, ``_clear`` e ``_real_code``. Olhando o disassembly do arquivo ELF vemos que a primeira instrução ``jmp`` foi codificada como: ``0e 94 08 00``, que é essencialmente a mesma coisa que tínhamos no nosso arquivo ``.lst``!
+Aqui temos nossos três símbolos: ``_blinks``, ``_clear`` e ``_real_code``. Olhando o disassembly do arquivo ELF vemos que a primeira instrução ``call`` foi codificada como: ``0e 94 08 00``, que é essencialmente a mesma coisa que tínhamos no nosso arquivo ``.lst``!
 
 ELF:
 
@@ -148,7 +148,7 @@ ELF:
 
 A única diferença entre eles parece ser a representação do bit mais significativo [#]_. No ELF a representação está com o byte menos significativo primeiro (mais à esquerda) e no ``.lst`` está com byte menos signifcativo por último (mais à diretia). Isso significa que nossa rotina ``_clear`` que no HEX estava no endereço ``0x0008`` está agora no ELF no endereço ``0x10``.
 
-Ainda não entendo porque o código da instrução menciona o endereço ``0008`` e o disassembly mostra ``jmp 0x10`` (um é o dobro do outro!), mas percebi que a princípio os endereços sempre coincidem! Ou seja, no ELF os endereços são sempre o dobro dos respectivos endereços no HEX. Talvez isso tenha relação com como o ELF representa internamente as instruçoes. A instrução que vai para o AVR é mesmo ``0e 94 08 00``, ou seja, o ``jmp`` irá saltar para o endereço ``0008`` da memória flash do AVR, mas como estamos adicionando símbolos no ELF, precisamos obeceder o endereçamento que ele mostra.
+Ainda não entendo porque o código da instrução menciona o endereço ``0008`` e o disassembly mostra ``call 0x10`` (um é o dobro do outro!), mas percebi que a princípio os endereços sempre coincidem! Ou seja, no ELF os endereços são sempre o dobro dos respectivos endereços no HEX. Talvez isso tenha relação com como o ELF representa internamente as instruçoes. A instrução que vai para o AVR é mesmo ``0e 94 08 00``, ou seja, o ``call`` irá saltar para o endereço ``0008`` da memória flash do AVR, mas como estamos adicionando símbolos no ELF, precisamos obeceder o endereçamento que ele mostra.
 
 Agora que sabemos onde estão nossas duas rotinas (``_clear`` e ``_real_code``) dentro do ELF podemos adicionar dois símoblos à tabela de símbolos. Como não encontrei nenhuma ferramenta que adicionasse símbolos a um ELF, escrevei meu pŕoprio código [#]_ que faz isso, chamei a ferramenta de ``elf-add-symbol``. Nossa nova tabela de símbolos ficou assim (mais detalhe em como ela foi adicionada ao arquivo ELF: `Automatizando todo o processo`_):
 
