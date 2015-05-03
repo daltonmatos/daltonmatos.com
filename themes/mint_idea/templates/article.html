@@ -8,7 +8,7 @@
     <meta property="og:title" content="{{article.title|striptags}}" />
     <meta name="keywords" content="{{article.tags|join(', ')}}" />
     <meta name="robots" content="all,follow" />
-    <title> {{article.title}} </title>
+    <title> {{article.title|striptags}} </title>
 {% endblock %}
 
 {% block content%}
@@ -22,8 +22,7 @@
 
     <p>{{article.date|strftime('%Y-%m-%d')}}, {{article.author}}</p>
   <h1> {{article.title}} </h1>
-
-  <p> {{article.content}} </p>
+    {{article.content}}
   </div>
 
 {% endblock %}
