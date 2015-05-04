@@ -6,10 +6,8 @@
 :lang: en
 :translation: true
 :tags: avr, microcontrollers, avr-C, avr-assembly, symbol-table, relocation-table
-
-.. :url: blog/en/convertendo-intel-hex-para-elf32-avr-mantendo-tabela-de-simbolos-e-tabela-de-realocacao
-
-.. :save_as: blog/en/convertendo-intel-hex-para-elf32-avr-mantendo-tabela-de-simbolos-e-tabela-de-realocacao/index.html
+:url: blog/en/convertendo-intel-hex-para-elf32-avr-mantendo-tabela-de-simbolos-e-tabela-de-realocacao
+:save_as: blog/en/convertendo-intel-hex-para-elf32-avr-mantendo-tabela-de-simbolos-e-tabela-de-realocacao/index.html
 
 
 This post is part of a `series of posts <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ about mixing C (``avr-gcc``) with Assembly (``AVRASM2``) code. If you didn't read the previous posts yet, it's advisable to do so before proceeding.
