@@ -6,6 +6,8 @@
 
 O código ASM (que foi convertido a partir de um .HEX) deve ter seus simbolos adicionados (ver post sobre symbol tables/relocation tables). O símbolos devem estar também na relocation table. A diferença é que o símbolo em questão não pertence a nenhuma section, ou seja, fica como *UND*. Confirmar como adicionar um simbolo com essas características.
 
+Parece que esse *UND* é a section a qual esse símbolo pertence. Tem que descobrir que section "*ABS*" é essa. Fazer um elfdump que mostra qual o valor desse *ABS*, ou seja, a que section ele está se referindo.
+
 Nesse caso específico, como o simbolojá estará inserido na symbol table (por causa da conversão .HEX => ELF) esse símbolo terá que ser editado, ou apagado e re-inserido.
 
 SYMBOL TABLE:
