@@ -5,7 +5,7 @@
 :lang: pt
 :slug: chamando-codigo-novo-em-c-avr-gcc-a-partir-de-um-codigo-assembly-legado-avrasm2
 
-Esse post faz parte de uma `série de posts <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ sobre mistura de código C (avr-gcc) com código Assembly (AVRASM2). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.
+Esse post faz parte de uma `série de posts <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ sobre mistura de código C (avr-gcc) com código Assembly (``avrasm2``). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.
 
 Contexto
 ========
@@ -17,14 +17,14 @@ Entendendo um símbolo externo
 
 Toda rotina que o código precisa chamar se transforma em um símbolo, que será usado pelo link-editor no momento de gerar o binário final. Vimos isso `no post sobre tabela de símbolos <{filename}convertendo-ihex-para-elf-preservando-as-labels-originais-como-simbolos.rst>`_, onde o próprio avr-gcc cuidava disso pra nós, já que estávamos lidando com um símbolo externo ao código C. Dessa vez teremos um símbolo externo ao código Assembly e por isso precisaremos novamente adicionar esse símbolo de forma manual na tabela de símbolos.
 
-A forma comp declaramos, no C, um símbolo externo é essa:
+A forma como declaramos, no C, um símbolo externo é essa:
 
 .. code-block:: c
 
   extern void asm_main();
 
 
-Olhando a tabela de símbolos criada pelo avr-gcc temos o seguinte:
+Olhando a tabela de símbolos criada pelo ``avr-gcc`` temos o seguinte:
 
 .. code-block:: objdump
 
@@ -67,7 +67,7 @@ Olhando a tabela, vemos que o símbolo ``asm_main`` pertence a um tipo de seçã
 Lidando com a impossibilidade de declarar símbolos no Intel Hex
 ===============================================================
 
-Essa instrução ``extern``, que usamos no ``avr-gcc``, simplesmente não existe quando estamos escrevendo código Assembly com o ``avrasm2``. Como o código Assembly é compilado de forma totalmente separada do código C ele "não sabe" que um (ou mais) de seus símbolos, na verdade, tem sua implementação no código C.
+Essa instrução ``extern``, que usamos no ``avr-gcc``, simplesmente não existe quando estamos escrevendo código Assembly com o ``avrasm2``. Isso contece porque o ``avrasm2`` gera apenas um Intel Hex no final de tudo e não existe uma fase de link-edição durante o processo de compilação. Tudo se torna ainda mais complicado pois o código Assembly é compilado de forma totalmente separada do código C e ele "não sabe" que um (ou mais) de seus símbolos, na verdade, tem sua implementação no código C.
 
 Vejamos um exemplo de código assembly onde teremos um símbolo externo.
 
@@ -92,7 +92,7 @@ Vejamos um exemplo de código assembly onde teremos um símbolo externo.
 
 Nesse código a rotina ``call_me_maybe`` será implementada em C. O problema é que ela **precisa existir** no código assembly, caso contrário o ``avrasm2`` não será capaz de compilar o codigo e gerar o Intel Hex. Então o que fazemos é compilar o código normalmente, mas podemos remover todo o código da rotina externa, ou até mesmo, posicionar o label em questão em qualquer lugar do código. Por enquanto vamos deixá-lo apenas com uma instrução ``nop``.
 
-Fazemos o processo normal de compilação e `conversão de IHex para avr-elf32 <{filename}convertendo-ihex-para-elf-preservando-as-labels-originais-como-simbolos.rst>`_, o que muda é que agora precisamos reconstruir a tabela de símbolos com dois tipos de símbolos: interno e externo. Nesse caso o único símbolo externo será o ``call_me_maybe``. 
+Fazemos o processo normal de compilação e `conversão de Intel Hex para avr-elf32 <{filename}convertendo-ihex-para-elf-preservando-as-labels-originais-como-simbolos.rst>`_, o que muda é que agora precisamos reconstruir a tabela de símbolos com dois tipos de símbolos: interno e externo. Nesse caso o único símbolo externo será o ``call_me_maybe``. 
 
 Usaremo as mesmas ferrametas do `último post <{filename}convertendo-ihex-para-elf-preservando-as-labels-originais-como-simbolos.rst>`_, apenas com algumas pequenas mudanças para dar suporte à diferenciação de símbolos internos e externos. Para facilitar, coloquei o nome de todos os símbolos externos direto no código da ferramenta ``extract-symbols-metadata.py`` [#]_. O formato da saída dessa ferramenta também precisou mudar, pois agora temos símbolos internos e externos. O formato ficou assim:
 
@@ -147,7 +147,7 @@ Vamos ver como está o disassembly do código, antes de fazer a link-edição fi
      a:   0e 94 01 00     call    0x2     ; 0x2 <other_routine+0x2>
      e:   08 95           ret
 
-Olhando a instrução no endereço ``0xa``, que é a linha do código em que a rotina ``call_me_maybe`` é chamada, vemos que a chamda está sendo feita para um endereço incorreto (``0x2``). Mas olhando a tabela de realoção, vemos que essa instrução está marcada para ser editada no momento da link-edição. Podemos perceber também que o disassembly acima nem mostra onde está o símbolo ``call_me_maybe``, já que ele é um símbolo externo.
+Olhando a instrução no endereço ``0xa``, que é a linha do código em que a rotina ``call_me_maybe`` é chamada, vemos que a chamda está sendo feita para um endereço incorreto (``0x2``). Mas olhando a tabela de realoção (abaixo), vemos que essa instrução está marcada para ser editada no momento da link-edição. Podemos perceber também que o disassembly acima nem mostra onde está o símbolo ``call_me_maybe``, já que ele é um símbolo externo.
 
 .. code-block:: objdump
 
@@ -181,8 +181,8 @@ Código C que usaremos nesse exemplo:
     
     asm_main();
       
-    DDRB |= _BV(PB5); // PIN13 (internal led) as output
-    PORTB |= _BV(PB5); // HIGH
+    DDRB = DDRB | _BV(PB5); // PIN13 (internal led) as output
+    PORTB = PORTB | _BV(PB5); // HIGH
     
     return 0;
   }
@@ -238,7 +238,7 @@ Juntando tudo em um binário final
 
 Agora que já temos nossos dois ``avr-elf32`` preparados e com suas tabelas de símbolos e realocação criadas, precisamos pedir ao compilador que junte tudo em um único binário, que poderemos gravar na memória do micro-controlador para ser executado.
 
-Esse paso, a link-edição, é feita normalmente com o ``avr-gcc``, com uma linha de comando semelhante a essa:
+Esse paso, a link-edição (junto com a compilação), é feita normalmente com o ``avr-gcc``, com uma linha de comando semelhante a essa:
 
 .. code-block:: shell
 
