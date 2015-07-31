@@ -345,6 +345,8 @@ O que fiz foi compilar um arquivo assembly com o ``avr-gcc`` e usando a ferramen
 
 Peguei o valor ``0x112`` (campo ``Info``) e usei a macro ``ELF32_R_TYPE()`` da própria lib ELFIO [7]_. O retorno dessa chamada foi ``0x12`` que é ``18`` em decimal. Por isso no código do ``elf-add-symbol`` temos a linha ``#define R_AVR_CALL 18``.
 
+Próximo post: `Chamando código novo C (avr-gcc) a partir de código legado Assembly (avrasm2) <{filename}chamando-codigo-novo-em-c-avr-gcc-a-partir-de-um-codigo-assembly-legado-avrasm2.rst>`_
+
 .. [#] `ELF Symbol Table <http://wiki.osdev.org/ELF_Tutorial#The_Symbol_Table>`_
 .. [#] `Endianness <http://en.wikipedia.org/wiki/Endianness>`_
 .. [#] `Código-fonte da ferramenta elf-add-symbol <{filename}/extra/elf-add-symbol.cpp>`_

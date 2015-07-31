@@ -336,6 +336,8 @@ What I did was to compile an Assembly code using ``avr-gcc`` and using the ``avr
 
 The I took the ``0x112`` value (``Info`` field) and used the ``ELF32_R_TYPE()`` macro (from the ELFIO [7]_ library). The return value was ``0x12`` which is ``18`` in decimal. Thats why we have the ``#define R_AVR_CALL 18`` in the ``eld-add-symbol`` source-code.
 
+Next post: `Calling modern C code (avr-gcc) from legacy Assembly (avrasm2) <{filename}chamando-codigo-novo-em-c-avr-gcc-a-partir-de-um-codigo-assembly-legado-avrasm2.rst>`_.
+
 .. [#] `ELF Symbol Table <http://wiki.osdev.org/ELF_Tutorial#The_Symbol_Table>`_
 .. [#] `Endianness <http://en.wikipedia.org/wiki/Endianness>`_
 .. [#] `Código-fonte da ferramenta elf-add-symbol <{filename}/extra/elf-add-symbol.cpp>`_

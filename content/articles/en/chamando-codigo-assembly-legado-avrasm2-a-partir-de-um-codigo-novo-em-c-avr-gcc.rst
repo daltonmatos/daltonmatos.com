@@ -110,16 +110,16 @@ To validate our hypothesis, let's do a C code that calls this routine written in
   int main(void){
 
     uint8_t total_blinks =  ASM_SYM(5);
-    DDRB |= _BV(PB5); /* PIN13 (internal led) as output*/
+    DDRB = DDRB | _BV(PB5); // PIN13 (internal led) as output
 
-    PORTB |= _BV(PB5); /* HIGH */
+    PORTB = PORTB | _BV(PB5); // HIGH
     for (;;){
       uint8_t i;
       for (i = 0; i < total_blinks; i++){
-        PORTB |= _BV(PB5); /* HIGH */
+        PORTB = PORTB | _BV(PB5); // HIGH
         _delay_ms(200);
 
-        PORTB &= ~_BV(PB5); /* LOW */
+        PORTB &= ~_BV(PB5); // LOW
           _delay_ms(200);
       }
       _delay_ms(1000);
@@ -365,6 +365,9 @@ We still have a lot of research to do and some more hypothesis to confirm, but t
 * Find out how to do the calling in the other direction, that is, call a C function from an assembly routine. What e did here was only C code calling assembly code.
 
 Thank you very much for the reading and stay tuned about the future post on this same subject. There's still a lot to do.
+
+Next post: `Converting Intel Hex to ELF32-avr and creating the symbol and relocation tables <{filename}convertendo-ihex-para-elf-preservando-as-labels-originais-como-simbolos.rst>`_.
+
 
 .. [#] `Intel Hex Format <http://en.wikipedia.org/wiki/Intel_HEX>`_
 .. [#] `Port Registers - Arduino.cc <http://www.arduino.cc/en/Reference/PortManipulation>`_
