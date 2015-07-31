@@ -1,6 +1,6 @@
 :title: Chamando código novo C (avr-gcc) a partir de código legado Assembly (avrasm2)
 :author: Dalton Barreto
-:date: 2015-07-26
+:date: 2015-07-30
 :status: published
 :lang: pt
 :slug: chamando-codigo-novo-em-c-avr-gcc-a-partir-de-um-codigo-assembly-legado-avrasm2

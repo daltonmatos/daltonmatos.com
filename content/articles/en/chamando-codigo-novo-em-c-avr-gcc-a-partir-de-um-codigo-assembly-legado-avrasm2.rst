@@ -1,6 +1,6 @@
 :title: Calling modern C code (avr-gcc) from legacy Assembly (avrasm2)
 :author: Dalton Barreto
-:date: 2015-07-26
+:date: 2015-07-30
 :status: published
 :lang: en
 :translation: true
