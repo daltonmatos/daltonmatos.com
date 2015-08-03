@@ -146,6 +146,7 @@ Tentar compilar o código oficial e juntar com C - Validar
 
 No exemplo do hello-world-st7565 quando incluo mais de uma definição de fonte (ou até apenas uma que não seja a f6x8), dá um erro de "out of range error" no momento de adicionar alguns simbolos na symbol table do elf gerado a partir do assembly. Tentar entender isso e resolver.
 
+Fazer um Teste rapido. Ver se o código original roda sem nenhum interupt registrado, apenas o de reset. Se rodar, dápra validar isso aqui apenas com um main() simples no C que chama o reset: do assembly. Funcina apenas com o reset e o IsrPwmEnd. Verificar porque sem esse ultimo interrupt handler o display nem exibe nada.
 
 
 Usar ldz em todo o codigo - Validar em Voo
