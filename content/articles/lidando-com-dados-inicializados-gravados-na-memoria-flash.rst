@@ -76,6 +76,8 @@ Eiste um jeito de deixar todos os .db .dw no assembly. Basta olhar onde o "blob"
 Para labels carregadas no Z, pois será usada na instrução lpm precisamos adicionar 2 * 0x40. Pois a instrução espera o endereço "shiftado" de 1 bit pra esquerda.
 Para labels que são usadas diretamente (como seleção de fonte, por exemplo), basta somar 0x40 (validar!)
 
+Funciona!!! Mas ainda não descobri como calcular o offset corretamente. Ainda está na tentativa e erro. Compilo o código final, vejo uma instrução "ldz" e confiro se o endereço foi passado corretamente. Ajusto o offset até o endereço ficar correto.
+
 
 O problema dos .db e .dw
 ========================
@@ -116,8 +118,8 @@ A princípio, **todos** os .db .dw são carregados com a macro ``ldz`` que é es
 
 
 
-Gravação/Leitura de valores da memoria RAM (RamVariables)
-=========================================================
+Gravação/Leitura de valores da memoria RAM (RamVariables) - OK
+==============================================================
 
 Algumas instruçoes gravam/lêm valores da variaveis que o codigo guarda na memoria. Um exemplo, quando escolhemos que fonte usar:
 
@@ -128,16 +130,34 @@ Confirmar, de alguma forma, se o endereço da RamVariable `FontSelector` vai mud
 
 
 
-Gravação/Leitura da EEProm
-==========================
+Gravação/Leitura da EEProm - OK
+===============================
 
 
 Gravar e ler da eeprom usa ldz, testar se o offset faz funcionar a leitura/gravação.
 
 RedeeProm/WriteeeProm usam Z.
 
+Parece funcionar!!! Display funcionou mesmo chmando funcoes (LoadLcdContrast/SetDefaultLcdContrast), que usam ReadeeProm e WriteeEprom;
 
-Comparar os dois hello.asm.elf_{ok,nook} e ver como ficaram as chamadas do my_ldz com a adição do offset.
+
+Tentar compilar o código oficial e juntar com C - Validar
+=========================================================
+
+No exemplo do hello-world-st7565 quando incluo mais de uma definição de fonte (ou até apenas uma que não seja a f6x8), dá um erro de "out of range error" no momento de adicionar alguns simbolos na symbol table do elf gerado a partir do assembly. Tentar entender isso e resolver.
+
+
+
+Usar ldz em todo o codigo - Validar em Voo
+=========================
+
+Todas as instrucoes que usam "ldi zl" seguido de "ldi zh" devem ser convertidos para "ldz <param>".
+
+A principio, chamadas como "ldi zl, <N>", não precisam, pois parece que o código está usando o Z apenas como contador e não como preparação para chamar a instrução "lpm".
+
+Fazer teste de voo com essa modificação já feita!
+
+Lembrar de mudar o simbolo TabCh. Todas as fontes devem estar com "+ (offset * 2)". Mas já terei descoberto isso se estiver fazendo o teste de voo, já que a placa não exibit nadano display se isso não estiver correto. =D
 
 Estrategias para conseguir fazer funcionar os .db .dw
 =====================================================
