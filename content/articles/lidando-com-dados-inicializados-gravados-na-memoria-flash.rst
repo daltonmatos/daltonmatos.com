@@ -32,7 +32,7 @@ shift z, 1
 
 call PrintString
 
-Deve darpara acessar um .db definido no assembly dessa forma:
+Deve dar para acessar um .db definido no assembly dessa forma:
 
 .. code-block:: c
 
@@ -115,6 +115,21 @@ O problema é que o endereço do símbolo **já foi resolvido**! E não temos co
 A princípio, **todos** os .db .dw são carregados com a macro ``ldz`` que é essa:
 
 
+
+Gravação/Leitura de valores da memoria RAM (RamVariables)
+=========================================================
+
+Algumas instruçoes gravam/lêm valores da variaveis que o codigo guarda na memoria. Um exemplo, quando escolhemos que fonte usar:
+
+
+  lrv FontSelector, f6x8
+
+Confirmar, de alguma forma, se o endereço da RamVariable `FontSelector` vai mudar quando juntarmos com C. Talvez não mude pois o avr-gcc precisa configurar o chip da mesma forma, por exemplo, escolhendo inicio e fim da RAM: Não muda! Podemos começar no C, ir pro Assembly e usar RamVariables (save/load) e tudo funciona.
+
+
+
+
+Comparar os dois hello.asm.elf_{ok,nook} e ver como ficaram as chamadas do my_ldz com a adição do offset.
 
 Estrategias para conseguir fazer funcionar os .db .dw
 =====================================================
