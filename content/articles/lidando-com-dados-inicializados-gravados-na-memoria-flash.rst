@@ -160,6 +160,9 @@ Fazer teste de voo com essa modificação já feita!
 
 Lembrar de mudar o simbolo TabCh. Todas as fontes devem estar com "+ (offset * 2)". Mas já terei descoberto isso se estiver fazendo o teste de voo, já que a placa não exibit nadano display se isso não estiver correto. =D
 
+** Cuidado com "ldz 0" **. O código do novo ldz deve fazer um "if" para quando o valor recebido é "0". Se não fizer vai distorcer o valor final, já que 0 * 2 é diferente de (0*2) + (offset *2), já que offset é sempre > 0.
+
+
 Estrategias para conseguir fazer funcionar os .db .dw
 =====================================================
 
