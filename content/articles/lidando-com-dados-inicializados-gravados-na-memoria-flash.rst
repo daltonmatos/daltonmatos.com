@@ -128,6 +128,14 @@ Confirmar, de alguma forma, se o endereço da RamVariable `FontSelector` vai mud
 
 
 
+Gravação/Leitura da EEProm
+==========================
+
+
+Gravar e ler da eeprom usa ldz, testar se o offset faz funcionar a leitura/gravação.
+
+RedeeProm/WriteeeProm usam Z.
+
 
 Comparar os dois hello.asm.elf_{ok,nook} e ver como ficaram as chamadas do my_ldz com a adição do offset.
 
