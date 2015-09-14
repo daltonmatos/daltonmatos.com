@@ -286,7 +286,7 @@ Olhando agora para as instruções ``ldi`` vemos que ela carrega o endereço cor
 Com esse ajuste de offset, seu código assembly consegue rodar junto com o código C e ainda fazer uso livre da memória flash para ler/gravar dados.
 
 
-Bonus
+Bônus
 =====
 
 Agora que já podemos chamar código das duas linguagens e usar a memória flash livremente para ler/gravar dados seria interssante poder declarar novas constantes no código C e poder passá-las para o código Assembly. Pensando em uma possível migração de Assembly para C, é importante poder ir transferindo aos poucos, e isso inclui definições de constantes. Abaixo veremos como fazer as duas coisas: Declarar no C um valor que é salvo na memória flash e passá-lo para o código Assembly como parâmetro de função e declarar no Assembly um valor que é salvo na memória flash e passá-lo para o código C.
