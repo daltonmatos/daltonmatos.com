@@ -107,7 +107,7 @@ Depois que você já tiver modificado seu código original para fazer uso dessa 
   ldz data*2
 
 
-O que precisamos agora é descobrir o quanto nosso código Assembly se deslocou depois que foi linkado ao código C. Devemos então adicionr esse "offset" ao código da nossa macro ``ldz``, assim todos os endereços serão corrigidos. Isso só funciona pois nosso código assembly original é composto por um grande arquivo binário. Se tivéssemos múltiplos arquivos Assembly, convertidos para ``avr-elf32`` e depois entregues para o ``avr-gcc`` para link-edição, provavelmente teríamos deslocamentos diferentes para as labels do código original. Por isso é importante manter seu código Assebly Legado como um binário único, convertido de Intel Hex para ``avr-elf32`` e entregue ao ``avr-gcc``.
+O que precisamos agora é descobrir o quanto nosso código Assembly se deslocou depois que foi linkado ao código C. Devemos então adicionar esse "offset" ao código da nossa macro ``ldz``, assim todos os endereços serão corrigidos. Isso só funciona pois nosso código assembly original é composto por um grande arquivo binário. Se tivéssemos múltiplos arquivos Assembly, convertidos para ``avr-elf32`` e depois entregues para o ``avr-gcc`` para link-edição, provavelmente teríamos deslocamentos diferentes para as labels do código original. Por isso é importante manter seu código Assembly Legado como um binário único, convertido de Intel Hex para ``avr-elf32`` e entregue ao ``avr-gcc``.
 
 
 Preparando a macro ldz para considerar o deslocamento aplicado pelo avr-gcc
@@ -128,7 +128,7 @@ Se considerarmos um deslocamento de ``0x80`` após uma link-edição com um cód
 
  ldz 0x769*2
 
-isso porque ``0x6e9 + 0x80 = 0x769``. Isso sifnifica que podemos reescrever nossa macro dessa forma:
+isso porque ``0x6e9 + 0x80 = 0x769``. Isso significa que podemos reescrever nossa macro dessa forma:
 
 .. code-block:: asm
 
@@ -159,7 +159,7 @@ Podemos colocar um código simples bem no início do nosso código assembly para
 .. code-block:: asm
 
   _offset_check:
-    lzd _data
+    ldz _data
   _offset_check_data:
     .db 01, 02
 
@@ -178,7 +178,6 @@ Esse será nosso código C:
   extern void hello_main();
 
   int f(){
-    f();
     return 0;
   }
 
@@ -186,7 +185,6 @@ Esse será nosso código C:
 
     f();
     hello_main();
-    f();
 
   }
 
@@ -237,10 +235,9 @@ Perceba que o valor da constante ``offset`` ainda está com valor ``0x00``, pois
      ...
 
   00000080 <f>:
-    80:	0e 94 40 00 	call	0x80	; 0x80 <f>
-    84:	80 e0       	ldi	r24, 0x00	; 0
-    86:	90 e0       	ldi	r25, 0x00	; 0
-    88:	08 95       	ret
+    80:	80 e0       	ldi	r24, 0x00	; 0
+    82:	90 e0       	ldi	r25, 0x00	; 0
+    84:	08 95       	ret
 
   0000008a <_offset_check>:
     8a:	e4 e0       	ldi	r30, 0x04	; 4
@@ -255,7 +252,6 @@ Perceba que o valor da constante ``offset`` ainda está com valor ``0x00``, pois
   00000092 <main>:
     92:	0e 94 40 00 	call	0x80	; 0x80 <f>
     96:	0e 94 48 00 	call	0x90	; 0x90 <hello_main>
-    9a:	0c 94 40 00 	jmp	0x80	; 0x80 <f>
 
 O que temos que notar nesse disassembly é o ponto em que nosso código Assembly foi posicionado. Podemos ver que ele foi posicionado logo após a função ``f()`` (escrita em C). Nosso código Assembly começa no endereço ``0x008a``. Podemos observar também que o ``offset`` atual, com valor ``0`` está incorreto. Vejamos porque.
 
@@ -356,7 +352,7 @@ Agora faremos o mesmo, mas tendo definido a constante no Assembly. Vejamos o có
     hello_main(p); 
   }
 
-Nesse código chamamos a rotina ``hello_main``, que está escrita em Assembly. Essa rotina chama de volta o código C através da função ``c_read_flashbyte()``, dessa vez passando como parametro o endereço onde o dado está gravado. Fazemos então a leitura desse dado com a função ``pgm_read_byte_near()``. Vejamos o código assembly:
+Nesse código chamamos a rotina ``hello_main``, que está escrita em Assembly. Essa rotina chama de volta o código C através da função ``c_read_flashbyte()``, dessa vez passando como parametro o endereço onde o dado está gravado. Fazemos então a leitura desse dado com a função ``pgm_read_byte_near()`` e retornamos o valor lido para o Assembly. Vejamos o código assembly:
 
 .. code-block:: asm
   
