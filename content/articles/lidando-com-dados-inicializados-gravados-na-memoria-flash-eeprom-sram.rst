@@ -11,23 +11,23 @@ Esse post faz parte de uma `série de posts <{filename}chamando-codigo-assembly-
 Contexto
 ========
 
-Até agora, nos posts anteriores vimos apenas como fazer chamdas de função de uma linguagem para outra, mas uma parte muito importante de qualquer projeto com micro-controladores é a possibilidade de gravar dados na area de memória do chip (memória flash, por exemplo). É bem comum usar essa memória para gravar valores que serão usados pelo código. O mais comum é vermos strings sendo guardadas para uso futuro, mas é perfeitamente possível guardarmos outros valores como constantes, números e até mesmo definição de fontes, para o caso de estarmos lidando com displays de LCD.
+Até agora, nos posts anteriores vimos apenas como fazer chamadas de função de uma linguagem para outra, mas uma parte muito importante de qualquer projeto com micro-controladores é a possibilidade de gravar dados na área de memória do chip (memória flash, por exemplo). É bem comum usar essa memória para gravar valores que serão usados pelo código. O mais comum é vermos strings sendo guardadas para uso futuro, mas é perfeitamente possível guardarmos outros valores como constantes, números e até mesmo definição de fontes, no caso de estarmos lidando com displays de LCD.
 
-Além da memória flash, temos duas outras memórias dispońiveis parausar dessa mesma forma. A memória SRAM [#]_ e a EEPROM [#]_. Vamos ver logo abaixo como gravamos/lemos dados dessas três memórias disponíveis nos micro-controladores AVR (pelo menos na maioria deles).
+Além da memória flash, temos duas outras memórias dispońiveis para usar dessa mesma forma. A memória SRAM [#]_ e a EEPROM [#]_. Vamos ver logo abaixo como gravamos/lemos dados dessas três memórias disponíveis nos micro-controladores AVR (pelo menos na maioria deles).
 
 
 Lendo/Gravando dados na memória SRAM e EEPROM
 =============================================
 
-Tanto a memória SRAM quanto a EEPROM possuem posicionamentos fixos em cada chip AVR, isso significa que, independente da lingagem usada, o endereço de leitura/escrita será sempre o mesmo. Isso significa que não precisamos nos preocupar com nenhum tipo de deslocamento de código quando fizermos a link-edição com algum código C. Tanto o ``avr-gcc`` quanto o ``avrasm2`` vão inicializar corretamente os valores dos endereços dessas duas memórias e o código poderá referenciar esses endereços livremente.
+Tanto a memória SRAM quanto a EEPROM possuem posicionamentos fixos em cada chip AVR, isso significa que, independente da lingagem usada, o endereço de leitura/escrita será sempre o mesmo. Isso significa que não precisamos nos preocupar com nenhum tipo de deslocamento de código quando fizermos a link-edição com algum código C. Tanto o ``avr-gcc`` quanto o ``avrasm2`` vão inicializar corretamente os valores iniciais e finais dos endereços dessas duas memórias e o código poderá referenciar esses endereços livremente.
 
 
 Lendo/Gravando dados na memória Flash
 =====================================
 
-O problema começa quando precisamos ler/gravar dados na memória flash. Isso acontece pois as duas instruçoes que devemos usar para isso, `LPM` e `SPM` trabalham de uma forma peculiar, que explico a seguir:
+O problema começa quando precisamos ler/gravar dados na memória flash. Isso acontece pois as duas instruçoes que devemos usar para isso, ``LPM`` e ``SPM`` trabalham de uma forma peculiar, que explico a seguir:
 
-Quando usamos quaisquer uma dessas duas instruçoes, temos que usar o registrador `Z` para dizer onde queremos ler/gravar nosso dado. Então pensando em um exemplo simples poderíamos pensar no seguinte código:
+Quando usamos quaisquer uma dessas duas instruçoes, temos que usar o registrador ``Z`` para dizer onde queremos ler/gravar nosso dado. Então, dando um exemplo simples poderíamos pensar no seguinte código:
 
 .. code-block:: asm
   
@@ -40,7 +40,7 @@ Quando usamos quaisquer uma dessas duas instruçoes, temos que usar o registrado
   data:
     .db 02, 03
 
-Olhando esse exemplo podeíamos pensar que, ao fim da execução desse código, o valor ``02`` estará gravado no registrador ``R0``, mas infelizmente não é tão simples assim. O problema é que a memóra flash é orientada a páginas e não a bytes e cada página possui dois bytes. Isso significa que em um atmega328p, por exemplo, que possui 32Kbytes de memória flash, temos na verdade 16K páginas que podem ser usadas com a instrução ``LPM``. Sabendo que cada página possui dois bytes, temos que ter uma forma de escolher qual desses dois bytes queremos ler/escrever.
+Olhando esse exemplo poderíamos pensar que, ao fim da execução do código, o valor ``02`` estará gravado no registrador ``R0``, mas infelizmente não é tão simples assim. O problema é que a memóra flash é orientada a páginas e não a bytes e cada página possui dois bytes. Isso significa que em um atmega328p, por exemplo, que possui 32Kbytes de memória flash, temos na verdade 16K páginas que podem ser usadas com a instrução ``LPM``. Sabendo que cada página possui dois bytes, temos que ter uma forma de escolher qual desses dois bytes queremos ler/escrever.
 
 Diferentes dos registradores de uso geral do AVR, que possuem 8 bits, o registrador ``Z`` possui 16 bits. Na verdade, o registrador ``Z`` é a junção dos registradores de 8 bits de uso geral: ``r31`` (``ZH``) e ``r30`` (``ZL``). A forma de escolher qual byte de uma página vamos ler/escrever é usando o bit menos significativo do registrador ``Z``.
 
@@ -77,13 +77,13 @@ Vamos considerar nossa label ``data:`` estando na mesma posição: ``0x6e9``. Qu
         ZH        ZL
     00001101  11010010
 
-Se fizermos a "decodificação" desse valor, segundo o que diz no datasheet, ou seja, pegando o bit menos significativo pra indicat o byte da página e o restante dos bits para indicar o endereço da página temos o seguinte: O bit menos significativo possui agora valor ``0``, o que significa que o primeiro byte da página será lido. E o restante dos bits (1 ao 15) possuem o segunte valor: ``000011011101001`` que é exatamente ``0x6e9``! Agora sim a leitura ficará correta e o código efetivamente gravará o valor ``02`` no registrador ``r0``.
+Se fizermos a "decodificação" desse valor, segundo o que diz no datasheet, ou seja, pegando o bit menos significativo pra indicar o byte da página e o restante dos bits para indicar o endereço da página temos o seguinte: O bit menos significativo possui agora valor ``0``, o que significa que o primeiro byte da página será lido. E o restante dos bits (1 ao 15) possuem o segunte valor: ``000011011101001`` que é exatamente ``0x6e9``! Agora sim a leitura ficará correta e o código efetivamente gravará o valor ``02`` no registrador ``r0``.
 
-E o que isso tudo tem a ver com nossa mistura de código C com código Assembly Legado? O problema é que esses endereços são calculados em tempo **de compilação**, ou seja, ates da fase de link-edição. Isso significa que quando o ``avr-gcc`` for juntar os dois códigos, todas as labels vão mudar de lugar (como já vimos nos posts anteriores) e isso significa que **todas** as leituras de dados da memória flash ficarão incorretas.
+E o que isso tudo tem a ver com nossa mistura de código C com código Assembly Legado? O problema é que esses endereços são calculados em tempo **de compilação**, ou seja, antes da fase de link-edição. Isso significa que quando o ``avr-gcc`` for juntar os dois códigos, todas as labels vão mudar de lugar (como já vimos nos posts anteriores) e isso significa que **todas** as leituras de dados da memória flash ficarão incorretas.
 
-Nos posts anteriores, para resolver esse mesmo tipo de problems, ou seja, deslocamento de código após a link-edição fizemos o parsing do dissasembly procurado por instruçoes de desvio (``jmp``, ``rjmp``, etc.), pegávamos o endereço que essas instruçoes estavam referenciando, fazíamos uma busca reversa em todos os labels encontrados no código original e adicionávamos uma entrada na tabela de realocação. Isso era feito, em conjunto, pelas duas ferramentas que escrevi: ``extract-symbols-metadata`` [#]_ e ``elf-add-symbol`` [#]_.
+Nos posts anteriores, para resolver esse mesmo tipo de problema, ou seja, o deslocamento de código após a link-edição fizemos o parsing do dissasembly procurando por instruçoes de desvio (``jmp``, ``rjmp``, etc.), pegamos o endereço que essas instruçoes estavam referenciando, fizemos uma busca reversa em todos os labels encontrados no código original e adicionamos uma entrada na tabela de realocação. Isso era feito em conjunto pelas duas ferramentas que escrevi: ``extract-symbols-metadata`` [#]_ e ``elf-add-symbol`` [#]_.
 
-Mas agora não podemos fazer isso pois uma operação de carga no registrador ``Z`` acaba se ransformando em duas instruçoes no assembly final, dessa forma:
+Mas agora não podemos fazer isso pois uma operação de carga no registrador ``Z`` acaba se transformando em duas instruçoes no assembly final, dessa forma:
 
 .. code-block:: asm
 
@@ -128,7 +128,7 @@ Se considerarmos um deslocamento de ``0x80`` após uma link-edição com um cód
 
  ldz 0x769*2
 
-isso porque ``0x6e9 + 0x80 = 0x769``. Isso sifnifica que podemos re-escrever nossa macro dessa forma:
+isso porque ``0x6e9 + 0x80 = 0x769``. Isso sifnifica que podemos reescrever nossa macro dessa forma:
 
 .. code-block:: asm
 
@@ -136,7 +136,10 @@ isso porque ``0x6e9 + 0x80 = 0x769``. Isso sifnifica que podemos re-escrever nos
     ldi zl, low(@0 + offset)
     ldi zh, high(@0 + offset)
   .endmacro
- 
+
+`(Nota importante: Entenderemos mais adiante porque não precisamos adicionar offset*2, já que o valor @0 já chega dentro da macro multiplicado)`.
+
+
 Podemos definir a constante ``offset`` no início do nosso código Assembly, dessa forma:
 
 .. code-block:: asm
@@ -144,7 +147,7 @@ Podemos definir a constante ``offset`` no início do nosso código Assembly, des
  .equ offset = 0x80
 
 
-A única forma que encontrei de descobrir esse deslocamento foi compilar o código inteiro e depois olhar no disassembly onde o código Assembly legado acabou sendo posicionado no binário final. Isso é chato (apesar de ser possível de automatizar) e passível de erro mas foi o que consegui fazer. Depois de descobrir o deslocamento, volto no código Assembly e adiciono esse offset ao código da macro ``ldz``. Quase sempre ele é posicionado logo aṕos a definição do iterrupt vector feita pelo ``àvr-gcc``.
+A única forma que encontrei de descobrir esse deslocamento foi compilar o código inteiro e depois olhar no disassembly onde o código Assembly legado acabou sendo posicionado no binário final. Isso é chato (apesar de ser possível de automatizar) e passível de erro mas foi o que consegui fazer. Depois de descobrir o deslocamento, volto no código Assembly e adiciono esse offset ao código da macro ``ldz``.
     
 
 O jeito simples de conferir se o offset escolhido está correto
@@ -160,12 +163,12 @@ Podemos colocar um código simples bem no início do nosso código assembly para
   _offset_check_data:
     .db 01, 02
 
-O que esse código faz é apenas carregar o endereço de uma label no registrador ``Z``. Ninguém vai chamar esse código, mas ele estará bem no início do nosso código Assembly e por isso aparecerá também no início do disasembly do binário final e poderemos conferir se as duas instruçoes ``ldi`` estão carregando o endereço correto nos regisradores ``r31:r30`` (``Z``).
+O que esse código faz é apenas carregar o endereço de uma label no registrador ``Z``. Ninguém vai chamar esse código, mas ele estará bem no início do nosso código Assembly e por isso aparecerá também no início do disasembly do binário final e poderemos conferir se as duas instruçoes ``ldi`` estarão carregando o endereço correto nos regisradores ``r31:r30`` (``Z``).
 
 Vejamos como essa checagem funciona. Vamos link-editar um código assembly com essa checagem com um código C qualquer e vamos ver como fica o disassembly.
 
 
-Esse será nosso códgo C:
+Esse será nosso código C:
 
 .. code-block:: c
 
@@ -188,7 +191,7 @@ Esse será nosso códgo C:
   }
 
 
-Desse código, temos a função ``hello_main``, que estará implementada e Assembly.
+Desse código, temos a função ``hello_main``, que estará implementada em Assembly.
 
 Esse será nosso código Assembly:
 
@@ -216,7 +219,7 @@ Esse será nosso código Assembly:
     ...
 
 
-Perceba que o valor da constante ``offset`` ainda está com valor ``0x00``, pois não sabemos onde nosso código Assembly será posicionado no binário final. Vejamos comomo fica o disassebly de uma primeira compilação:
+Perceba que o valor da constante ``offset`` ainda está com valor ``0x00``, pois não sabemos onde nosso código Assembly será posicionado no binário final. Vejamos como fica o disassebly de uma primeira compilação:
 
 .. code-block:: objdump
 
@@ -229,43 +232,9 @@ Perceba que o valor da constante ``offset`` ainda está com valor ``0x00``, pois
   00000000 <__vectors>:
      0:	0c 94 34 00 	jmp	0x68	; 0x68 <__ctors_end>
      4:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-     8:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-     c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    10:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    14:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    18:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    1c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    20:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    24:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    28:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    2c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    30:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    34:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    38:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    3c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    40:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    44:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    48:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    4c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    50:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    54:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    58:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    5c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    60:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-    64:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-
-  00000068 <__ctors_end>:
-    68:	11 24       	eor	r1, r1
-    6a:	1f be       	out	0x3f, r1	; 63
-    6c:	cf ef       	ldi	r28, 0xFF	; 255
-    6e:	d8 e0       	ldi	r29, 0x08	; 8
-    70:	de bf       	out	0x3e, r29	; 62
-    72:	cd bf       	out	0x3d, r28	; 61
-    74:	0e 94 49 00 	call	0x92	; 0x92 <main>
-    78:	0c 94 4f 00 	jmp	0x9e	; 0x9e <_exit>
-
-  0000007c <__bad_interrupt>:
-    7c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+     ...
+     ...
+     ...
 
   00000080 <f>:
     80:	0e 94 40 00 	call	0x80	; 0x80 <f>
@@ -288,14 +257,7 @@ Perceba que o valor da constante ``offset`` ainda está com valor ``0x00``, pois
     96:	0e 94 48 00 	call	0x90	; 0x90 <hello_main>
     9a:	0c 94 40 00 	jmp	0x80	; 0x80 <f>
 
-  0000009e <_exit>:
-    9e:	f8 94       	cli
-
-  000000a0 <__stop_program>:
-    a0:	ff cf       	rjmp	.-2      	; 0xa0 <__stop_program>
-
-
-O que temos que notar nesse disassembly é o ponto é que nosso código Assembly foi posicionado. Podemo ver que ele foi posicionado logo após a função ``f()`` (escrita em C). Nosso código Assembly começa no endereço ``0x008a``. Podemos observar também que o ``offset`` atual, com valor ``0`` está incorreto. Vejamos porque.
+O que temos que notar nesse disassembly é o ponto em que nosso código Assembly foi posicionado. Podemos ver que ele foi posicionado logo após a função ``f()`` (escrita em C). Nosso código Assembly começa no endereço ``0x008a``. Podemos observar também que o ``offset`` atual, com valor ``0`` está incorreto. Vejamos porque.
 
 .. code-block:: objdump
 
@@ -307,7 +269,7 @@ O que temos que notar nesse disassembly é o ponto é que nosso código Assembly
   0000008e <_offset_data>:
     8e:	01 02       	muls	r16, r17
 
-Aqui podemo sver que as duas instruçoes ``ldi``, que são responsáveis por carregar o endereço da label ``_offset_data`` no registrador ``Z`` (``r31:r30``), estão passando um endereço incorreto. Nossa label está localizada no endereço ``0x008e``, mas o que está sendo carregado nos registradores ``r31:r30`` é ``0x0004``, o que está claramente errado.
+Aqui podemos ver que as duas instruçoes ``ldi``, que são responsáveis por carregar o endereço da label ``_offset_data`` no registrador ``Z`` (``r31:r30``), estão passando um endereço incorreto. Nossa label está localizada no endereço ``0x008e``, mas o que está sendo carregado nos registradores ``r31:r30`` é ``0x0004``, o que está claramente errado.
 
 Agora vejamos como fica o disassembly quando adicionamos o offset correto, nesse caso ``0x008a``, que é exatamente o ponto onde nosso código Assembly foi posicionado no binário final.
 
@@ -323,75 +285,120 @@ Como não adicionamos nenhum código C novo, vamos olhar apenas para a parte do 
     8e:	01 02       	muls	r16, r17
 
 
-Olhando agora para as instruçoes ``ldi`` vemos que ela carrega o endereço correto, que é ``0x008e``. Esse é exatamente o endereço na nossa label ``_offset_data``. Note que os valores já estão multiplicados por 2, isso porque estamos analisando o disassembly já do arquivo ``avr-elf32`` onde os novos endereços são o dobro dos endereços originais, que encontramos no arquivo ``.map`` produzido pelo ``avrasm2``.
+Olhando agora para as instruçoes ``ldi`` vemos que ela carrega o endereço correto, que é ``0x008e``. Esse é exatamente o endereço na nossa label ``_offset_data``. Note que os valores já estão multiplicados por 2, isso porque estamos analisando o disassembly já do arquivo ``avr-elf32`` onde os novos endereços são o dobro dos endereços originais, que encontramos no arquivo ``.map`` produzido pelo ``avrasm2``. É por isso que não precisamos adicionar o valor de ``offset*2``, pois o offset que vemos no disassembly, nesse caso ``0x008a``, já está multiplicado.
 
-Com esse ajuste de ofsset, seu código assembly consegue rodar junto com o código C e ainda fazer uso livre da memória flash para ler/gravar dados.
+Com esse ajuste de offset, seu código assembly consegue rodar junto com o código C e ainda fazer uso livre da memória flash para ler/gravar dados.
 
 
-Notes
+Bonus
 =====
 
-Algumas ideias para se passar dados da memória flash do C pra asm e do asm pra C.
+Agora que já podemos chamar código das duas linguagens e usar a memória flash livremente para ler/gravar dados seria interssante poder declarar novas constantes no código C e poder passá-las para o código Assembly. Pensando em uma possível migração de Assembly para C, é importante poder ir transferindo aos poucos, e isso inclui definiçoes de constantes. Abaixo veremos como fazer as duas coisas: Declarar no C um valor que é salvo na memória flash e passá-lo para o código Assembly como parâmetro de função e declarar no Assembly um valor que é salvo na memória flash e passá-lo para o código C.
 
 
-C => ASM
-========
+Declarando o valor no C e passando para o assembly
+==================================================
 
-.. code-block:: c
-
-  char* a PROGMEM = "abc";
-
-
-
-call_asm_routine(a);
-
-No assembly:
-
-; recebe o parametroem r25:r24 ? Se sim:
-mov r26, 25
-mov r27, r24
-movw z, x ; x é r25:r24
-
-;conferir se o C já passa o valor multiplicado por 2 !! Senão, multiplicar.
-shift z, 1
-
-call PrintString
-
-Deve dar para acessar um .db definido no assembly dessa forma:
+Esse será nosso código C onde declaramos uma string que será salva na memória flash.
 
 .. code-block:: c
 
-  extern char* a;
+  #include <avr/io.h>
+
+  const char p[] PROGMEM = {"Hello from C."};
+
+  extern void hello_main(const char []);
+
+  void main(){
+    hello_main(p);
+  }
 
 
-pgm_read_byte(a);
+Quando fazemos a chamada à rotina Assembly ``hello_main()``, o endereço de ``p`` é passado nos registradores ``r25:r24``. vejamos o disassembly:
 
-e no assembly:
+.. code-block:: objdump
 
-a:
-  .db 10, 20
-
-
-Tentar compilar o código oficial e juntar com C - Validar
-=========================================================
-
-No exemplo do hello-world-st7565 quando incluo mais de uma definição de fonte (ou até apenas uma que não seja a f6x8), dá um erro de "out of range error" no momento de adicionar alguns simbolos na symbol table do elf gerado a partir do assembly. Tentar entender isso e resolver.
-
-Fazer um Teste rapido. Ver se o código original roda sem nenhum interupt registrado, apenas o de reset. Se rodar, dápra validar isso aqui apenas com um main() simples no C que chama o reset: do assembly. Funcina apenas com o reset e o IsrPwmEnd. Verificar porque sem esse ultimo interrupt handler o display nem exibe nada.
+  00000dce <main>:
+   dce:   8c e7           ldi     r24, 0x7C       ; 124
+   dd0:   90 e0           ldi     r25, 0x00       ; 0
+   dd2:   0e 94 a2 06     call    0xd44   ; 0xd44 <hello_main>
+   ddc:   08 95           ret
 
 
-Usar ldz em todo o codigo - Validar em Voo
-==========================================
+Vemos nesse caso que o valor que é passado é ``0x007c``. A boa notícia é que esse valor já está pronto para ser usado com a instrução ``LPM``, ou seja, já está multiplicado por 2. No código Assembly basta mover esse valor para o registrador ``Z`` e usar normalmente. Vejamos o código Assembly que receberá esse valor:
 
-Todas as instrucoes que usam "ldi zl" seguido de "ldi zh" devem ser convertidos para "ldz <param>".
+.. code-block:: asm
 
-A principio, chamadas como "ldi zl, <N>", não precisam, pois parece que o código está usando o Z apenas como contador e não como preparação para chamar a instrução "lpm".
+  hello_main:
+    mov zl, r24
+    mov zh, r25
+    lpm r0, Z    
 
-Fazer teste de voo com essa modificação já feita!
+Definindo o valor no Assembly e passando para o C
+=================================================
 
-Lembrar de mudar o simbolo TabCh. Todas as fontes devem estar com "+ (offset * 2)". Mas já terei descoberto isso se estiver fazendo o teste de voo, já que a placa não exibirá nada no display se isso não estiver correto. =D
+Agora faremos o mesmo, mas tendo definido a constante no Assembly. Vejamos o código C que receberá o endereço da memória flash onde o dado estára gravado.
 
-Cuidado com "ldz 0" . O código do novo ldz deve fazer um "if" para quando o valor recebido é "0". Se não fizer vai distorcer o valor final, já que 0 * 2 é diferente de (0 * 2) + (offset * 2), já que offset é sempre > 0.
+.. code-block:: c
+
+  #include <avr/io.h>
+  #include <avr/pgmspace.h>
+
+  const char p[] PROGMEM = {"Hello from C."};
+
+  extern void hello_main(const char []);
+
+  char c_read_flashbyte(char p[]){
+    return pgm_read_byte_near(p);
+  }
+
+  void main(){
+    hello_main(p); 
+  }
+
+Nesse código chamamos a rotina ``hello_main``, que está escrita em Assembly. Essa rotina chama de volta o código C através da função ``c_read_flashbyte()``, dessa vez passando como parametro o endereço onde o dado está gravado. Fazemos então a leitura desse dado com a função ``pgm_read_byte_near()``. Vejamos o código assembly:
+
+.. code-block:: asm
+  
+  hello_main:
+
+    ldi r25, high(flash_byte_from_asm*2 + offset)
+    ldi r24, low(flash_byte_from_asm*2 + offset)
+    call c_read_flashbyte
+    
+  flash_byte_from_asm:  .db "X", 0
+
+Vejamos como fica o disassembly disso tudo:
+
+.. code-block:: objdump
+
+  ...
+  ...
+
+  00000d56 <hello_main>:
+   dbe:	9d e0       	ldi	r25, 0x0D	; 13
+   dc0:	80 ef       	ldi	r24, 0xF0	; 240
+   dc2:	0e 94 56 00 	call	0xac	; 0xac <c_read_flashbyte>
+   ...
+   ...
+   ...
+   ...
+
+  00000df0 <flash_byte_from_asm>:
+   df0:	58 00       	.word	0x0058	; ????
+
+  ...
+  ...
+
+  000000ac <c_read_flashbyte>:
+    ac:	fc 01       	movw	r30, r24
+    ae:	84 91       	lpm	r24, Z
+    b0:	08 95       	ret
+
+
+Passamos o endereço pelos registradores ``r25:r24``. Note que estamos passando o endereço correto, ``0x0DF0``. A função ``c_read_flashbyte`` move o conteúdo dos registradores ``r25:r24`` para o registrador ``Z`` (``r31:r30``) e faz a leitura do dado com a instrução ``LPM``, guardando o resultado em ``r24``. E esse é exatamenteo o registrador onde estará, nesse caso, o valor ``'X'``.
+
+Então para passarmos endereços da memória flash declarados no Assembly precisamos sempre considerar o offset que esse código sofreu quando foi posicionado no binário final.
 
 
 .. [#] `Static random-access memory <https://en.wikipedia.org/wiki/Static_random-access_memory>`_
