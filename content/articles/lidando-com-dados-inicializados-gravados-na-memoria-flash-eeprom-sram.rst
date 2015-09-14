@@ -25,9 +25,9 @@ Tanto a memória SRAM quanto a EEPROM possuem posicionamentos fixos em cada chip
 Lendo/Gravando dados na memória Flash
 =====================================
 
-O problema começa quando precisamos ler/gravar dados na memória flash. Isso acontece pois as duas instruçoes que devemos usar para isso, ``LPM`` e ``SPM`` trabalham de uma forma peculiar, que explico a seguir:
+O problema começa quando precisamos ler/gravar dados na memória flash. Isso acontece pois as duas instruções que devemos usar para isso, ``LPM`` e ``SPM`` trabalham de uma forma peculiar, que explico a seguir:
 
-Quando usamos quaisquer uma dessas duas instruçoes, temos que usar o registrador ``Z`` para dizer onde queremos ler/gravar nosso dado. Então, dando um exemplo simples poderíamos pensar no seguinte código:
+Quando usamos quaisquer uma dessas duas instruções, temos que usar o registrador ``Z`` para dizer onde queremos ler/gravar nosso dado. Então, dando um exemplo simples poderíamos pensar no seguinte código:
 
 .. code-block:: asm
   
@@ -81,9 +81,9 @@ Se fizermos a "decodificação" desse valor, segundo o que diz no datasheet, ou 
 
 E o que isso tudo tem a ver com nossa mistura de código C com código Assembly Legado? O problema é que esses endereços são calculados em tempo **de compilação**, ou seja, antes da fase de link-edição. Isso significa que quando o ``avr-gcc`` for juntar os dois códigos, todas as labels vão mudar de lugar (como já vimos nos posts anteriores) e isso significa que **todas** as leituras de dados da memória flash ficarão incorretas.
 
-Nos posts anteriores, para resolver esse mesmo tipo de problema, ou seja, o deslocamento de código após a link-edição fizemos o parsing do dissasembly procurando por instruçoes de desvio (``jmp``, ``rjmp``, etc.), pegamos o endereço que essas instruçoes estavam referenciando, fizemos uma busca reversa em todos os labels encontrados no código original e adicionamos uma entrada na tabela de realocação. Isso era feito em conjunto pelas duas ferramentas que escrevi: ``extract-symbols-metadata`` [#]_ e ``elf-add-symbol`` [#]_.
+Nos posts anteriores, para resolver esse mesmo tipo de problema, ou seja, o deslocamento de código após a link-edição fizemos o parsing do dissasembly procurando por instruções de desvio (``jmp``, ``rjmp``, etc.), pegamos o endereço que essas instruções estavam referenciando, fizemos uma busca reversa em todos os labels encontrados no código original e adicionamos uma entrada na tabela de realocação. Isso era feito em conjunto pelas duas ferramentas que escrevi: ``extract-symbols-metadata`` [#]_ e ``elf-add-symbol`` [#]_.
 
-Mas agora não podemos fazer isso pois uma operação de carga no registrador ``Z`` acaba se transformando em duas instruçoes no assembly final, dessa forma:
+Mas agora não podemos fazer isso pois uma operação de carga no registrador ``Z`` acaba se transformando em duas instruções no assembly final, dessa forma:
 
 .. code-block:: asm
 
@@ -163,7 +163,7 @@ Podemos colocar um código simples bem no início do nosso código assembly para
   _offset_check_data:
     .db 01, 02
 
-O que esse código faz é apenas carregar o endereço de uma label no registrador ``Z``. Ninguém vai chamar esse código, mas ele estará bem no início do nosso código Assembly e por isso aparecerá também no início do disasembly do binário final e poderemos conferir se as duas instruçoes ``ldi`` estarão carregando o endereço correto nos regisradores ``r31:r30`` (``Z``).
+O que esse código faz é apenas carregar o endereço de uma label no registrador ``Z``. Ninguém vai chamar esse código, mas ele estará bem no início do nosso código Assembly e por isso aparecerá também no início do disasembly do binário final e poderemos conferir se as duas instruções ``ldi`` estarão carregando o endereço correto nos regisradores ``r31:r30`` (``Z``).
 
 Vejamos como essa checagem funciona. Vamos link-editar um código assembly com essa checagem com um código C qualquer e vamos ver como fica o disassembly.
 
@@ -269,7 +269,7 @@ O que temos que notar nesse disassembly é o ponto em que nosso código Assembly
   0000008e <_offset_data>:
     8e:	01 02       	muls	r16, r17
 
-Aqui podemos ver que as duas instruçoes ``ldi``, que são responsáveis por carregar o endereço da label ``_offset_data`` no registrador ``Z`` (``r31:r30``), estão passando um endereço incorreto. Nossa label está localizada no endereço ``0x008e``, mas o que está sendo carregado nos registradores ``r31:r30`` é ``0x0004``, o que está claramente errado.
+Aqui podemos ver que as duas instruções ``ldi``, que são responsáveis por carregar o endereço da label ``_offset_data`` no registrador ``Z`` (``r31:r30``), estão passando um endereço incorreto. Nossa label está localizada no endereço ``0x008e``, mas o que está sendo carregado nos registradores ``r31:r30`` é ``0x0004``, o que está claramente errado.
 
 Agora vejamos como fica o disassembly quando adicionamos o offset correto, nesse caso ``0x008a``, que é exatamente o ponto onde nosso código Assembly foi posicionado no binário final.
 
@@ -285,7 +285,7 @@ Como não adicionamos nenhum código C novo, vamos olhar apenas para a parte do 
     8e:	01 02       	muls	r16, r17
 
 
-Olhando agora para as instruçoes ``ldi`` vemos que ela carrega o endereço correto, que é ``0x008e``. Esse é exatamente o endereço na nossa label ``_offset_data``. Note que os valores já estão multiplicados por 2, isso porque estamos analisando o disassembly já do arquivo ``avr-elf32`` onde os novos endereços são o dobro dos endereços originais, que encontramos no arquivo ``.map`` produzido pelo ``avrasm2``. É por isso que não precisamos adicionar o valor de ``offset*2``, pois o offset que vemos no disassembly, nesse caso ``0x008a``, já está multiplicado.
+Olhando agora para as instruções ``ldi`` vemos que ela carrega o endereço correto, que é ``0x008e``. Esse é exatamente o endereço na nossa label ``_offset_data``. Note que os valores já estão multiplicados por 2, isso porque estamos analisando o disassembly já do arquivo ``avr-elf32`` onde os novos endereços são o dobro dos endereços originais, que encontramos no arquivo ``.map`` produzido pelo ``avrasm2``. É por isso que não precisamos adicionar o valor de ``offset*2``, pois o offset que vemos no disassembly, nesse caso ``0x008a``, já está multiplicado.
 
 Com esse ajuste de offset, seu código assembly consegue rodar junto com o código C e ainda fazer uso livre da memória flash para ler/gravar dados.
 
@@ -293,7 +293,7 @@ Com esse ajuste de offset, seu código assembly consegue rodar junto com o códi
 Bonus
 =====
 
-Agora que já podemos chamar código das duas linguagens e usar a memória flash livremente para ler/gravar dados seria interssante poder declarar novas constantes no código C e poder passá-las para o código Assembly. Pensando em uma possível migração de Assembly para C, é importante poder ir transferindo aos poucos, e isso inclui definiçoes de constantes. Abaixo veremos como fazer as duas coisas: Declarar no C um valor que é salvo na memória flash e passá-lo para o código Assembly como parâmetro de função e declarar no Assembly um valor que é salvo na memória flash e passá-lo para o código C.
+Agora que já podemos chamar código das duas linguagens e usar a memória flash livremente para ler/gravar dados seria interssante poder declarar novas constantes no código C e poder passá-las para o código Assembly. Pensando em uma possível migração de Assembly para C, é importante poder ir transferindo aos poucos, e isso inclui definições de constantes. Abaixo veremos como fazer as duas coisas: Declarar no C um valor que é salvo na memória flash e passá-lo para o código Assembly como parâmetro de função e declarar no Assembly um valor que é salvo na memória flash e passá-lo para o código C.
 
 
 Declarando o valor no C e passando para o assembly
