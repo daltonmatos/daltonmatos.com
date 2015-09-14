@@ -5,15 +5,13 @@
 :language: en
 :translation: true
 :slug: lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram
-:url: blog//en/lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram
-:save_as: blog//en/lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram/index.html
+:url: blog/en/lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram
+:save_as: blog/en/lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram/index.html
 
+This post is part of a `series of posts <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ about mixing legacy assembly and moderna C code. If you didn't read the prévios posts, it's recomende to do so before proceeding.
 
-Esse post faz parte de uma `série de posts <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ sobre mistura de código C (avr-gcc) com código Assembly (``avrasm2``). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.
-
-
-Contexto
-========
+Context
+=======
 
 Até agora, nos posts anteriores vimos apenas como fazer chamadas de função de uma linguagem para outra, mas uma parte muito importante de qualquer projeto com micro-controladores é a possibilidade de gravar dados na área de memória do chip (memória flash, por exemplo). É bem comum usar essa memória para gravar valores que serão usados pelo código. O mais comum é vermos strings sendo guardadas para uso futuro, mas é perfeitamente possível guardarmos outros valores como constantes, números e até mesmo definição de fontes, no caso de estarmos lidando com displays de LCD.
 
