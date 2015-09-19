@@ -3,8 +3,8 @@ body, div, span, p, a, img, ul, ol, li, table, th, tr, td, form, fieldset, legen
 body { 
   padding: 0 0; 
   background: #192d40 url('../img/bg.jpg') repeat-x; 
-  font-family: "arial",sans-serif; 
-  font-size: 13px;
+  font-family: "Noto Sans", sans-serif; 
+  font-size: 16px;
   line-height:24px;
   color: #e8eaeb; 
   text-align: center; 
@@ -17,9 +17,9 @@ a:hover {color:#fff; text-decoration: none;}
 
 /* headings --------------------------------------------------------------------- */
 h1, h2, h3, h4, h5, h6 { margin:15px 0 10px 0; }
-h1 { font-size:200%; }
-h2 { font-size:160%; font-family: 'Trebuchet MS', 'Geneva CE', lucida, sans-serif; font-weight: normal; }
-h3 { font-size:120%; margin-top: 25px; font-family: 'Trebuchet MS', 'Geneva CE', lucida, sans-serif;}
+h1 { font-size:200%; font-family: 'Playfair Display', serif; line-height:36px;}
+h2 { font-size:160%; font-family: 'Playfair Display', serif; font-weight: normal;  line-height:30px;}
+h3 { font-size:120%; margin-top: 25px; font-family: 'Open Sans', sans-serif;}
 h4 { font-size:120%; }
 h5 { font-size:100%; }
 
