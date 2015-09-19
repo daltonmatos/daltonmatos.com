@@ -2,7 +2,7 @@
 :date: 2015-09-13
 :status: draft
 :author: Dalton Barreto
-:language: en
+:lang: en
 :translation: true
 :slug: lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram
 :url: blog/en/lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram
