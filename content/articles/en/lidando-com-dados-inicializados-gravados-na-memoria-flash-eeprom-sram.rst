@@ -8,18 +8,18 @@
 :url: blog/en/lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram
 :save_as: blog/en/lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram/index.html
 
-This post is part of a `series of posts <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ about mixing legacy assembly and moderna C code. If you didn't read the prévios posts, it's recomende to do so before proceeding.
+This post is part of a `series of posts <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ about mixing legacy assembly (``avrasm2``) and modern C code (``avr-gcc``). If you didn't read the previous posts, it's recomended to do so before proceeding.
 
 Context
 =======
 
-Até agora, nos posts anteriores vimos apenas como fazer chamadas de função de uma linguagem para outra, mas uma parte muito importante de qualquer projeto com micro-controladores é a possibilidade de gravar dados na área de memória do chip (memória flash, por exemplo). É bem comum usar essa memória para gravar valores que serão usados pelo código. O mais comum é vermos strings sendo guardadas para uso futuro, mas é perfeitamente possível guardarmos outros valores como constantes, números e até mesmo definição de fontes, no caso de estarmos lidando com displays de LCD.
+So far, in previous posts we have seen just how to make function calls from one language to another, but a very important part of any project with micro-controllers is the ability to write data to the chip memory area (flash memory, for example) . It is quite common to use this memory to record values that will be used by the code. The most common is to see strings being stored for future use, but it is quite possible we keep other values as constants, numbers and even font definition, in case we are dealing with LCD displays.
 
-Além da memória flash, temos duas outras memórias dispońiveis para usar dessa mesma forma. A memória SRAM [#]_ e a EEPROM [#]_. Vamos ver logo abaixo como gravamos/lemos dados dessas três memórias disponíveis nos micro-controladores AVR (pelo menos na maioria deles).
+In addition to the flash memory, we have two other available memories to use this way. The SRAM memory [#] _ and EEPROM [#] _. We'll see below how to write/read data from these three memories available in the AVR microcontrollers (at least most of them).
 
 
-Lendo/Gravando dados na memória SRAM e EEPROM
-=============================================
+Writing/Reading data to SRAM e EEPROM memories
+==============================================
 
 Tanto a memória SRAM quanto a EEPROM possuem posicionamentos fixos em cada chip AVR, isso significa que, independente da lingagem usada, o endereço de leitura/escrita será sempre o mesmo. Isso significa que não precisamos nos preocupar com nenhum tipo de deslocamento de código quando fizermos a link-edição com algum código C. Tanto o ``avr-gcc`` quanto o ``avrasm2`` vão inicializar corretamente os valores iniciais e finais dos endereços dessas duas memórias e o código poderá referenciar esses endereços livremente.
 
