@@ -18,18 +18,18 @@ So far, in previous posts we have seen just how to make function calls from one 
 In addition to the flash memory, we have two other available memories to use this way. The SRAM memory [#] _ and EEPROM [#] _. We'll see below how to write/read data from these three memories available in the AVR microcontrollers (at least most of them).
 
 
-Writing/Reading data to SRAM e EEPROM memories
+Reading/Writing data to SRAM e EEPROM memories
 ==============================================
 
-Tanto a memória SRAM quanto a EEPROM possuem posicionamentos fixos em cada chip AVR, isso significa que, independente da lingagem usada, o endereço de leitura/escrita será sempre o mesmo. Isso significa que não precisamos nos preocupar com nenhum tipo de deslocamento de código quando fizermos a link-edição com algum código C. Tanto o ``avr-gcc`` quanto o ``avrasm2`` vão inicializar corretamente os valores iniciais e finais dos endereços dessas duas memórias e o código poderá referenciar esses endereços livremente.
+Both SRAM and EEPROM have fixed positions in every AVR chip, this means that, regardless of the language used, the read/write address will always be the same. This means that we need not to worry about any code relocation when linking with C code. Both `` avr-gcc`` and `` avrasm2`` will correctly initialize the start and end of these two memories and the code can reference these addresses freely.
 
 
-Lendo/Gravando dados na memória Flash
-=====================================
+Reading/Writing data to Flash memory 
+====================================
 
-O problema começa quando precisamos ler/gravar dados na memória flash. Isso acontece pois as duas instruções que devemos usar para isso, ``LPM`` e ``SPM`` trabalham de uma forma peculiar, que explico a seguir:
+The problem starts when we need to read / write data to flash memory. This happens because these two instructions that we should use, ``SPM`` and ``LPM`` work in a peculiar way, which I explain below:
 
-Quando usamos quaisquer uma dessas duas instruções, temos que usar o registrador ``Z`` para dizer onde queremos ler/gravar nosso dado. Então, dando um exemplo simples poderíamos pensar no seguinte código:
+When using any of these two statements, we have to use the ``Z`` register to say where we want to read/write our data. So giving a simple example we would have the following code:
 
 .. code-block:: asm
   
@@ -42,15 +42,15 @@ Quando usamos quaisquer uma dessas duas instruções, temos que usar o registrad
   data:
     .db 02, 03
 
-Olhando esse exemplo poderíamos pensar que, ao fim da execução do código, o valor ``02`` estará gravado no registrador ``R0``, mas infelizmente não é tão simples assim. O problema é que a memóra flash é orientada a páginas e não a bytes e cada página possui dois bytes. Isso significa que em um atmega328p, por exemplo, que possui 32Kbytes de memória flash, temos na verdade 16K páginas que podem ser usadas com a instrução ``LPM``. Sabendo que cada página possui dois bytes, temos que ter uma forma de escolher qual desses dois bytes queremos ler/escrever.
+Looking at this example we might think that at the end of code execution, the value ``02`` will be recorded in the register ``R0``, but unfortunately is not that simple. The problem is that the flash memory pages oriented rather than byte oriented and each page has two bytes. This means that in a ATmega328P, for example, which has 32Kbytes of flash memory, we actually have 16K pages that can be used with the ``LPM`` instruction. Knowing that every page has two bytes, we must have a way to choose which of these two bytes we want to read/write.
 
-Diferentes dos registradores de uso geral do AVR, que possuem 8 bits, o registrador ``Z`` possui 16 bits. Na verdade, o registrador ``Z`` é a junção dos registradores de 8 bits de uso geral: ``r31`` (``ZH``) e ``r30`` (``ZL``). A forma de escolher qual byte de uma página vamos ler/escrever é usando o bit menos significativo do registrador ``Z``.
+Unlike the general-purpose registers of the AVR, which have 8 bits, the ``Z`` register has 16 bits. In fact, it is the union of two 8-bit general-purpose registers: ``r31`` (``ZH``) and ``r30`` (``ZL``). The way to choose which byte of a page we read/write is using the least significant bit of the ``Z`` register.
 
-O bit menos significativo com valor ``0`` indica que queremos mexer no primeiro byte da página e esse bit com valor ``1`` significa que queremos mexer no segundo byte da página. Os bits restantes (1 até 15) servem para indicar o endereço da página da memória flash que queremos mexer. Sabendo disso já podemos entender porque o exemplo de código acima não funciona.
+When the least significant bit is ``0`` it means that we want to read/write the first byte of the page and when this bit is ``1`` it means we want to read/write the second byte of the page. The remaining bits (1 to 15) serve to indicate the address of the flash memory page that we want to read/write. Knowing this we can now understand why the example above does not work.
 
-No exemplo acima, o endereço da página (que tem como referência o label ``data:``) está ocupando o bit menos significativo. Isso aconteceu pois carregamos o endereço do label ``data:`` diretamente no registrador ``Z``. Vejamos um exemplo:
+In the example above, the page address (which refers to the label ``data:``) is occupying the least significant bit. This happened because we loaded the address of the label ``data:`` directly into the ``Z`` register. Here's an example:
 
-Se nosso label ``data:`` está posicionado no endereço ``0x6e9``, o exemplo acima deixou o registrador ``Z`` com o seguinte valor:
+If our label ``data`` is positioned at the address ``0x6e9``, the above example left the ``Z`` recorder with the following value:
 
 .. code-block:: text
 
