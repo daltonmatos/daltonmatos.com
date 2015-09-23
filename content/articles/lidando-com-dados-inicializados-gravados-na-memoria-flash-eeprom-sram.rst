@@ -40,7 +40,7 @@ Quando usamos quaisquer uma dessas duas instruções, temos que usar o registrad
   data:
     .db 02, 03
 
-Olhando esse exemplo poderíamos pensar que, ao fim da execução do código, o valor ``02`` estará gravado no registrador ``R0``, mas infelizmente não é tão simples assim. O problema é que a memóra flash é orientada a páginas e não a bytes e cada página possui dois bytes. Isso significa que em um atmega328p, por exemplo, que possui 32Kbytes de memória flash, temos na verdade 16K páginas que podem ser usadas com a instrução ``LPM``. Sabendo que cada página possui dois bytes, temos que ter uma forma de escolher qual desses dois bytes queremos ler/escrever.
+Olhando esse exemplo poderíamos pensar que, ao fim da execução do código, o valor ``02`` estará gravado no registrador ``R0``, mas infelizmente não é tão simples assim. O problema é que a memória flash é orientada a páginas e não a bytes e cada página possui dois bytes. Isso significa que em um atmega328p, por exemplo, que possui 32Kbytes de memória flash, temos na verdade 16K páginas que podem ser usadas com a instrução ``LPM``. Sabendo que cada página possui dois bytes, temos que ter uma forma de escolher qual desses dois bytes queremos ler/escrever.
 
 Diferentes dos registradores de uso geral do AVR, que possuem 8 bits, o registrador ``Z`` possui 16 bits. Na verdade, o registrador ``Z`` é a junção dos registradores de 8 bits de uso geral: ``r31`` (``ZH``) e ``r30`` (``ZL``). A forma de escolher qual byte de uma página vamos ler/escrever é usando o bit menos significativo do registrador ``Z``.
 
