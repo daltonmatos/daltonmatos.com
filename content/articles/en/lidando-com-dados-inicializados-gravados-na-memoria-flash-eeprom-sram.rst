@@ -42,7 +42,7 @@ When using any of these two statements, we have to use the ``Z`` register to say
   data:
     .db 02, 03
 
-Looking at this example we might think that at the end of code execution, the value ``02`` will be recorded in the register ``R0``, but unfortunately is not that simple. The problem is that the flash memory pages oriented rather than byte oriented and each page has two bytes. This means that in a ATmega328P, for example, which has 32Kbytes of flash memory, we actually have 16K pages that can be used with the ``LPM`` instruction. Knowing that every page has two bytes, we must have a way to choose which of these two bytes we want to read/write.
+Looking at this example we might think that at the end of code execution, the value ``02`` will be recorded in the ``R0`` register, but unfortunately is not that simple. The problem is that the flash memory is page oriented rather than byte oriented and each page has two bytes. This means that in a ATmega328P, for example, which has 32Kbytes of flash memory, we actually have 16K pages that can be used with the ``LPM/SPM`` instructions. Knowing that every page has two bytes, we must have a way to choose which of these two bytes we want to read/write.
 
 Unlike the general-purpose registers of the AVR, which have 8 bits, the ``Z`` register has 16 bits. In fact, it is the union of two 8-bit general-purpose registers: ``r31`` (``ZH``) and ``r30`` (``ZL``). The way to choose which byte of a page we read/write is using the least significant bit of the ``Z`` register.
 
@@ -50,15 +50,14 @@ When the least significant bit is ``0`` it means that we want to read/write the 
 
 In the example above, the page address (which refers to the label ``data:``) is occupying the least significant bit. This happened because we loaded the address of the label ``data:`` directly into the ``Z`` register. Here's an example:
 
-If our label ``data`` is positioned at the address ``0x6e9``, the above example left the ``Z`` recorder with the following value:
+If our label ``data`` were positioned at the address ``0x6e9``, the above example would load the ``Z`` register with the following value:
 
 .. code-block:: text
 
         ZH        ZL
     00000110  11101001
 
-E o que isso significa? Segundo o datasheet, significa que queremos ler o segundo byte da página (pois o bit menos signiicativo tem valor ``1``) e queremos esse byte da página com endereço ``000001101110100``, ou seja, ``0x374``. Isso definitivamente não é o que queríamos no início! Esse código de exemplo, está, na verdade, lendo a página de endereço ``0x374`` e não a página que queremos. Então como fazemos para ler a página correta? O que precisamos fazer é carregar o endereço de nossa página a partir do segundo bit menos significativo do registrador ``Z``, assim liberamos o primeiro bit para podermos indicar qual byte queremos ler. Existe uma forma muito simples de fazer isso: Basta multiplicar por ``2`` o endereço da página, antes de mover para o registrador ``Z``. Vejamos o mesmo exemplo acima, mas agora escrito da forma correta.
-
+And what does that mean? According to the datasheet this means that we want to read the second byte of the page (because the least significant bit has a value of `1``) and we want to read/write that byte in the page with address ``000001101110100``, namely, ``0x374``. That's definitely not what we wanted at the beginning! This sample code is actually reading the page at address ``0x374`` and not the page you want. So how do you read the correct page? What we need to do is load the address of our page beginning at the second least significant bit of the ``Z`` register, thus releasing the first bit to indicate which byte we want to read. There is a very simple way to do this: Just multiply by the page address by ``2``, before loading the ``Z`` register. Let's look at the same example as above, but now written properly.
 
 .. code-block:: asm
   
@@ -71,28 +70,28 @@ E o que isso significa? Segundo o datasheet, significa que queremos ler o segund
   data:
     .db 02, 03
 
-
-Vamos considerar nossa label ``data:`` estando na mesma posição: ``0x6e9``. Quando rodamos esse código, o valor que é efetivamente carregado no registrador ``Z`` é ``0x6e9 * 2``, que é ``0xdd2`` e o registrador fica assim:
+Let's consider our label ``data:`` at the same address: ``0x6e9``. When we run this code, the value that is actually loaded in ``Z`` register is ``0x6e9 * 2``, which is ``0xdd2`` and the ``Z`` register looks like this:
 
 .. code-block:: text
 
         ZH        ZL
     00001101  11010010
 
-Se fizermos a "decodificação" desse valor, segundo o que diz no datasheet, ou seja, pegando o bit menos significativo pra indicar o byte da página e o restante dos bits para indicar o endereço da página temos o seguinte: O bit menos significativo possui agora valor ``0``, o que significa que o primeiro byte da página será lido. E o restante dos bits (1 ao 15) possuem o segunte valor: ``000011011101001`` que é exatamente ``0x6e9``! Agora sim a leitura ficará correta e o código efetivamente gravará o valor ``02`` no registrador ``r0``.
 
-E o que isso tudo tem a ver com nossa mistura de código C com código Assembly Legado? O problema é que esses endereços são calculados em tempo **de compilação**, ou seja, antes da fase de link-edição. Isso significa que quando o ``avr-gcc`` for juntar os dois códigos, todas as labels vão mudar de lugar (como já vimos nos posts anteriores) e isso significa que **todas** as leituras de dados da memória flash ficarão incorretas.
+If we do the "decoding" of that value, according to the datasheet, that is, taking the least significant bit to indicate the byte of the page and the rest of the bits to indicate the page address we have the following: The least significant bit has now value `0``, which means that the first byte of the page will be read/written. And the rest of bits (1-15) have the following value: ``000011011101001`` which is exactly ``0x6e9``! Now the values are correct and the code actually writes the value ``02`` into the ``r0`` register.
 
-Nos posts anteriores, para resolver esse mesmo tipo de problema, ou seja, o deslocamento de código após a link-edição fizemos o parsing do dissasembly procurando por instruções de desvio (``jmp``, ``rjmp``, etc.), pegamos o endereço que essas instruções estavam referenciando, fizemos uma busca reversa em todos os labels encontrados no código original e adicionamos uma entrada na tabela de realocação. Isso era feito em conjunto pelas duas ferramentas que escrevi: ``extract-symbols-metadata`` [#]_ e ``elf-add-symbol`` [#]_.
+And what does all this have to do with our mix of C and Legacy Assembly code? The problem is that these addresses are calculated in **compile** time, that is, before link-editing. This means that when ``avr-gcc`` joins the two codes, all labels will have its addresses changed (as we have seen in previous posts) and it means that **all** flash memory data optarions will be incorrect.
 
-Mas agora não podemos fazer isso pois uma operação de carga no registrador ``Z`` acaba se transformando em duas instruções no assembly final, dessa forma:
+In previous posts, to resolve this same kind of problem, ie, the code shift after link-editing did the parsing of the dissasembly looking for branch instructions (``jmp``, ``rjmp``, etc.) We got the address that these instructions were referencing, we made a reverse search on all labels found in the original code and added an entry in relocation table for each label found. This was done by the two tools I wrote: ``extract-symbols-metadata`` [#] _ and ``elf-add-symbol`` [#] _.
+
+But now we can not do this because a load operation in register ``Z`` ends up as two instructions in the disassembly, like this:
 
 .. code-block:: asm
 
   ldi r30, 0xE6
   ldi r31, 0x0D
 
-Seria insano procurar por esse "padrão" por todo o disassembly pra depois tentar de alguma forma "editar" a instrução no binário final. Por causa disso essa é a única "preparação" que você precisa fazer no seu código Assembly legado pra que seja possível juntá-lo com um código C moderno. Em todo o seu código original, quando você fizer uso da instrução ``LPM`` ou ``SPM`` você precisa levar em consideração o deslocamento que seu código Assembly vai sofrer após ser linkado com um código C. Uma forma simples de fazer isso é, por exemplo, sempre carregar valores no registrador ``Z`` usando uma macro, como essa:
+It would be insane to look for this "pattern" throughout the disassembly and try to somehow "edit" the instructions in the final binary. Because of that, this is the only "preparation" you need to do in your assembly code so that you can mix it with a modern C code. In the original code, when you make use of the ``SPM`` or ``LPM`` instructions you need to take into account the displacement that your assembly code will suffer after being linked with the C code. A simple way to do it is, for example, always load values into the ``Z`` register using a macro, like this:
 
 .. code-block:: asm
 
