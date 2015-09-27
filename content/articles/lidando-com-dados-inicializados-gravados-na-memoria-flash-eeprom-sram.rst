@@ -1,5 +1,5 @@
 :title: Lidando com dados gravados na memória flash, EEPROM e SRAM
-:date: 2015-09-13
+:date: 2015-09-27
 :status: draft
 :author: Dalton Barreto
 :slug: lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram
