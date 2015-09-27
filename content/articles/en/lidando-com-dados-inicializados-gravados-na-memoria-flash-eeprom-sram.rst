@@ -101,35 +101,33 @@ It would be insane to look for this "pattern" throughout the disassembly and try
   .endmacro
 
 
-Depois que você já tiver modificado seu código original para fazer uso dessa macro, fica bem mais fácil corrigir os valores que são carregados no registrador ``Z``, pois poderemos mexer apenas nessa macro, e não no código inteiro. Esse é um exemplo de uso dessa macro:
+After you have already modified the original code to make use of this macro, it is much easier to correct the values that are loaded into the ``Z`` register because we need only to modify this macro, not the entire code. This is an example of using this macro:
 
 .. code-block:: asm
 
   ldz data*2
 
+What we need now is to find out how much our Assembly code was displaced by the ``avr-gcc`` after it was linked to the C code. We then will add this "offset" to the code of our macro ``ldz``, so all addresses will be corrected. This only works because our original assembly code consists of a large binary file. If we had multiple assembly files, converted to ``avr-elf32`` and then passed to ``avr-gcc`` for link-editing, we would probably have different offsets for the original code labels. So it's important to keep your Legacy Assembly code as a single binary, converted from Intel Hex to ``avr-elf32`` and passed to the ``avr-gcc`` for linking.
 
-O que precisamos agora é descobrir o quanto nosso código Assembly se deslocou depois que foi linkado ao código C. Devemos então adicionar esse "offset" ao código da nossa macro ``ldz``, assim todos os endereços serão corrigidos. Isso só funciona pois nosso código assembly original é composto por um grande arquivo binário. Se tivéssemos múltiplos arquivos Assembly, convertidos para ``avr-elf32`` e depois entregues para o ``avr-gcc`` para link-edição, provavelmente teríamos deslocamentos diferentes para as labels do código original. Por isso é importante manter seu código Assembly Legado como um binário único, convertido de Intel Hex para ``avr-elf32`` e entregue ao ``avr-gcc``.
-
-
-Preparando a macro ldz para considerar o deslocamento aplicado pelo avr-gcc
-===========================================================================
+Preparing the ldzmacro to consider the offset of the Assembly code 
+==================================================================
 
 
-Como sabemos que todas as nossas labels serão deslocadas após o processo de link-edição, precisamos preparar nossa macro ldz para considerar esse offset e poder corrigir todos os endereços carregados no registrador ``Z``. Vejamos um exemplo simples:
+Since we know that all our labels are displaced after the process of link-editing, we need to prepare our ``ldz`` macro to consider this offset and be able to correct all the addresses loaded into ``Z`` register. Take a simple example:
 
-Vamos considerar nossa label de exemplo ``data:``, localizada no endereço ``0x6e9``. Se formos rodar o código Assembly sozinho, a chamada à macro ``ldz`` ficaria assim (vamos substituir o nome da label pelo seu endereço para ficar mais claro):
+Let's consider in our example that the label ``data:`` is located at address ``0x6e9``. If we run this Assembly code alone, the call to the ``ldz`` macro would look like the following (we will replace the name of the label by its address for clarity):
 
 .. code-block:: asm
 
  ldz 0x6e9*2
 
-Se considerarmos um deslocamento de ``0x80`` após uma link-edição com um código C, nossa chamada à macro deveria ficar assim:
+If we consider an offset of ``0x80`` after a linking with a C code, our call to the macro should look like this:
 
 .. code-block:: asm
 
  ldz 0x769*2
 
-isso porque ``0x6e9 + 0x80 = 0x769``. Isso significa que podemos reescrever nossa macro dessa forma:
+this happens because ``0x6e9 + 0x80 = 0x769``. It means we can rewrite our macro like this:
 
 .. code-block:: asm
 
@@ -138,38 +136,38 @@ isso porque ``0x6e9 + 0x80 = 0x769``. Isso significa que podemos reescrever noss
     ldi zh, high(@0 + offset)
   .endmacro
 
-`(Nota importante: Entenderemos mais adiante porque não precisamos adicionar offset*2, já que o valor @0 já chega dentro da macro multiplicado)`.
+`(Important note: We will understand later why we don't need to add offset * 2, since the @0 value is passed to the macro already multiplied)`.
 
 
-Podemos definir a constante ``offset`` no início do nosso código Assembly, dessa forma:
+We can define constant ``offset`` at the beginning of our assembly code, like this:
 
 .. code-block:: asm
 
  .equ offset = 0x80
 
 
-A única forma que encontrei de descobrir esse deslocamento foi compilar o código inteiro e depois olhar no disassembly onde o código Assembly legado acabou sendo posicionado no binário final. Isso é chato (apesar de ser possível de automatizar) e passível de erro mas foi o que consegui fazer. Depois de descobrir o deslocamento, volto no código Assembly e adiciono esse offset ao código da macro ``ldz``.
-    
-
-O jeito simples de conferir se o offset escolhido está correto
-==============================================================
+The only way I found to discover the offest value was to compile the entire code and then look in the disassembly where the legacy code ended up being positioned in the final binary. This is annoying (although it is possible to automate) and subject to error but that's what I could do. After discovering the right value, I went back to the Assembly code and added he value of the offset .
 
 
-Podemos colocar um código simples bem no início do nosso código assembly para nos ajudar a conferir se o ``offset`` escolhido está correto.
+A simple way to check if the offset value is correct
+====================================================
+
+
+We can put a simple code at the very beginning of our assembly code to help us check if the chosen ``offset`` is correct.
 
 .. code-block:: asm
 
   _offset_check:
-    ldz _data
+    ldz _offset_check_data
   _offset_check_data:
     .db 01, 02
 
-O que esse código faz é apenas carregar o endereço de uma label no registrador ``Z``. Ninguém vai chamar esse código, mas ele estará bem no início do nosso código Assembly e por isso aparecerá também no início do disasembly do binário final e poderemos conferir se as duas instruções ``ldi`` estarão carregando o endereço correto nos regisradores ``r31:r30`` (``Z``).
+What this code do is load the address of a label into the ``Z`` register. No one will call this code, but it will be at the very beginning of our Assembly code and it will also appear at the beginning of the final binary disasembly and we can check if the two ``ldi`` statements will be loading the correct value into the ``r31:r30`` (``Z``) registers.
 
-Vejamos como essa checagem funciona. Vamos link-editar um código assembly com essa checagem com um código C qualquer e vamos ver como fica o disassembly.
+Let's see how this check works. Let's link an assembly code with this check with any C code and let's see how is the disassembly.
 
 
-Esse será nosso código C:
+This will be our C code:
 
 .. code-block:: c
 
@@ -190,9 +188,9 @@ Esse será nosso código C:
   }
 
 
-Desse código, temos a função ``hello_main``, que estará implementada em Assembly.
+In this code we have the ``hello_main`` routine, that will be implemented in Assembly.
 
-Esse será nosso código Assembly:
+This will be out Assembly code:
 
 .. code-block:: asm
 
@@ -218,7 +216,7 @@ Esse será nosso código Assembly:
     ...
 
 
-Perceba que o valor da constante ``offset`` ainda está com valor ``0x00``, pois não sabemos onde nosso código Assembly será posicionado no binário final. Vejamos como fica o disassebly de uma primeira compilação:
+Note that the value of the ``offset`` constant still has value ``0x00`` because we do not know where our Assembly code will be positioned in the final binary. Let's see how is the disassebly of a first compile:
 
 .. code-block:: objdump
 
@@ -254,7 +252,7 @@ Perceba que o valor da constante ``offset`` ainda está com valor ``0x00``, pois
     92:	0e 94 40 00 	call	0x80	; 0x80 <f>
     96:	0e 94 48 00 	call	0x90	; 0x90 <hello_main>
 
-O que temos que notar nesse disassembly é o ponto em que nosso código Assembly foi posicionado. Podemos ver que ele foi posicionado logo após a função ``f()`` (escrita em C). Nosso código Assembly começa no endereço ``0x008a``. Podemos observar também que o ``offset`` atual, com valor ``0`` está incorreto. Vejamos porque.
+What we must note in this disassembly is the point that our assembly code has been placed. We can see that it was positioned after the ``f()`` (written in C) function . Our Assembly code starts at address ``0x008a``. We can also note that the current ``offset`` with value ``0`` is incorrect. Let's see why.
 
 .. code-block:: objdump
 
@@ -266,11 +264,11 @@ O que temos que notar nesse disassembly é o ponto em que nosso código Assembly
   0000008e <_offset_data>:
     8e:	01 02       	muls	r16, r17
 
-Aqui podemos ver que as duas instruções ``ldi``, que são responsáveis por carregar o endereço da label ``_offset_data`` no registrador ``Z`` (``r31:r30``), estão passando um endereço incorreto. Nossa label está localizada no endereço ``0x008e``, mas o que está sendo carregado nos registradores ``r31:r30`` é ``0x0004``, o que está claramente errado.
+Here we can see that the two ``ldi`` statements, which are responsible for loading the address of the label ``_offset_data`` into the ``Z`` register (``r31: r30``), are incorrect. Our label is located at address ``0x008e``, but what is being loaded into registers ``r31: r30`` is ``0x0004``, which is clearly wrong.
 
-Agora vejamos como fica o disassembly quando adicionamos o offset correto, nesse caso ``0x008a``, que é exatamente o ponto onde nosso código Assembly foi posicionado no binário final.
+Now let's see how is the disassembly when we add the correct offset, in this case ``0x008a``, which is exactly the point where our Assembly code is positioned in the final binary.
 
-Como não adicionamos nenhum código C novo, vamos olhar apenas para a parte do disassembly que realmente mudou.
+As we didn't add any new C code, we will only look at the part of the disassembly that has really changed.
 
 .. code-block:: objdump
 
@@ -282,21 +280,20 @@ Como não adicionamos nenhum código C novo, vamos olhar apenas para a parte do 
     8e:	01 02       	muls	r16, r17
 
 
-Olhando agora para as instruções ``ldi`` vemos que ela carrega o endereço correto, que é ``0x008e``. Esse é exatamente o endereço na nossa label ``_offset_data``. Note que os valores já estão multiplicados por 2, isso porque estamos analisando o disassembly já do arquivo ``avr-elf32`` onde os novos endereços são o dobro dos endereços originais, que encontramos no arquivo ``.map`` produzido pelo ``avrasm2``. É por isso que não precisamos adicionar o valor de ``offset*2``, pois o offset que vemos no disassembly, nesse caso ``0x008a``, já está multiplicado.
+Now looking at the ``ldi`` instructions we see that it loads the correct address, which is ``0x008e``. This is exactly the address on our label ``_offset_data``. Note that the values are already multiplied by 2, thats because we are looking at a ``avr-elf32`` disassembly, where new addresses are twice the original addresses (foun in the ``.map`` file  produced by ``avrasm2``).
 
-Com esse ajuste de offset, seu código assembly consegue rodar junto com o código C e ainda fazer uso livre da memória flash para ler/gravar dados.
+With this offset adjustment, your assembly code can run with the C code and still make free use of flash memory for read/write data.
 
-
-Bônus
+Bonus
 =====
 
-Agora que já podemos chamar código das duas linguagens e usar a memória flash livremente para ler/gravar dados seria interssante poder declarar novas constantes no código C e poder passá-las para o código Assembly. Pensando em uma possível migração de Assembly para C, é importante poder ir transferindo aos poucos, e isso inclui definições de constantes. Abaixo veremos como fazer as duas coisas: Declarar no C um valor que é salvo na memória flash e passá-lo para o código Assembly como parâmetro de função e declarar no Assembly um valor que é salvo na memória flash e passá-lo para o código C.
+Now that we can call code of the two languages and freely use flash memory to read/write data would be interesting to be able to declare new constants in C code and pass them to the Assembly code. Thinking about a possible migration from Assembly to C, it is important to migrate gradually, and that includes constant definitions. Below we will see how to do both: Declare the in the C code a value that is saved in flash memory and pass it to the Assembly code as a function parameter and declare in the Assembly code a value that is saved in flash memory and pass it to the code C.
 
 
-Declarando o valor no C e passando para o assembly
-==================================================
+Declaring a value in C and passing it to Assembly
+=================================================
 
-Esse será nosso código C onde declaramos uma string que será salva na memória flash.
+This is our C code where we declare a variable that will be stored in tha flash memory.
 
 .. code-block:: c
 
@@ -311,7 +308,7 @@ Esse será nosso código C onde declaramos uma string que será salva na memóri
   }
 
 
-Quando fazemos a chamada à rotina Assembly ``hello_main()``, o endereço de ``p`` é passado nos registradores ``r25:r24``. vejamos o disassembly:
+When we make the call to the ``hello_main()`` Assembly routine, the address of ``p`` is passed in registers ``r25:r24``. let's see disassembly:
 
 .. code-block:: objdump
 
@@ -322,7 +319,7 @@ Quando fazemos a chamada à rotina Assembly ``hello_main()``, o endereço de ``p
    ddc:   08 95           ret
 
 
-Vemos nesse caso que o valor que é passado é ``0x007c``. A boa notícia é que esse valor já está pronto para ser usado com a instrução ``LPM``, ou seja, já está multiplicado por 2. No código Assembly basta mover esse valor para o registrador ``Z`` e usar normalmente. Vejamos o código Assembly que receberá esse valor:
+We see in this case that the value that is passed is ``0x007c``. The good news is that this value is ready to be used with the ``LPM/SPM`` instructions, that is, is already multiplied by 2. Assembly code needs only to move this value into ``Z`` register and use normally. Let's look at the assembly code that will receive this value:
 
 .. code-block:: asm
 
@@ -331,10 +328,10 @@ Vemos nesse caso que o valor que é passado é ``0x007c``. A boa notícia é que
     mov zh, r25
     lpm r0, Z    
 
-Definindo o valor no Assembly e passando para o C
-=================================================
+Declaring a value in Assembly and passing to C
+==============================================
 
-Agora faremos o mesmo, mas tendo definido a constante no Assembly. Vejamos o código C que receberá o endereço da memória flash onde o dado estára gravado.
+Now we will do the same, but with the constant defined in the Assembly. Let's look at the C code that will receive the address of the flash memory where the data will be stored.
 
 .. code-block:: c
 
@@ -353,7 +350,8 @@ Agora faremos o mesmo, mas tendo definido a constante no Assembly. Vejamos o có
     hello_main(p); 
   }
 
-Nesse código chamamos a rotina ``hello_main``, que está escrita em Assembly. Essa rotina chama de volta o código C através da função ``c_read_flashbyte()``, dessa vez passando como parametro o endereço onde o dado está gravado. Fazemos então a leitura desse dado com a função ``pgm_read_byte_near()`` e retornamos o valor lido para o Assembly. Vejamos o código assembly:
+
+In this code we call the routine ``hello_main`` which is written in Assembly. This routine calls back the C code using the function ``c_read_flashbyte ()``, this time passing as parameter the address where the data is stored. Then we read this data with the ``pgm_read_byte_near ()`` and return the value read to the Assembly. Let's look at the assembly code:
 
 .. code-block:: asm
   
@@ -365,7 +363,7 @@ Nesse código chamamos a rotina ``hello_main``, que está escrita em Assembly. E
     
   flash_byte_from_asm:  .db "X", 0
 
-Vejamos como fica o disassembly disso tudo:
+Let's see the disassembly of all this:
 
 .. code-block:: objdump
 
@@ -392,11 +390,9 @@ Vejamos como fica o disassembly disso tudo:
     ae:	84 91       	lpm	r24, Z
     b0:	08 95       	ret
 
+We spent the address by registrars ``r25:r24``. Note that we are passing the correct address, ``0x0DF0``. The function ``c_read_flashbyte`` moves the contents of the ``r25: r24`` registers into ``Z`` (``r31:r30``) register and reads the data with the ``LPM`` instruction, storing the result in ``r24``, which will hold the value: ``X``.
 
-Passamos o endereço pelos registradores ``r25:r24``. Note que estamos passando o endereço correto, ``0x0DF0``. A função ``c_read_flashbyte`` move o conteúdo dos registradores ``r25:r24`` para o registrador ``Z`` (``r31:r30``) e faz a leitura do dado com a instrução ``LPM``, guardando o resultado em ``r24``. E esse é exatamenteo o registrador onde estará, nesse caso, o valor ``'X'``.
-
-Então para passarmos endereços da memória flash declarados no Assembly precisamos sempre considerar o offset que esse código sofreu quando foi posicionado no binário final.
-
+So to pass any address declared in the Assembly to C we must always consider the offset that this code suffered when it was positioned at the final binary.
 
 .. [#] `Static random-access memory <https://en.wikipedia.org/wiki/Static_random-access_memory>`_
 .. [#] `EEPROM <https://en.wikipedia.org/wiki/EEPROM>`_
