@@ -159,7 +159,7 @@ Podemos colocar um código simples bem no início do nosso código assembly para
 .. code-block:: asm
 
   _offset_check:
-    ldz _data
+    ldz _offset_check_data
   _offset_check_data:
     .db 01, 02
 
