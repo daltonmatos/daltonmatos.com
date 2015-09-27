@@ -1,5 +1,5 @@
 :title: Dealing with data stored in the flash, EEPROM and SRAM memories
-:date: 2015-09-13
+:date: 2015-09-27
 :status: draft
 :author: Dalton Barreto
 :lang: en
@@ -13,21 +13,21 @@ This post is part of a `series of posts <{filename}chamando-codigo-assembly-lega
 Context
 =======
 
-So far, in previous posts we have seen just how to make function calls from one language to another, but a very important part of any project with micro-controllers is the ability to write data to the chip memory area (flash memory, for example) . It is quite common to use this memory to record values that will be used by the code. The most common is to see strings being stored for future use, but it is quite possible we keep other values as constants, numbers and even font definition, in case we are dealing with LCD displays.
+So far, in previous posts we have seen just how to make function calls from one language to another, but a very important part of any project with micro-controllers is the ability to write data to the chip memory area (flash memory, for example) . It is quite common to use this memory to store values that will be used by the code. The most common is to see strings being stored for future use, but it is quite possible we keep other values such as constants, numbers and even font definition, in case we are dealing with LCD displays.
 
-In addition to the flash memory, we have two other available memories to use this way. The SRAM memory [#] _ and EEPROM [#] _. We'll see below how to write/read data from these three memories available in the AVR microcontrollers (at least most of them).
+In addition to the flash memory, we have two other available memories to use this way. The SRAM memory [#]_ and EEPROM [#]_. We'll see below how to write/read data from these three memories available in the AVR microcontrollers (at least most of them).
 
 
-Reading/Writing data to SRAM e EEPROM memories
-==============================================
+Reading/Writing data to SRAM and EEPROM memories
+================================================
 
-Both SRAM and EEPROM have fixed positions in every AVR chip, this means that, regardless of the language used, the read/write address will always be the same. This means that we need not to worry about any code relocation when linking with C code. Both `` avr-gcc`` and `` avrasm2`` will correctly initialize the start and end of these two memories and the code can reference these addresses freely.
+Both SRAM and EEPROM have fixed positions in every AVR chip, this means that, regardless of the language used, the read/write address will always be the same. This means that we need not to worry about any code relocation when linking with C code. Both ``avr-gcc`` and ``avrasm2`` will correctly initialize the start and end of these two memories and the code can reference these addresses freely.
 
 
 Reading/Writing data to Flash memory 
 ====================================
 
-The problem starts when we need to read / write data to flash memory. This happens because these two instructions that we should use, ``SPM`` and ``LPM`` work in a peculiar way, which I explain below:
+The problem starts when we need to read/write data to flash memory. This happens because the two instructions that we should use (``SPM`` and ``LPM``) work in a peculiar way which I explain below:
 
 When using any of these two statements, we have to use the ``Z`` register to say where we want to read/write our data. So giving a simple example we would have the following code:
 
@@ -78,13 +78,13 @@ Let's consider our label ``data:`` at the same address: ``0x6e9``. When we run t
     00001101  11010010
 
 
-If we do the "decoding" of that value, according to the datasheet, that is, taking the least significant bit to indicate the byte of the page and the rest of the bits to indicate the page address we have the following: The least significant bit has now value `0``, which means that the first byte of the page will be read/written. And the rest of bits (1-15) have the following value: ``000011011101001`` which is exactly ``0x6e9``! Now the values are correct and the code actually writes the value ``02`` into the ``r0`` register.
+If we do the "decoding" of that value, according to the datasheet, that is, taking the least significant bit to indicate the byte of the page and the rest of the bits to indicate the page address we have the following: The least significant bit has now value ``0``, which means that the first byte of the page will be read/written. And the rest of bits (1-15) have the following value: ``000011011101001`` which is exactly ``0x6e9``! Now the values are correct and the code actually writes the value ``02`` into the ``r0`` register.
 
-And what does all this have to do with our mix of C and Legacy Assembly code? The problem is that these addresses are calculated in **compile** time, that is, before link-editing. This means that when ``avr-gcc`` joins the two codes, all labels will have its addresses changed (as we have seen in previous posts) and it means that **all** flash memory data optarions will be incorrect.
+And what does all this have to do with our mix of C and Legacy Assembly code? The problem is that these addresses are calculated in **compile** time, that is, before link-editing. This means that when ``avr-gcc`` joins the two codes, all labels will have its addresses changed (as we have seen in previous posts) and it means that **all** flash memory data operations will be incorrect.
 
-In previous posts, to resolve this same kind of problem, ie, the code shift after link-editing did the parsing of the dissasembly looking for branch instructions (``jmp``, ``rjmp``, etc.) We got the address that these instructions were referencing, we made a reverse search on all labels found in the original code and added an entry in relocation table for each label found. This was done by the two tools I wrote: ``extract-symbols-metadata`` [#] _ and ``elf-add-symbol`` [#] _.
+In previous posts, to resolve this same kind of problem, that is, the code shift after link-editing we did the parsing of the dissasembly looking for branch instructions (``jmp``, ``rjmp``, etc.) We got the address that these instructions were referencing, we made a reverse search on all labels found in the original code and added an entry in relocation table for each label found. This was done by the two tools I wrote: ``extract-symbols-metadata`` [#]_ and ``elf-add-symbol`` [#]_.
 
-But now we can not do this because a load operation in register ``Z`` ends up as two instructions in the disassembly, like this:
+But now we can not do this because a load operation in ``Z`` register ends up as two instructions in the disassembly, like this:
 
 .. code-block:: asm
 
@@ -109,8 +109,8 @@ After you have already modified the original code to make use of this macro, it 
 
 What we need now is to find out how much our Assembly code was displaced by the ``avr-gcc`` after it was linked to the C code. We then will add this "offset" to the code of our macro ``ldz``, so all addresses will be corrected. This only works because our original assembly code consists of a large binary file. If we had multiple assembly files, converted to ``avr-elf32`` and then passed to ``avr-gcc`` for link-editing, we would probably have different offsets for the original code labels. So it's important to keep your Legacy Assembly code as a single binary, converted from Intel Hex to ``avr-elf32`` and passed to the ``avr-gcc`` for linking.
 
-Preparing the ldzmacro to consider the offset of the Assembly code 
-==================================================================
+Preparing the ldz macro to consider the offset of the Assembly code 
+===================================================================
 
 
 Since we know that all our labels are displaced after the process of link-editing, we need to prepare our ``ldz`` macro to consider this offset and be able to correct all the addresses loaded into ``Z`` register. Take a simple example:
@@ -139,14 +139,14 @@ this happens because ``0x6e9 + 0x80 = 0x769``. It means we can rewrite our macro
 `(Important note: We will understand later why we don't need to add offset * 2, since the @0 value is passed to the macro already multiplied)`.
 
 
-We can define constant ``offset`` at the beginning of our assembly code, like this:
+We can define the constant ``offset`` at the beginning of our assembly code, like this:
 
 .. code-block:: asm
 
  .equ offset = 0x80
 
 
-The only way I found to discover the offest value was to compile the entire code and then look in the disassembly where the legacy code ended up being positioned in the final binary. This is annoying (although it is possible to automate) and subject to error but that's what I could do. After discovering the right value, I went back to the Assembly code and added he value of the offset .
+The only way I found to discover the final offest value was to compile the entire code and then look in the disassembly where the legacy code ended up being positioned in the final binary. This is annoying (although it is possible to automate) and error prone but that's what I could do. After discovering the right value, I went back to the Assembly code and added the value of the offset .
 
 
 A simple way to check if the offset value is correct
@@ -162,9 +162,9 @@ We can put a simple code at the very beginning of our assembly code to help us c
   _offset_check_data:
     .db 01, 02
 
-What this code do is load the address of a label into the ``Z`` register. No one will call this code, but it will be at the very beginning of our Assembly code and it will also appear at the beginning of the final binary disasembly and we can check if the two ``ldi`` statements will be loading the correct value into the ``r31:r30`` (``Z``) registers.
+What this code does is load the address of a label into the ``Z`` register. No one will call this code, but it will be at the very beginning of our Assembly code and it will also appear at the beginning of the final binary disasembly and we can check if the two ``ldi`` statements will be loading the correct value into the ``r31:r30`` (``Z``) registers.
 
-Let's see how this check works. Let's link an assembly code with this check with any C code and let's see how is the disassembly.
+Let's see how this check works. Let's link an assembly code with this check with any C code and let's see how the disassembly looks like.
 
 
 This will be our C code:
@@ -190,7 +190,7 @@ This will be our C code:
 
 In this code we have the ``hello_main`` routine, that will be implemented in Assembly.
 
-This will be out Assembly code:
+This will be our Assembly code:
 
 .. code-block:: asm
 
@@ -216,7 +216,7 @@ This will be out Assembly code:
     ...
 
 
-Note that the value of the ``offset`` constant still has value ``0x00`` because we do not know where our Assembly code will be positioned in the final binary. Let's see how is the disassebly of a first compile:
+Note that the ``offset`` constant still has value ``0x00`` because we do not know where our Assembly code will be positioned in the final binary. Let's see how is the disassebly of a first compile:
 
 .. code-block:: objdump
 
@@ -264,7 +264,7 @@ What we must note in this disassembly is the point that our assembly code has be
   0000008e <_offset_data>:
     8e:	01 02       	muls	r16, r17
 
-Here we can see that the two ``ldi`` statements, which are responsible for loading the address of the label ``_offset_data`` into the ``Z`` register (``r31: r30``), are incorrect. Our label is located at address ``0x008e``, but what is being loaded into registers ``r31: r30`` is ``0x0004``, which is clearly wrong.
+Here we can see that the two ``ldi`` statements, which are responsible for loading the address of the label ``_offset_data`` into the ``Z`` register (``r31:r30``), are incorrect. Our label is located at address ``0x008e``, but what is being loaded into registers ``r31:r30`` is ``0x0004``, which is clearly wrong.
 
 Now let's see how is the disassembly when we add the correct offset, in this case ``0x008a``, which is exactly the point where our Assembly code is positioned in the final binary.
 
@@ -280,14 +280,14 @@ As we didn't add any new C code, we will only look at the part of the disassembl
     8e:	01 02       	muls	r16, r17
 
 
-Now looking at the ``ldi`` instructions we see that it loads the correct address, which is ``0x008e``. This is exactly the address on our label ``_offset_data``. Note that the values are already multiplied by 2, thats because we are looking at a ``avr-elf32`` disassembly, where new addresses are twice the original addresses (foun in the ``.map`` file  produced by ``avrasm2``).
+Now looking at the ``ldi`` instructions we see that it loads the correct address, which is ``0x008e``. This is exactly the address of our label ``_offset_data``. Note that the values are already multiplied by 2, thats because we are looking at a ``avr-elf32`` disassembly, where new addresses are twice the original addresses (foun in the ``.map`` file  produced by ``avrasm2``).
 
 With this offset adjustment, your assembly code can run with the C code and still make free use of flash memory for read/write data.
 
 Bonus
 =====
 
-Now that we can call code of the two languages and freely use flash memory to read/write data would be interesting to be able to declare new constants in C code and pass them to the Assembly code. Thinking about a possible migration from Assembly to C, it is important to migrate gradually, and that includes constant definitions. Below we will see how to do both: Declare the in the C code a value that is saved in flash memory and pass it to the Assembly code as a function parameter and declare in the Assembly code a value that is saved in flash memory and pass it to the code C.
+Now that we can call code of the two languages and freely use flash memory to read/write data, would be interesting to be able to declare new constants in C code and pass them to the Assembly code. Thinking about a possible migration from Assembly to C, it is important to migrate gradually, and that includes constant definitions. Below we will see how to do both: Declare in the C code a value that is saved in flash memory and pass it to the Assembly code as a function parameter and declare in the Assembly code a value that is saved in flash memory and pass it to the code C.
 
 
 Declaring a value in C and passing it to Assembly
@@ -308,7 +308,7 @@ This is our C code where we declare a variable that will be stored in tha flash 
   }
 
 
-When we make the call to the ``hello_main()`` Assembly routine, the address of ``p`` is passed in registers ``r25:r24``. let's see disassembly:
+When we make the call to the ``hello_main()`` Assembly routine, the address of ``p`` is passed in registers ``r25:r24``. let's see the disassembly:
 
 .. code-block:: objdump
 
@@ -328,10 +328,10 @@ We see in this case that the value that is passed is ``0x007c``. The good news i
     mov zh, r25
     lpm r0, Z    
 
-Declaring a value in Assembly and passing to C
-==============================================
+Declaring a value in Assembly and passing it to C
+=================================================
 
-Now we will do the same, but with the constant defined in the Assembly. Let's look at the C code that will receive the address of the flash memory where the data will be stored.
+Now we will do the same, but with the constant defined in the Assembly. Let's look at the C code that will receive the address of the flash memory where the data is stored.
 
 .. code-block:: c
 
@@ -351,7 +351,7 @@ Now we will do the same, but with the constant defined in the Assembly. Let's lo
   }
 
 
-In this code we call the routine ``hello_main`` which is written in Assembly. This routine calls back the C code using the function ``c_read_flashbyte ()``, this time passing as parameter the address where the data is stored. Then we read this data with the ``pgm_read_byte_near ()`` and return the value read to the Assembly. Let's look at the assembly code:
+In this code we call the routine ``hello_main`` which is written in Assembly. This routine calls back the C code using the function ``c_read_flashbyte()``, this time passing as parameter the address where the data is stored. Then we read this data with the ``pgm_read_byte_near()`` and return the value read to the Assembly. Let's look at the assembly code:
 
 .. code-block:: asm
   
@@ -390,7 +390,7 @@ Let's see the disassembly of all this:
     ae:	84 91       	lpm	r24, Z
     b0:	08 95       	ret
 
-We spent the address by registrars ``r25:r24``. Note that we are passing the correct address, ``0x0DF0``. The function ``c_read_flashbyte`` moves the contents of the ``r25: r24`` registers into ``Z`` (``r31:r30``) register and reads the data with the ``LPM`` instruction, storing the result in ``r24``, which will hold the value: ``X``.
+We pass the address in the registers ``r25:r24``. Note that we are passing the correct address, ``0x0DF0``. The function ``c_read_flashbyte`` moves the contents of ``r25:r24`` into ``Z`` (``r31:r30``) and reads the data with the ``LPM`` instruction, storing the result in ``r24``, which now holds the value: ``X``.
 
 So to pass any address declared in the Assembly to C we must always consider the offset that this code suffered when it was positioned at the final binary.
 
