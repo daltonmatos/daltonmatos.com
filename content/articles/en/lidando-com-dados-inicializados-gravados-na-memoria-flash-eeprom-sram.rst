@@ -1,6 +1,6 @@
 :title: Dealing with data stored in the flash, EEPROM and SRAM memories
 :date: 2015-09-27
-:status: draft
+:status: published
 :author: Dalton Barreto
 :lang: en
 :translation: true
@@ -42,7 +42,7 @@ When using any of these two statements, we have to use the ``Z`` register to say
   data:
     .db 02, 03
 
-Looking at this example we might think that at the end of code execution, the value ``02`` will be recorded in the ``R0`` register, but unfortunately is not that simple. The problem is that the flash memory is page oriented rather than byte oriented and each page has two bytes. This means that in a ATmega328P, for example, which has 32Kbytes of flash memory, we actually have 16K pages that can be used with the ``LPM/SPM`` instructions. Knowing that every page has two bytes, we must have a way to choose which of these two bytes we want to read/write.
+Looking at this example we might think that at the end of code execution, the value ``02`` will be stored in the ``R0`` register, but unfortunately is not that simple. The problem is that the flash memory is page oriented rather than byte oriented and each page has two bytes. This means that in a ATmega328P, for example, which has 32Kbytes of flash memory, we actually have 16K pages that can be used with the ``LPM/SPM`` instructions. Knowing that every page has two bytes, we must have a way to choose which of these two bytes we want to read/write.
 
 Unlike the general-purpose registers of the AVR, which have 8 bits, the ``Z`` register has 16 bits. In fact, it is the union of two 8-bit general-purpose registers: ``r31`` (``ZH``) and ``r30`` (``ZL``). The way to choose which byte of a page we read/write is using the least significant bit of the ``Z`` register.
 
@@ -57,7 +57,7 @@ If our label ``data`` were positioned at the address ``0x6e9``, the above exampl
         ZH        ZL
     00000110  11101001
 
-And what does that mean? According to the datasheet this means that we want to read the second byte of the page (because the least significant bit has a value of `1``) and we want to read/write that byte in the page with address ``000001101110100``, namely, ``0x374``. That's definitely not what we wanted at the beginning! This sample code is actually reading the page at address ``0x374`` and not the page you want. So how do you read the correct page? What we need to do is load the address of our page beginning at the second least significant bit of the ``Z`` register, thus releasing the first bit to indicate which byte we want to read. There is a very simple way to do this: Just multiply by the page address by ``2``, before loading the ``Z`` register. Let's look at the same example as above, but now written properly.
+And what does that mean? According to the datasheet this means that we want to read the second byte of the page (because the least significant bit has a value of ``1``) and we want to read/write that byte in the page with address ``000001101110100``, namely, ``0x374``. That's definitely not what we wanted at the beginning! This sample code is actually reading the page at address ``0x374`` and not the page you want. So how do you read the correct page? What we need to do is load the address of our page beginning at the second least significant bit of the ``Z`` register, thus releasing the first bit to indicate which byte we want to read. There is a very simple way to do this: Just multiply the page address by ``2``, before loading the ``Z`` register. Let's look at the same example as above, but now written properly.
 
 .. code-block:: asm
   
@@ -80,7 +80,7 @@ Let's consider our label ``data:`` at the same address: ``0x6e9``. When we run t
 
 If we do the "decoding" of that value, according to the datasheet, that is, taking the least significant bit to indicate the byte of the page and the rest of the bits to indicate the page address we have the following: The least significant bit has now value ``0``, which means that the first byte of the page will be read/written. And the rest of bits (1-15) have the following value: ``000011011101001`` which is exactly ``0x6e9``! Now the values are correct and the code actually writes the value ``02`` into the ``r0`` register.
 
-And what does all this have to do with our mix of C and Legacy Assembly code? The problem is that these addresses are calculated in **compile** time, that is, before link-editing. This means that when ``avr-gcc`` joins the two codes, all labels will have its addresses changed (as we have seen in previous posts) and it means that **all** flash memory data operations will be incorrect.
+And what does all this have to do with our mix of C and Legacy Assembly code? The problem is that these addresses are calculated at **compile** time, that is, before link-editing. This means that when ``avr-gcc`` joins the two codes, all labels will have its addresses changed (as we have seen in previous posts) and it means that **all** flash memory data operations will be incorrect.
 
 In previous posts, to resolve this same kind of problem, that is, the code shift after link-editing we did the parsing of the dissasembly looking for branch instructions (``jmp``, ``rjmp``, etc.) We got the address that these instructions were referencing, we made a reverse search on all labels found in the original code and added an entry in relocation table for each label found. This was done by the two tools I wrote: ``extract-symbols-metadata`` [#]_ and ``elf-add-symbol`` [#]_.
 
@@ -107,7 +107,7 @@ After you have already modified the original code to make use of this macro, it 
 
   ldz data*2
 
-What we need now is to find out how much our Assembly code was displaced by the ``avr-gcc`` after it was linked to the C code. We then will add this "offset" to the code of our macro ``ldz``, so all addresses will be corrected. This only works because our original assembly code consists of a large binary file. If we had multiple assembly files, converted to ``avr-elf32`` and then passed to ``avr-gcc`` for link-editing, we would probably have different offsets for the original code labels. So it's important to keep your Legacy Assembly code as a single binary, converted from Intel Hex to ``avr-elf32`` and passed to the ``avr-gcc`` for linking.
+What we need now is to find out how much our Assembly code was displaced by the ``avr-gcc`` after it was linked to the C code. We then will add this "offset" to the code of our ``ldz`` macro, so all addresses will be corrected. This only works because our original assembly code consists of a large binary file. If we had multiple assembly files, converted to ``avr-elf32`` and then passed to ``avr-gcc`` for link-editing, we would probably have different offsets for the original code labels. So it's important to keep your Legacy Assembly code as a single binary, converted from Intel Hex to ``avr-elf32`` and passed to the ``avr-gcc`` for linking.
 
 Preparing the ldz macro to consider the offset of the Assembly code 
 ===================================================================
@@ -158,11 +158,11 @@ We can put a simple code at the very beginning of our assembly code to help us c
 .. code-block:: asm
 
   _offset_check:
-    ldz _offset_check_data
+    ldz _offset_check_data*2
   _offset_check_data:
     .db 01, 02
 
-What this code does is load the address of a label into the ``Z`` register. No one will call this code, but it will be at the very beginning of our Assembly code and it will also appear at the beginning of the final binary disasembly and we can check if the two ``ldi`` statements will be loading the correct value into the ``r31:r30`` (``Z``) registers.
+What this code does is load the address of a label into the ``Z`` register. No one will call this code, but it will be at the very beginning of our Assembly code and it will also appear at the beginning of the final binary disassembly and we can check if the two ``ldi`` statements will be loading the correct value into the ``r31:r30`` (``Z``) registers.
 
 Let's see how this check works. Let's link an assembly code with this check with any C code and let's see how the disassembly looks like.
 

@@ -1,6 +1,6 @@
 :title: Lidando com dados gravados na memória flash, EEPROM e SRAM
 :date: 2015-09-27
-:status: draft
+:status: published
 :author: Dalton Barreto
 :slug: lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram
 
@@ -25,7 +25,7 @@ Tanto a memória SRAM quanto a EEPROM possuem posicionamentos fixos em cada chip
 Lendo/Gravando dados na memória Flash
 =====================================
 
-O problema começa quando precisamos ler/gravar dados na memória flash. Isso acontece pois as duas instruções que devemos usar para isso, ``LPM`` e ``SPM`` trabalham de uma forma peculiar, que explico a seguir:
+O problema começa quando precisamos ler/gravar dados na memória flash. Isso acontece pois as duas instruções que devemos usar para isso (``LPM`` e ``SPM``) trabalham de uma forma peculiar, que explico a seguir:
 
 Quando usamos quaisquer uma dessas duas instruções, temos que usar o registrador ``Z`` para dizer onde queremos ler/gravar nosso dado. Então, dando um exemplo simples poderíamos pensar no seguinte código:
 
@@ -159,11 +159,11 @@ Podemos colocar um código simples bem no início do nosso código assembly para
 .. code-block:: asm
 
   _offset_check:
-    ldz _offset_check_data
+    ldz _offset_check_data*2
   _offset_check_data:
     .db 01, 02
 
-O que esse código faz é apenas carregar o endereço de uma label no registrador ``Z``. Ninguém vai chamar esse código, mas ele estará bem no início do nosso código Assembly e por isso aparecerá também no início do disasembly do binário final e poderemos conferir se as duas instruções ``ldi`` estarão carregando o endereço correto nos regisradores ``r31:r30`` (``Z``).
+O que esse código faz é apenas carregar o endereço de uma label no registrador ``Z``. Ninguém vai chamar esse código, mas ele estará bem no início do nosso código Assembly e por isso aparecerá também no início do disassembly do binário final e poderemos conferir se as duas instruções ``ldi`` estarão carregando o endereço correto nos regisradores ``r31:r30`` (``Z``).
 
 Vejamos como essa checagem funciona. Vamos link-editar um código assembly com essa checagem com um código C qualquer e vamos ver como fica o disassembly.
 
@@ -289,7 +289,7 @@ Com esse ajuste de offset, seu código assembly consegue rodar junto com o códi
 Bônus
 =====
 
-Agora que já podemos chamar código das duas linguagens e usar a memória flash livremente para ler/gravar dados seria interssante poder declarar novas constantes no código C e poder passá-las para o código Assembly. Pensando em uma possível migração de Assembly para C, é importante poder ir transferindo aos poucos, e isso inclui definições de constantes. Abaixo veremos como fazer as duas coisas: Declarar no C um valor que é salvo na memória flash e passá-lo para o código Assembly como parâmetro de função e declarar no Assembly um valor que é salvo na memória flash e passá-lo para o código C.
+Agora que já podemos chamar código das duas linguagens e usar a memória flash livremente para ler/gravar dados seria interessante poder declarar novas constantes no código C e poder passá-las para o código Assembly. Pensando em uma possível migração de Assembly para C, é importante poder ir transferindo aos poucos, e isso inclui definições de constantes. Abaixo veremos como fazer as duas coisas: Declarar no C um valor que é salvo na memória flash e passá-lo para o código Assembly como parâmetro de função e declarar no Assembly um valor que é salvo na memória flash e passá-lo para o código C.
 
 
 Declarando o valor no C e passando para o assembly
