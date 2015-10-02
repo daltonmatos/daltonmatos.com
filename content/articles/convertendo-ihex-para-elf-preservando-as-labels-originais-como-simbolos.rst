@@ -6,7 +6,7 @@
 :tags: avr, microcontrollers, avr-C, avr-assembly, symbol-table, relocation-table
 
 
-Esse post faz parte de uma `série de posts <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ sobre mistura de código C (avr-gcc) com código Assembly (AVRASM2). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.
+Esse post faz parte de uma `série de posts <{filename}/pages/avrgcc-avrasm2.rst>`_ sobre mistura de código C (avr-gcc) com código Assembly (AVRASM2). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.
 
 Contexto
 ========
