@@ -13,7 +13,13 @@
 {% block content%}
 
   <div id="container" class="box">
-  <h1> {{page.title}} </h1>
+    {% if page.in_default_lang and page.translations %}
+      This content is also available in English: <a href="{{SITE_URL}}/{{page.translations[0].url}}"> {{page.translations[0].title}} </a>
+    {% elif not page.in_default_lang %}
+      Este conteúdo também está disponivel Português: <a href="{{SITE_URL}}/{{page.is_translation_of.url}}"> {{page.is_translation_of.title}} </a>
+    {% endif %}
+ 
+    <h1> {{page.title}} </h1>
 
   <p> {{page.content}} </p>
   </div>

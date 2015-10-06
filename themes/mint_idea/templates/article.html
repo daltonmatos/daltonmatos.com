@@ -19,7 +19,8 @@
     {% if article.in_default_lang and article.translations %}
       This content is also available in English: <a href="{{SITE_URL}}/{{article.translations[0].url}}"> {{article.translations[0].title}} </a>
     {% elif not article.in_default_lang %}
-      Este conteúdo também está disponivel Português: <a href="{{SITE_URL}}/blog/{{article.slug}}/"> aqui </a>
+      Este conteúdo também está disponivel Português: <a href="{{SITE_URL}}/{{article.is_translation_of.url}}"> {{article.is_translation_of.title}} </a>
+      <!-- a href="{{SITE_URL}}/blog/{{article.slug}}/"> aqui </a -->
     {% endif %}
 
     <p>{{article.date|strftime('%Y-%m-%d')}}, {{article.author}}</p>

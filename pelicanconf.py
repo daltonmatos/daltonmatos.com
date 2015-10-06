@@ -40,7 +40,7 @@ ARTICLE_PATHS = ['articles']
 ARTICLE_SAVE_AS = 'blog/{slug}/index.html'
 
 PLUGIN_PATHS = ["plugins"]
-PLUGINS = ["sitemap"]
+PLUGINS = ["sitemap", "backreftranslate"]
 
 
 SITEMAP = {
