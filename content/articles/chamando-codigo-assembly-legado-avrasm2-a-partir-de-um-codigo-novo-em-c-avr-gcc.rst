@@ -293,7 +293,7 @@ O que temos aqui é o código da instrução ``oc 94`` e o endereço para onde o
   CSEG _blinks      00000080
   CSEG _add         00000082
 
-isso nos diz que nossa rotina ``_add`` está exatamente no endereço ``0082`` que é o mesmo endereço que vemos na codigicação da nossa instrução (``0c 94 82 00``) do ELF, eles estão apenas representados de forma diferente [#]_.
+isso nos diz que nossa rotina ``_add`` está exatamente no endereço ``0082`` que é o mesmo endereço que vemos na codificação da nossa instrução (``0c 94 82 00``) do ELF, eles estão apenas representados de forma diferente [#]_.
 
 Nossa rotina que estava originalmente no endereço ``0082`` está com o jmp para ``0x104``. Mas ``0x104`` é exatamente o dobro de ``0x0082`` então vamos trocar o nosso ``.org 0x0080`` para ``.org 0x0040`` e ver o que acontece.
 
