@@ -290,5 +290,5 @@ Now what we have to do is flash this binary into the micro-controller memory. An
 
 
 .. [#] `ElfIO - C++ library for reading and generating ELF files <http://elfio.sourceforge.net/>`_
-.. [#] `extract-symbols-metadata <{filename}/extra/extract-symbols-metadata-v2.py>`_
-.. [#] `Código-fonte da ferramenta elf-add-symbol <{filename}/extra/elf-add-symbol-v2.cpp>`_
+.. [#] `extract-symbols-metadata <https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/extract-symbols-metadata.py>`_
+.. [#] `Código-fonte da ferramenta elf-add-symbol <https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/elf-add-symbol.cpp>`_

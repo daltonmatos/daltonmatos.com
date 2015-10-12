@@ -396,5 +396,5 @@ So to pass any address declared in the Assembly to C we must always consider the
 
 .. [#] `Static random-access memory <https://en.wikipedia.org/wiki/Static_random-access_memory>`_
 .. [#] `EEPROM <https://en.wikipedia.org/wiki/EEPROM>`_
-.. [#] `extract-symbols-metadata <{filename}/extra/extract-symbols-metadata-v2.py>`_
-.. [#] `elf-add-symbol <{filename}/extra/elf-add-symbol-v2.cpp>`_
+.. [#] `extract-symbols-metadata <https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/extract-symbols-metadata.py>`_
+.. [#] `elf-add-symbol <https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/elf-add-symbol.cpp>`_

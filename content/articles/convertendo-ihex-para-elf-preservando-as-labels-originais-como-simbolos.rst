@@ -349,9 +349,9 @@ Próximo post: `Chamando código novo C (avr-gcc) a partir de código legado Ass
 
 .. [#] `ELF Symbol Table <http://wiki.osdev.org/ELF_Tutorial#The_Symbol_Table>`_
 .. [#] `Endianness <http://en.wikipedia.org/wiki/Endianness>`_
-.. [#] `Código-fonte da ferramenta elf-add-symbol <{filename}/extra/elf-add-symbol.cpp>`_
+.. [#] `Código-fonte da ferramenta elf-add-symbol <https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/elf-add-symbol.cpp>`_
 .. [#] `ELF Relocation Table <http://wiki.osdev.org/ELF_Tutorial#Relocation_Sections>`_
 .. [#] `AVR ELF Relocation Types <https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=include/elf/avr.h;h=115296da404d034d0626ebe57ac2631a6849d239;hb=HEAD#l53>`_
-.. [#] `extract-symbols-metadata <{filename}/extra/extract-symbols-metadata.py>`_
+.. [#] `extract-symbols-metadata <https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/extract-symbols-metadata.py>`_
 .. [#] `ElfIO - C++ library for reading and generating ELF files <http://elfio.sourceforge.net/>`_
 
