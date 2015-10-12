@@ -13,6 +13,9 @@ from collections import defaultdict
 import re
 from pprint import pprint
 
+def write_err(s, *args):
+    sys.stderr.write(s + "".join(str(i) for i in args) + "\n")
+    sys.stderr.flush()
 
 HEX_DIGITS = "[\dA-Fa-f]+"
 RE_INTRUCTION_ADDRESS = "(?P<instr_addr>{})".format(HEX_DIGITS)
@@ -21,7 +24,7 @@ RE_OPCODE_LOW_BYTE = "(?P<opcodeL>{})".format(HEX_DIGITS)
 RE_OPCODE_ADDR_HIGH_BYTE = "(?P<addrH>{})".format(HEX_DIGITS)
 RE_OPCODE_ADDR_LOW_BYTE = "(?P<addrL>{})".format(HEX_DIGITS)
 RE_MNEMONIC = "(?P<mnemonic>[a-z0-9]+)"
-RE_ELF_ADDR = "(?P<elf_addr>0x{})".format(HEX_DIGITS)
+RE_ELF_ADDR = "(?P<elf_addr>(?:0x|){})".format(HEX_DIGITS)
 
 
 # Opcode com parametro (jmp, call, rcall, etc)
@@ -52,6 +55,8 @@ with open(map_file, 'r') as f:
             parts = line.strip().split(" ")
             symbol = parts[1]
             addr = int(parts[-1], 16)
+            if symbol in ["CppmMainMenu"]:
+                write_err(symbol, " addr=", "0x%x" % addr)
             symbols_by_name[symbol].append(addr)
             symbols_by_addr[addr].append(symbol)
 
@@ -68,13 +73,18 @@ instructions_for_symbols = defaultdict(list)
 for line in sys.stdin:
     m = OBJDUMP_REGEX.search(line.strip())
     if m:
-        #print line.strip()
         group_dict = m.groupdict()
         if group_dict['addrH'] and group_dict['addrL']:  # This is a branch struction, must be relocated
+            write_err("branch instruction=", line.strip())
             addr = int(group_dict['addrH'] + group_dict['addrL'], 16)
+            if ("%x" % addr) in ["5db"]:
+                write_err("addr=05db")
             if addr in symbols_by_addr:  # We found a symbol at this address in the .map file
+                if ("%x" % addr) in ["5db"]:
+                    write_err("symbols in this addr=", symbols_by_addr[addr], " elf_addr=", group_dict['elf_addr'])
+                    write_err(line.strip())
                 for _s in symbols_by_addr[addr]:
-                    symbols_addr_in_elf[_s] = group_dict['elf_addr']
+                    symbols_addr_in_elf[_s] = addr
                     instructions_for_symbols[_s].append(int(group_dict['instr_addr'], 16))
 
 symbols_not_in_elf =  set(symbols_by_name.keys()).difference(set(instructions_for_symbols.keys()))
@@ -88,8 +98,8 @@ for _0_addr_symbols in symbols_not_in_elf:
 # sym_type is I=Internal E=External
 for _s in symbols_addr_in_elf:
     sym_type = "I"
-    if _s == "call_me_maybe":
+    if _s in ["call_me_maybe", "flashdata_from_asm", "c_read_flashbyte"]:
         sym_type = "E"
-    print  _s, sym_type, symbols_addr_in_elf[_s], " ".join("0x%x" % item for item in instructions_for_symbols.get(_s, []))
+    print  _s, sym_type, "0x%x" % (symbols_addr_in_elf[_s] * 2), " ".join("0x%x" % item for item in instructions_for_symbols.get(_s, []))
 
 
