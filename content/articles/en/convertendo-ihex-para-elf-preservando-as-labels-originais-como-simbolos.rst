@@ -16,7 +16,7 @@ This post is part of a `series of posts <{filename}chamando-codigo-assembly-lega
 Context
 =======
 
-In the `previus post <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ we were able to call Assembly code (wrote for ``avrasm2``) from a C code (wrote with ``avr-gcc``). We also realized that there were some limitations in the approach we used and we had to hack the ``.org`` instruction. This means that we would have to change the assembly code every time we added new C code. Today we will use a different approach that makes this hack not necessary anymore.
+In the `previous post <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ we were able to call Assembly code (wrote for ``avrasm2``) from a C code (wrote with ``avr-gcc``). We also realized that there were some limitations in the approach we used and we had to hack the ``.org`` instruction. This means that we would have to change the assembly code every time we added new C code. Today we will use a different approach that makes this hack not necessary anymore.
 
 Looking at our Assembly code
 ============================
