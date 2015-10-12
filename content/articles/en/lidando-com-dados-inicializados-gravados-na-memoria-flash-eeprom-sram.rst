@@ -8,7 +8,7 @@
 :url: blog/en/lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram
 :save_as: blog/en/lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram/index.html
 
-This post is part of a `series of posts <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ about mixing legacy assembly (``avrasm2``) and modern C code (``avr-gcc``). If you didn't read the previous posts, it's recomended to do so before proceeding.
+This post is part of a `series of posts <{filename}/pages/en/avrgcc-avrasm2.rst>`_ about mixing legacy assembly (``avrasm2``) and modern C code (``avr-gcc``). If you didn't read the previous posts, it's recomended to do so before proceeding.
 
 Context
 =======

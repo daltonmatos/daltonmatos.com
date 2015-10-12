@@ -8,7 +8,7 @@
 :url: blog/en/chamando-codigo-novo-em-c-avr-gcc-a-partir-de-um-codigo-assembly-legado-avrasm2
 :save_as: blog/en/chamando-codigo-novo-em-c-avr-gcc-a-partir-de-um-codigo-assembly-legado-avrasm2/index.html
 
-This post is part of a `series of posts <{filename}chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc.rst>`_ about mixing C (``avr-gcc``) code with Assembly (``avrasm2``). If you didn't read the previous articles, it's strongly suggested that you read them before continue.
+This post is part of a `series of posts <{filename}/pages/en/avrgcc-avrasm2.rst>`_ about mixing C (``avr-gcc``) code with Assembly (``avrasm2``). If you didn't read the previous articles, it's strongly suggested that you read them before continue.
 
 Context
 =======
