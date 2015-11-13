@@ -25,7 +25,7 @@ The third post evolves the technique used in the previous post. In this post we 
 
 4. `Dealing with data stored in the flash, EEPROM and SRAM memories <{filename}/articles/en/lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram.rst>`_
 
-The fourth and final post handles constants that are stored in the chip code memory. Deals specifically with AVR ``LPM`` and ``STM`` instructions that work in a peculiar way and therefore require address correcting at compile time.
+The fourth and final post handles constants that are stored in the chip code memory. Deals specifically with AVR ``LPM`` and ``SPM`` instructions that work in a peculiar way and therefore require address correcting at compile time.
 
 
 Code used during the research

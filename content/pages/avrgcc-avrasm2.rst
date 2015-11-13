@@ -25,7 +25,7 @@ O terceiro evolui a técnica usada no post anterior. Nesse post adicionamos o co
 
 4. `Lidando com dados gravados na memória flash, EEPROM e SRAM <{filename}/articles/lidando-com-dados-inicializados-gravados-na-memoria-flash-eeprom-sram.rst>`_
 
-O quarto e último post lida com constantes que são salvas na memória de código do chip. Lidamos específicamente com as instruções ``LPM`` e ``STM``, que nos chips AVR trabalham de uma forma peculiar e por isso demandam ajuste de endereços ainda durante a compilação.
+O quarto e último post lida com constantes que são salvas na memória de código do chip. Lidamos específicamente com as instruções ``LPM`` e ``SPM``, que nos chips AVR trabalham de uma forma peculiar e por isso demandam ajuste de endereços ainda durante a compilação.
 
 
 Códigos usados durante a pesquisa
