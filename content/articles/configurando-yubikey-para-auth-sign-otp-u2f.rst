@@ -1,47 +1,93 @@
-:title: Preparando ua Yubikey 4 Nano para uso diário
+:title: Preparando uma Yubikey 4 Nano para uso diário
 :date: 2017-09-27
 :status: draft
 :author: Dalton Barreto
 :slug: preparando-uma-yubikey-4-nano-para-uso-diario
 
-Pacotes Removidos
-=================
 
- _u yubikey-manager python-pyscard pcsclite yubikey-manager-qt
-checking dependencies...
+Intro
+=====
 
-Package (17)             Old Version  Net Change
+Até saber da existência de smartcards, eu carregava minha chave RSA no meu computador pessoal
+e tinha uma chave para cada computador que eu usava, basicamene uma chave no trabalho e uma
+chave em casa.
 
-libu2f-host              1.1.3-2       -0.13 MiB
-python-asn1crypto        0.22.0-1      -1.16 MiB
-python-cffi              1.10.0-1      -0.96 MiB
-python-click             6.7-1         -0.66 MiB
-python-cryptography      2.0.3-1       -2.21 MiB
-python-ply               3.10-1        -0.31 MiB
-python-pycparser         2.18-1        -1.24 MiB
-python-pyopenssl         17.2.0-1      -0.51 MiB
-python-pyotherside       1.5.0-3       -0.26 MiB
-python-pyusb             1.0.0-5       -0.50 MiB
-yubico-c                 1.13-4        -0.05 MiB
-yubico-c-client          2.15-3        -0.07 MiB
-yubikey-personalization  1.18.0-3      -0.19 MiB
-pcsclite                 1.8.22-1      -0.29 MiB
-python-pyscard           1.9.6-1       -0.89 MiB
-yubikey-manager          0.4.4-1       -0.55 MiB
-yubikey-manager-qt       0.3.1-1       -0.08 MiB
+Meu primeiro interesse em smartcards nem foi para usar como storage para chaves criptográficas e sim
+para fazer Multi-Factor Autentication. Nesse caso o primeiro fator é algo que eu "sei" (minha senha) e o
+segundo fator é algo que eu "tenho", ou seja, o smartcard.
 
-Total Removed Size:  10.05 MiB
+Só isso já me pareceu suficientemente interessante para querer ter um smartcard, quando descobri que
+esse smartcard em especial era compatível com OpenPGP, aí eu passei a definitivamente qurer ter um e inicei
+minha pesquisa para saber qual seria a dificuldade de usar esse smartcard de forma fluida em uma máquina
+rodando Linux. No meu caso específico Arch Linux, mas acredito que funcione quem qualquer outro, basta adaptar
+o nome dos pacotes no momento de instalar.
 
-dmesg ao inserir a chave na porta USB
-=====================================
+Esse post surgiu dessa pesquisa e aqui descrevo as caracteríscidas do smartcard que comprei junto com o paso-a-passo
+que fiz para fazê-lo funcionar.
 
 
- input: Yubico Yubikey 4 OTP+U2F+CCID as /devices/pci0000:00/0000:00:14.0/usb3/3-2/3-2:1.0/0003:1050:0407.0003/input/input14
- hid-generic 0003:1050:0407.0003: input,hidraw2: USB HID v1.10 Keyboard [Yubico Yubikey 4 OTP+U2F+CCID] on usb-0000:00:14.0-2/input0
- hid-generic 0003:1050:0407.0004: hiddev1,hidraw3: USB HID v1.10 Device [Yubico Yubikey 4 OTP+U2F+CCID] on usb-0000:00:14.0-2/input1
+Primeiro contato com o smartcart
+================================
 
-Usando OTP de fábrica
-=====================
+O smartcard que escolhi é produzido pela Yubico. O modelo que escolhi foi o Yubico 4 Nano. Escolhi pelo fato ser
+ser **minúsculo** e caber praticamente todo dentro da porta USB. Sendo desse tamanho, seria possível usar a chave
+sem chamar tanto a atenção por ter algo plugado na porta USB durante todo o tempo.
+
+Logo que você insere o smartcard na porta usb ele se identifica como um dispositivo de entrada:
+
+```
+
+usb 2-1: new full-speed USB device number 31 using xhci_hcd
+input: Yubico Yubikey 4 OTP+U2F+CCID as /devices/pci0000:00/0000:00:14.0/usb2/2-1/2-1:1.0/0003:1050:0407.0016/input/input31
+hid-generic 0003:1050:0407.0016: input,hidraw1: USB HID v1.10 Keyboard [Yubico Yubikey 4 OTP+U2F+CCID] on usb-0000:00:14.0-1/input0
+hid-generic 0003:1050:0407.0017: hiddev1,hidraw2: USB HID v1.10 Device [Yubico Yubikey 4 OTP+U2F+CCID] on usb-0000:00:14.0-1/input1
+
+```
+
+A primeira validação de funcionamento já dá pra ser feita nesse momento. Abre um edit de texto qualquer e toque no smartcard, se
+uma string for digitada no editor significa que seu smartcard já está em funcionamento. É essa funcionalidade que acabamos de
+testar que vai nos dar a possibilidade de usá-lo como segundo fator (mais sobre isso logo adiante).
+
+Funcionalidades que vamos usar com esse smartcard
+=================================================
+
+No decorrer desse texto vamos ver como usar algumas funcionalidades desse smartcard, essas são:
+
+* One Time Password (OTP)
+* OpennPGP (Encriptação/Assinatura digital/Autenticação)
+* Challenge-Response, que pode ser considerado um segundo fator de autenticação mas sem precisar de acesso à internet.
+
+
+Instalação dos pacotes necessários
+==================================
+
+ * yubikey-manager
+ * yubikey-manager-qt
+ * pcsc-tools libu2f-host
+
+ Depois de instalar os pacotes, reinicie o servico `pcscd` e re-insira seu smartcard.
+
+
+Usando One Time Password (OTP)
+==============================
+
+Resumindo bem brevemente, o OTP funciona da seguiinte maneira:
+
+Cada smartcad bem de fábrica com uma chave privada pré-vinculada. Essa chave fica nas mãos da Yubico
+e apenas o seu smartcard é capaz de gerar conteúdos que podem ser checados com essa chave que está com eles.
+
+Então um fluxo de autenticação usando essa funcionalidade funciona assim:
+
+* Você entra no site onde quer se autenticar (Poder ser GMail, Github, etc).
+* Coloca sua senha e avança
+* Nesse ponto, o site vai pedir que você toque no seu smartcard.
+* Quando você fizer esse toque, um conteúdo único é gerado e enviado ao site (como se fosse um teclado mesmo)
+* Nesse momento, o site consulta a fabricante (Yubico) para saber se o conteúdo é autentico.
+* Se a Yubico responder positivamente, sua autenticação é concluída com sucesso.
+
+Como você configurou sua autenticação no Gmail (por exemplo) para usar seu smartcard específico, mesmo que uma pessoa
+tenha a sua senha não conseguirá entrar a não ser que tenha **o seu** smartcard.
+
 
 Como ele se identifica como um teclado, a primeira função já está pronta.
 A função de OTP (One Time Password) já vem pré-configurada pelo a Yubico.
