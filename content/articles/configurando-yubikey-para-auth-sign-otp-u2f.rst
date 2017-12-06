@@ -65,8 +65,9 @@ Instalação dos pacotes necessários
  * yubikey-manager-qt
  * pcsc-tools libu2f-host
 
- Depois de instalar os pacotes, reinicie o servico `pcscd` e re-insira seu smartcard.
+Nota: Os yubikey-manager está disponível no OSX atrvés do pacote ykman, que pode instalado com o homebrew
 
+Depois de instalar os pacotes, reinicie o servico `pcscd` e re-insira seu smartcard.
 
 Usando One Time Password (OTP)
 ==============================
