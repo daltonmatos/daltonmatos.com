@@ -8,7 +8,7 @@ type: "about"
 menu:
   main:
     title: "About"
-
+    weight: 255
 ---
 
 

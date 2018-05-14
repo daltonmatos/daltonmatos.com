@@ -10,5 +10,14 @@
     "description": "Dalton Barreto",
     "author": "Dalton Barreto",
     "authorimage": "/daltonmatos.jpeg"
+  },
+  "menu": {
+    "main": [
+      {
+        "name": "Home",
+        "url": "/",
+        "weight": -10
+      }
+    ]
   }
 }
