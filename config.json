@@ -1,8 +1,9 @@
 {
-  "baseURL": "https://daltonmatos.com/",
+  "baseURL": "http://daltonmatos.com/",
   "languageCode": "pt-br",
   "title": "",
   "theme": "hyde-hyde",
+  "publishDir": "docs/",
   "params": {
     "layoutReverse": false,
     "themeColor": "theme-base-08",
