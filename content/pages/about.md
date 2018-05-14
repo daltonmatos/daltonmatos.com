@@ -1,12 +1,14 @@
 ---
+
 title: "About"
 author: "Dalton Barreto"
 layout: "page"
 date: 2018-05-14
-type: "page"
+type: "about"
 menu:
   main:
     title: "About"
+
 ---
 
 
