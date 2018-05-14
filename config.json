@@ -1,0 +1,13 @@
+{
+  "baseURL": "https://daltonmatos.com/",
+  "languageCode": "pt-br",
+  "title": "",
+  "theme": "hyde-hyde",
+  "params": {
+    "layoutReverse": false,
+    "themeColor": "theme-base-08",
+    "description": "Dalton Barreto",
+    "author": "Dalton Barreto",
+    "authorimage": "daltonmatos.jpeg"
+  }
+}
