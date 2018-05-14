@@ -3,40 +3,40 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://daltonmatos.com/page/about/</loc>
+    <loc>http://1.daltonmatos.com/page/about/</loc>
     <lastmod>2018-05-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://daltonmatos.com/posts/the-first-post/</loc>
+    <loc>http://1.daltonmatos.com/posts/the-first-post/</loc>
     <lastmod>2018-05-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://daltonmatos.com/</loc>
-    <lastmod>2018-05-14T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://daltonmatos.com/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://daltonmatos.com/page/</loc>
+    <loc>http://1.daltonmatos.com/</loc>
     <lastmod>2018-05-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://daltonmatos.com/posts/</loc>
+    <loc>http://1.daltonmatos.com/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://1.daltonmatos.com/page/</loc>
     <lastmod>2018-05-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://daltonmatos.com/tags/</loc>
+    <loc>http://1.daltonmatos.com/posts/</loc>
+    <lastmod>2018-05-14T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://1.daltonmatos.com/tags/</loc>
     <priority>0</priority>
   </url>
   
