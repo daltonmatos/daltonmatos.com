@@ -1,0 +1,18 @@
+{{ define "header" -}}
+    {{ partial "header.html" . }}
+{{- end -}}
+
+{{define "content" -}}
+
+<h1>{{.Title}}</h1>
+{{ .Content }}
+
+{{ range .Data.Pages }}
+
+<p> {{.Type}} </p>
+{{- end}}
+
+{{- end -}}
+
+{{ define "footer" -}}
+{{- end }}
