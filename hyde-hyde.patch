@@ -1,0 +1,33 @@
+diff --git a/static/css/custom.css b/static/css/custom.css
+index 4f6bd95..d0bda7f 100644
+--- a/static/css/custom.css
++++ b/static/css/custom.css
+@@ -55,9 +55,7 @@ pre code, li code, td code, code
+     border-radius: 4px;
+     white-space: pre-wrap;
+     padding:1px 4px;
+-	background: #eee;
+ 	/* color: #444; */
+-	border: 1px solid #d9d9d9;
+ }
+ 
+ code {
+@@ -81,4 +79,4 @@ code {
+ /* Changing from font-awesome 4 to 5, the class pull-right was removed */
+ .pull-right {
+     float: right;
+-}
+\ No newline at end of file
++}
+diff --git a/static/css/poole.css b/static/css/poole.css
+index c2f9e35..f74371e 100644
+--- a/static/css/poole.css
++++ b/static/css/poole.css
+@@ -167,7 +167,6 @@ pre {
+   white-space: pre-wrap;
+   word-break: break-all;
+   word-wrap: break-word;
+-  background-color: #f9f9f9;
+ }
+ pre code {
+   padding: 0;

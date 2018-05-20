@@ -4,6 +4,10 @@
   "title": "",
   "theme": "hyde-hyde",
   "publishDir": "docs/",
+  "PygmentsCodeFences": true,
+  "pygmentsStyle": "monokai",
+  "pygmentsUseClassic": true,
+  "pygmentsUseClasses": false,
   "params": {
     "layoutReverse": false,
     "themeColor": "theme-base-08",
