@@ -6,9 +6,46 @@
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
+    <lastBuildDate>Sun, 12 Apr 2015 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://1.daltonmatos.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Avr</title>
+      <link>http://1.daltonmatos.com/tags/avr/</link>
+      <pubDate>Sun, 12 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://1.daltonmatos.com/tags/avr/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Avr Assembly</title>
+      <link>http://1.daltonmatos.com/tags/avr-assembly/</link>
+      <pubDate>Sun, 12 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://1.daltonmatos.com/tags/avr-assembly/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Avr C</title>
+      <link>http://1.daltonmatos.com/tags/avr-c/</link>
+      <pubDate>Sun, 12 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://1.daltonmatos.com/tags/avr-c/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Microcontrollers</title>
+      <link>http://1.daltonmatos.com/tags/microcontrollers/</link>
+      <pubDate>Sun, 12 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://1.daltonmatos.com/tags/microcontrollers/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>

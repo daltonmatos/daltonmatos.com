@@ -3,13 +3,23 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://1.daltonmatos.com/page/about/</loc>
+    <loc>http://1.daltonmatos.com/about/</loc>
     <lastmod>2018-05-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://1.daltonmatos.com/posts/the-first-post/</loc>
+    <loc>http://1.daltonmatos.com/project/</loc>
     <lastmod>2018-05-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://1.daltonmatos.com/post/the-first-post/</loc>
+    <lastmod>2018-05-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://1.daltonmatos.com/post/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/</loc>
+    <lastmod>2015-04-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -19,24 +29,43 @@
   </url>
   
   <url>
+    <loc>http://1.daltonmatos.com/tags/avr/</loc>
+    <lastmod>2015-04-12T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://1.daltonmatos.com/tags/avr-assembly/</loc>
+    <lastmod>2015-04-12T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://1.daltonmatos.com/tags/avr-c/</loc>
+    <lastmod>2015-04-12T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://1.daltonmatos.com/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://1.daltonmatos.com/page/</loc>
-    <lastmod>2018-05-14T00:00:00+00:00</lastmod>
+    <loc>http://1.daltonmatos.com/tags/microcontrollers/</loc>
+    <lastmod>2015-04-12T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://1.daltonmatos.com/posts/</loc>
+    <loc>http://1.daltonmatos.com/post/</loc>
     <lastmod>2018-05-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://1.daltonmatos.com/tags/</loc>
+    <lastmod>2015-04-12T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

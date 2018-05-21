@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title></title>
-    <link>http://1.daltonmatos.com/</link>
-    <description>Recent content on </description>
+    <title>Posts on </title>
+    <link>http://1.daltonmatos.com/post/</link>
+    <description>Recent content in Posts on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
     <lastBuildDate>Mon, 14 May 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://1.daltonmatos.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://1.daltonmatos.com/post/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>About</title>
-      <link>http://1.daltonmatos.com/about/</link>
-      <pubDate>Mon, 14 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>http://1.daltonmatos.com/about/</guid>
-      <description>Quem sou Olá! Me chamo Dalton Barreto e esse é meu site/blog. Aqui você encontrará conteúdos que escrevo sobre diversos assuntos de meu interesse, dentre eles desenvolvimento de software, eletrônica (circuitos analógicos/digitais), micro controladores (principalmente AVR), servidores e etc.
-Meus projetos estão publicados em meu perfil no GitHub: https://github.com/daltonmatos</description>
-    </item>
     
     <item>
       <title>Um Post qualquer</title>

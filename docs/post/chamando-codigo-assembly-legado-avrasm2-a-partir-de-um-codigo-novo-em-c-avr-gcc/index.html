@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="wf-firasans-n4-active wf-active">
+	<head>
+    <link href="http://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Enable responsiveness on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    <meta name="generator" content="Hugo 0.40.3" />
+    
+    <title>Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc) &middot; </title>
+    <meta content="Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc) - " property="og:title">
+    <meta content=" - " property="og:description">
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i|Roboto+Mono:300,300i,400,400i" rel="stylesheet">
+    <link rel="stylesheet" href="http://1.daltonmatos.com/css/print.css" media="print">
+    <link rel="stylesheet" href="http://1.daltonmatos.com/css/poole.css">
+    <link rel="stylesheet" href="http://1.daltonmatos.com/css/hyde.css">
+    <!-- Font-Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+    
+    <!-- Customised CSS -->
+    <link rel="stylesheet" href="http://1.daltonmatos.com/css/custom.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+	</head>
+    <body class="theme-base-08 " >
+        <div class="sidebar">
+	<div class="container text-center sidebar-sticky">
+		<div class="sidebar-about text-center">
+			<a href="http://1.daltonmatos.com/"><h1 class="brand"></h1></a>
+			 <img src="/daltonmatos.jpeg" alt="Author Image" class="img-circle headshot center"> 
+			<p class="lead">
+				 Dalton Barreto 
+			</p>
+		</div>
+		
+<div>
+	<ul class="sidebar-nav">
+		
+		
+				<li>
+					<a href="/"> <span>Home</span></a>
+				</li>
+				<li>
+					<a href="/about/"> <span>About</span></a>
+				</li>
+		</li>
+	</ul>
+</div>
+
+        <p>
+		<section class="row text-center">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</section>
+
+        </p>
+		<p class="copyright">&copy; 2018 Dalton Barreto.
+        <a href="https://creativecommons.org/licenses/by/4.0">Some Rights Reserved</a>.<br/>Built with <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+        </p>
+	</div>
+	<div>
+	</div>
+</div>
+
+        <div class="content container">
+            <div class="post">
+  <h1>Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc)</h1>
+  
+  <div class="col-sm-12 col-md-12">
+    <span class="text-left post-date meta">
+            
+       
+        <i class="fas fa-calendar-alt"></i> Apr 12, 2015
+      
+      
+      
+      
+        
+        
+            <br/>
+             <i class="fas fa-tags"></i>
+            
+            <a class="meta" href="/tags/avr">avr</a> 
+        
+            <a class="meta" href="/tags/avr-c">avr-c</a> 
+        
+            <a class="meta" href="/tags/avr-assembly">avr-assembly</a> 
+        
+            <a class="meta" href="/tags/microcontrollers">microcontrollers</a>
+        
+      
+      
+      <br/>
+      <i class="fas fa-clock"></i> 12 min read 
+      </span>  
+  </div>    
+  
+  
+
+<h1 id="contexto">Contexto</h1>
+
+<p>Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando <code>avr-gcc</code>. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Isso significa que o código assembly deve estar na sintaxe que o <code>avr-as</code> (GNU Assembler) espera encontrar. Quando me refiro a &ldquo;código legado&rdquo; estou falando de Assembly feito no AVR Studio, usando o AVRASM2 como Assembler. A sintaxe do Assembly que o <code>AVRASM2</code> espera é incompatível com a que o <code>avr-as</code> espera, então não podemos simplesmente pegar o código e compilar com <code>avr-as</code>.</p>
+
+<p>Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades. O desafio desse post é conseguir juntar dois projetos que foram feitos usando ferramentas diferentes (<code>avr-gcc</code> e <code>AVR Studio</code>) que, a princípio, são incompatíveis.</p>
+
+<p>Muitos desses projetos ASM (todos?) feitos há muito tempo atrás provavelmente foram feitos com assemblers que não tinham em mente a junção com código C e portanto geram binários que não possuem suporte à link-edição e outras coisas necessárias para que possamos juntar as duas linguagens. Esse é o caso do <code>AVR Studio</code> (quando usando <code>AVRASM2</code> como Assembler), ele gera no final do build um arquivo no formato <a href="http://en.wikipedia.org/wiki/Intel_HEX">Intel Hex</a>, que não possui, dentre outras coisas, suporte à link-edição.</p>
+
+<h1 id="preparação-dos-arquivos">Preparação dos arquivos</h1>
+
+<p>Antes de podermos começar precisamos ter todos os nossos arquivos em um mesmo formato, para que possamos usar o <code>avr-gcc</code> para gerar nosso binário final. Isso significa que teremos que converter todos os arquivos para um formato que o <code>avr-gcc</code> entenda.</p>
+
+<p>Como o AVRASM2 gera Intel Hex (HEX) temos que converter esse conteúdo para elf32-avr (ELF), assim poderemos juntar esse código com nosso código compilado pelo <code>avr-gcc</code>. Não existe uma conversão direta de HEX pra ELF, o que podemos fazer é converter de HEX para flat binary e depois para ELF. A conversão é feita com <code>avr-objcopy</code>.</p>
+
+<h1 id="exemplo-de-código-avrasm2">Exemplo de código AVRASM2</h1>
+
+<p>Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer o processo completo.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#a6e22e">.include</span> <span style="color:#e6db74">&#34;m328Pdef.inc&#34;</span>
+
+<span style="color:#a6e22e">.org</span> <span style="color:#ae81ff">0x0000</span>
+
+_blinks:
+  <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">r23</span>, <span style="color:#ae81ff">0xa</span>
+  <span style="color:#a6e22e">add</span> <span style="color:#66d9ef">r24</span>, <span style="color:#66d9ef">r23</span>
+  <span style="color:#a6e22e">clr</span> <span style="color:#66d9ef">r1</span>
+  <span style="color:#a6e22e">clr</span> <span style="color:#66d9ef">r25</span>
+  <span style="color:#a6e22e">ret</span> </code></pre></div>
+<p>Esse código apenas soma o valor 10 ao parametro que ele receber. A linha do <code>.include</code> é necessária pois é nela que existem as definiçoes de resgitradores e etc para o micro controlador que estivermos usando. Nesse caso estamos usando um ATmega328P, mas poderia ser qualquer outro AVR. Importante notar a instrução <code>.org 0x0000</code>, isso faz com que nosso código seja posicionado no endereço de memória <code>0</code>. Precisaremos saber disso mais adiante.</p>
+
+<p>O HEX gerado pelo AVRASM2 (AVRStudio 4, por exemplo) possui apenas um seção chamada <code>.sec1</code>, então só precisamos copiá-la pra o flat binary.</p>
+
+<pre><code>
+      $ avr-objdump -h blinks.hex
+
+      blinks.hex:     file format ihex
+
+      Sections:
+      Idx Name          Size      VMA       LMA       File off  Algn
+        0 .sec1         0000000a  00000000  00000000  00000011  2**0
+                        CONTENTS, ALLOC, LOAD
+</code></pre>
+
+<p>Copiando essa seção para o flat binary:</p>
+
+<pre><code>      $ avr-objcopy -j .sec1 -I ihex -O binary blinks.hex blinks.bin
+</code></pre>
+
+<p>Agora precisamos converter para ELF:</p>
+
+<pre><code>      $ avr-objcopy  --rename-section .data=.progmem.data,contents,alloc,load,readonly,data -I binary -O elf32-avr blinks.bin blinks.elf
+</code></pre>
+
+<p>Nesse momento temos um código asembly já pronto para ser link-editado com qualquer outro código gerado pelo avr-gcc. Mas ainda temos alguns problemas.
+Olhando o arquivo ELF de perto, vemos que o símbolo <code>_blinks</code> não está na tabela de símbolos e precisamos saber onde nossa rotina começa para podermos referenciá-la no código C.</p>
+
+<pre><code>
+  $ avr-objdump -x blink_simple.asm.elf
+
+  blink_simple.asm.elf:     file format elf32-avr
+
+  SYMBOL TABLE:
+  00000000 l    d  .progmem.data	00000000 .progmem.data
+  00000000 g       .progmem.data	00000000 _binary_blinks_bin_start
+  0000000a g       .progmem.data	00000000 _binary_blinks_bin_end
+  0000000a g       *ABS*	        00000000 _binary_blinks_bin_size
+</code></pre>
+
+<p>Os três símobolos <code>_binary_*</code> foram criados pelo <code>avr-objcopy</code> e marcam, respectivamente, o início, fim e tamanho total do nosso código, depois de compilado. Mesmo não tendo o símbolo <code>_blinks</code> podemos deduzir onde ele está. Se voltarmos no código assembly veremos que a instrução <code>.org 0x0000</code> está lá e sabemos que ela força o posicionamento do ínício do nosso código no endereço <code>0</code>. Então podemos usar o símbolo <code>_binary_blinks_bin_start</code> como sendo nosso ponto de entrada no código assembly.</p>
+
+<h1 id="analisando-o-código-em-c">Analisando o código em C</h1>
+
+<p>Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina escrita em Assembly. O código é bem simples, tudo que ele faz é piscar o LED que está ligado na porta D13. Como esse código foi testando em um Arduino Nano, a porta D13 é, na verdade, o bit 5 da <a href="http://www.arduino.cc/en/Reference/PortManipulation">PORTB</a>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;util/delay.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+  <span style="color:#75715e">// Arduino Pin13 is mapped to PORTB, bit 5
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// See: http://www.arduino.cc/en/Reference/PortManipulation
+</span><span style="color:#75715e"></span>
+  <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">char</span> <span style="color:#a6e22e">ASM_SYM</span>(<span style="color:#66d9ef">char</span> n);
+
+  <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">void</span>){
+
+    uint8_t total_blinks <span style="color:#f92672">=</span>  ASM_SYM(<span style="color:#ae81ff">5</span>);
+    DDRB <span style="color:#f92672">=</span> DDRB <span style="color:#f92672">|</span> _BV(PB5); <span style="color:#75715e">// PIN13 (internal led) as output
+</span><span style="color:#75715e"></span>
+    PORTB <span style="color:#f92672">=</span> PORTB <span style="color:#f92672">|</span> _BV(PB5); <span style="color:#75715e">// HIGH 
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> (;;){
+      uint8_t i;
+      <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> total_blinks; i<span style="color:#f92672">++</span>){
+        PORTB <span style="color:#f92672">=</span> PORTB <span style="color:#f92672">|</span> _BV(PB5); <span style="color:#75715e">// HIGH
+</span><span style="color:#75715e"></span>        _delay_ms(<span style="color:#ae81ff">200</span>);
+
+        PORTB <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>_BV(PB5); <span style="color:#75715e">// LOW
+</span><span style="color:#75715e"></span>          _delay_ms(<span style="color:#ae81ff">200</span>);
+      }
+      _delay_ms(<span style="color:#ae81ff">1000</span>);
+    }
+
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+  }</code></pre></div>
+<p>Como vamos usar esse mesmo código para linkar com vários códigos ASM diferentes, deixamos o nome da função como uma constante (<code>ASM_SYM</code>) e vamos passar um valor para essa constante para o <code>avr-gcc</code>, no momento de compilar esse código.</p>
+
+<h1 id="compilando-tudo-e-juntando-em-um-mesmo-binário">Compilando tudo e juntando em um mesmo binário</h1>
+
+<p>A compilação do código em C é simples, nada demais em relação aqualquer outra compilação:</p>
+
+<pre><code>  $ avr-gcc -mmcu=atmega328p -Os -DF_CPU=16000000 -DASM_SYM=_binary_blinks_bin_start -o main.elf main.c blinks.elf
+</code></pre>
+
+<p>Podemos olhar o ELF gerado para saber se o código parece correto:</p>
+
+<pre><code>  $ avr-objdump -d main.elf
+</code></pre>
+
+<pre><code>  Disassembly of section .text:
+
+  00000000 &lt;__vectors&gt;:
+     0:	0c 94 34 00 	jmp	0x68	; 0x68 &lt;__ctors_end&gt;
+     4:	0c 94 3e 00 	jmp	0x7c	; 0x7c &lt;__bad_interrupt&gt;
+
+  00000068 &lt;__ctors_end&gt;:
+    68:	11 24       	eor	r1, r1
+    6a:	1f be       	out	0x3f, r1	; 63
+    6c:	cf ef       	ldi	r28, 0xFF	; 255
+    6e:	d8 e0       	ldi	r29, 0x08	; 8
+    70:	de bf       	out	0x3e, r29	; 62
+    72:	cd bf       	out	0x3d, r28	; 61
+    74:	0e 94 45 00 	call	0x8a	; 0x8a &lt;main&gt;
+    78:	0c 94 6d 00 	jmp	0xda	; 0xda &lt;_exit&gt;
+
+  0000007c &lt;__bad_interrupt&gt;:
+    7c:	0c 94 00 00 	jmp	0	; 0x0 &lt;__vectors&gt;
+
+  00000080 &lt;_binary_blinks_bin_start&gt;:
+    80:	7a e0       	ldi	r23, 0x0A	; 10
+    82:	87 0f       	add	r24, r23
+    84:	11 24       	eor	r1, r1
+    86:	99 27       	eor	r25, r25
+    88:	08 95       	ret
+
+  0000008a &lt;main&gt;:
+    8a:	80 e0       	ldi	r24, 0x00	; 0
+    8c:	0e 94 40 00 	call	0x80	; 0x80 &lt;_binary_blinks_bin_start&gt;
+    90:	25 9a       	sbi	0x04, 5	; 4
+    92:	2d 9a       	sbi	0x05, 5	; 5
+</code></pre>
+
+<p>Algumas partes do código foram omitidas para podermos nos concentrar no que é importante. O que temos que observar aqui é onde está nosso código ASM, que nesse caso está no endereço <code>0x0080</code>. Olhando o código da nossa função <code>main</code> vemos que a segunda instrução é o <code>call 0x80</code>, que é justamente a chamada à nossa rotina Assembly.</p>
+
+<p>Nesse ponto, temos um ELF que precisamos converter de volta para HEX, para que possamos fazer o flash para o micro controlador.</p>
+
+<pre><code>  $ avr-objcopy -I elf32-avr -O ihex -j .text -j .data main.elf main.hex
+</code></pre>
+
+<p>De fato, esse é um exemplo muito simples e provavelmente não representa uma situação real em que temos um projeto Assembly legado que precisa ser migrado para C. Pensando nisso, vamos analisar exemplos mais complexos de código Assembly que fazem uso de outras instruçoes como <code>jmp, call, rjmp</code>.</p>
+
+<h1 id="analisando-um-código-que-usa-jmp">Analisando um código que usa jmp</h1>
+
+<p>Agora vamos fazer o mesmo procedimento mas usando um código Assembly que faz uso da instrução <code>jmp</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">  <span style="color:#a6e22e">.org</span> <span style="color:#ae81ff">0x0000</span>
+
+  _blinks:
+    <span style="color:#a6e22e">jmp</span> <span style="color:#66d9ef">_add</span>
+
+  _add:
+    <span style="color:#a6e22e">clr</span> <span style="color:#66d9ef">r1</span>
+    <span style="color:#a6e22e">clr</span> <span style="color:#66d9ef">r25</span>
+    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">r23</span>, <span style="color:#ae81ff">0xa</span>
+    <span style="color:#a6e22e">add</span> <span style="color:#66d9ef">r24</span>, <span style="color:#66d9ef">r23</span>
+    <span style="color:#a6e22e">ret</span> </code></pre></div>
+<p>O código é basicamente o mesmo, mas forçamos um <code>jmp</code> apenas para ilustrar nosso problema. Depois que compilamos com o AVRASM2 e geramos o elf temos o seguinte:</p>
+
+<pre><code>  Disassembly of section .text:
+
+  00000000 &lt; _binary_blinks_bin_start&gt;:
+     0:	0c 94 02 00 	jmp	0x4	; 0x4 &lt; _binary_blinks_bin_start+0x4&gt;
+     4:	11 24       	eor	r1, r1
+     6:	99 27       	eor	r25, r25
+     8:	7a e0       	ldi	r23, 0x0A	; 10
+     a:	87 0f       	add	r24, r23
+     c:	08 95       	ret
+</code></pre>
+
+<p>Olhando o assembly gerado, vemos que está tudo certo pois nosso código começa e <code>0x0000</code> e o jmp está indo para o endereço <code>0x0004</code>, que é onde começa nossa rotina <code>_add</code>. Sabemos disso pois a instrução <code>clr r1, r1</code> é traduzida para <code>eor r1, r1</code>. Agora é hora de juntar isso ao noso código C. Vejamos o Assembly final:</p>
+
+<pre><code>  Disassembly of section .text:
+
+  00000000 &lt;__vectors&gt;:
+     0:	0c 94 34 00 	jmp	0x68	; 0x68 &lt;__ctors_end&gt;
+     4:	0c 94 3e 00 	jmp	0x7c	; 0x7c &lt;__bad_interrupt&gt;
+     8:	0c 94 3e 00 	jmp	0x7c	; 0x7c &lt;__bad_interrupt&gt;
+
+  00000068 &lt;__ctors_end&gt;:
+    68:	11 24       	eor	r1, r1
+    6a:	1f be       	out	0x3f, r1	; 63
+    6c:	cf ef       	ldi	r28, 0xFF	; 255
+    6e:	d8 e0       	ldi	r29, 0x08	; 8
+    70:	de bf       	out	0x3e, r29	; 62
+    72:	cd bf       	out	0x3d, r28	; 61
+    74:	0e 94 47 00 	call	0x8e	; 0x8e &lt;main&gt;
+    78:	0c 94 6f 00 	jmp	0xde	; 0xde &lt;_exit&gt;
+
+  00000080 &lt;_binary_blinks_bin_start&gt;:
+    80:	0c 94 02 00 	jmp	0x4	; 0x4 &lt;__zero_reg__+0x3&gt;
+    84:	11 24       	eor	r1, r1
+    86:	99 27       	eor	r25, r25
+    88:	7a e0       	ldi	r23, 0x0A	; 10
+    8a:	87 0f       	add	r24, r23
+    8c:	08 95       	ret
+
+  0000008e &lt;main&gt;:
+    8e:	80 e0       	ldi	r24, 0x00	; 0
+    90:	0e 94 40 00 	call	0x80	; 0x80 &lt; _binary_blinks_bin_start&gt;
+    94:	25 9a       	sbi	0x04, 5	; 4
+</code></pre>
+
+<p>Olhando o código da nossa função <code>main()</code> vemos que o call é feito corretamente para o endereço <code>0x0080</code>, mas quando olhamos para o código de nossa rotina Assembly, em <code>0x0080</code>, vemos que o endereço para onde o <code>jmp</code> está indo continua sendo <code>0x4</code> e olhando esse endereço percebemos que certamente não é o endereço correto. Isso acontece pois o código Assembly foi compilado completamente separado do código C e não tem nehuma ideia de que vai, na verdade, ser inserido no meio de um outro binário e que por isso deveria ter seus endereços ajustados.</p>
+
+<p>O endereço correto para onde o <code>jmp</code> deveria ir é <code>0x0084</code>. Precisamos fazer, de alguma forma, esses endereços ficarem certos. Uma forma bem &ldquo;suja&rdquo; de se fazer isso é &ldquo;deslocar&rdquo; o código assembly em exatamente <code>0x0080</code>. Afinal, sabemos que ele será posicionado no endereço <code>0x0080</code> (vimos isso no disassembly do ELF). Mudando a instrução <code>.org 0x0000</code> para <code>.org 0x0080</code> temos o seguinte no diassembly do ELF final.</p>
+
+<pre><code>  00000080 &lt;_binary_blinks_bin_start&gt;:
+    80:	0c 94 82 00 	jmp	0x104	; 0x104 &lt;_etext+0x22&gt;
+    84:	11 24       	eor	r1, r1
+    86:	99 27       	eor	r25, r25
+    88:	7a e0       	ldi	r23, 0x0A	; 10
+    8a:	87 0f       	add	r24, r23
+    8c:	08 95       	ret
+</code></pre>
+
+<p>Percebemos que o endereço final ainda ficou errado. Mas vamos parar um pouco e analisar como nossa instrução de <code>jmp</code> foi codificada. Analisando a linha isoladamente temos o segunte:</p>
+
+<pre><code>    80:	0c 94 82 00 	jmp	0x104	; 0x104 &lt;_etext+0x22&gt;
+</code></pre>
+
+<p>O que temos aqui é o código da instrução <code>oc 94</code> e o endereço para onde o <code>jmp</code> deve ir, nesse caso <code>82 00</code>. Quando compilamos nosso código com o avrasm2 podemos gerar um arquivo adicional que contem todos os labels originais do assembly (opção <code>-m</code>) e seus endereços finais. Olhando esse arquivo temos o seguinte:</p>
+
+<pre><code>  CSEG _blinks      00000080
+  CSEG _add         00000082
+</code></pre>
+
+<p>isso nos diz que nossa rotina <code>_add</code> está exatamente no endereço <code>0082</code> que é o mesmo endereço que vemos na codificação da nossa instrução (<code>0c 94 82 00</code>) do ELF, eles estão apenas <a href="http://en.wikipedia.org/wiki/Endianness">representados de forma diferente</a>.</p>
+
+<p>Nossa rotina que estava originalmente no endereço <code>0082</code> está com o jmp para <code>0x104</code>. Mas <code>0x104</code> é exatamente o dobro de <code>0x0082</code> então vamos trocar o nosso <code>.org 0x0080</code> para <code>.org 0x0040</code> e ver o que acontece.</p>
+
+<pre><code>  00000080 &lt;_binary_blinks_bin_start&gt;:
+    80:	0c 94 42 00 	jmp	0x84	; 0x84 &lt;_binary_blinks_bin_start+0x4&gt;
+    84:	11 24       	eor	r1, r1
+    86:	99 27       	eor	r25, r25
+    88:	7a e0       	ldi	r23, 0x0A	; 10
+    8a:	87 0f       	add	r24, r23
+    8c:	08 95       	ret
+</code></pre>
+
+<p>Agora sim temos o <code>jmp</code> para o endereço correto! Não sei ao certo porque isso funciona mas parece dar certo. Funciona inclusive pra um código assembly em que fazemos uso de várias instruçoes de desvio ao mesmo tempo (<code>jmp</code>, <code>rjmp</code>, <code>call</code>):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">  _blinks:
+    <span style="color:#a6e22e">rjmp</span> <span style="color:#66d9ef">_add</span>
+  _ret:
+    <span style="color:#a6e22e">ret</span>
+   
+  _add:
+    <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">_ldi</span>
+  _add1:
+    <span style="color:#a6e22e">add</span> <span style="color:#66d9ef">r24</span>, <span style="color:#66d9ef">r23</span>
+    <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">_clear</span>
+    <span style="color:#a6e22e">rjmp</span> <span style="color:#66d9ef">_ret</span>
+
+  _clear:
+    <span style="color:#a6e22e">clr</span> <span style="color:#66d9ef">r1</span>
+    <span style="color:#a6e22e">clr</span> <span style="color:#66d9ef">r25</span>
+    <span style="color:#a6e22e">ret</span>
+    
+  _ldi:
+    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">r23</span>, <span style="color:#ae81ff">0x5</span>
+    <span style="color:#a6e22e">jmp</span> <span style="color:#66d9ef">_add1</span> </code></pre></div>
+<p>Diassembly do ELF final:</p>
+
+<pre><code>  00000080 &lt;_binary_blinks_bin_start&gt;:
+    80:	01 c0       	rjmp	.+2      	; 0x84 &lt;_binary_blinks_bin_start+0x4&gt;
+    82:	08 95       	ret
+    84:	0e 94 4b 00 	call	0x96	; 0x96 &lt;__binary_blinks_bin_start+0x16&gt;
+    88:	87 0f       	add	r24, r23
+    8a:	0e 94 48 00 	call	0x90	; 0x90 &lt;__binary_blinks_bin_start+0x10&gt;
+    8e:	f9 cf       	rjmp	.-14     	; 0x82 &lt;__binary_blinks_bin_start+0x2&gt;
+    90:	11 24       	eor	r1, r1
+    92:	99 27       	eor	r25, r25
+    94:	08 95       	ret
+    96:	75 e0       	ldi	r23, 0x05	; 5
+    98:	0c 94 44 00 	jmp	0x88	; 0x88 &lt;__binary_blinks_bin_start+0x8&gt;
+</code></pre>
+
+<h1 id="conclusoes">Conclusoes</h1>
+
+<p>Vimos que é possível gerar um HEX, converter pra ELF e chamar uma rotina Assembly que está dentro desse binário. Mas isso é só o início, ainda temos um longo caminho pela frente até podermos pegar um projeto Assembly realmente grande (10K+ LOC) e mesclar com C.</p>
+
+<p>Quando misturamos C e Assembly existem regras que devemos obedecer no momento de usar os registradores. Essas regras estão descritas nesse <a href="http://www.atmel.com/images/doc42055.pdf">documento da Atmel</a>. Antes de tentar reproduzir o que fizemos aqui em um projeto Assembly maior e com funcionalidades reais certifique-se de que o uso dos registradores está em conformidade com essas regras ou as chamadas ao código assembly podem simplesmente não funcionar.</p>
+
+<h1 id="trabalhos-futuros">Trabalhos futuros</h1>
+
+<p>Ainda tenho muita pesquisa para fazer e algumas hipóteses para confirmar, mas isso é assunto para alguns próxmos posts. Isso inclui:</p>
+
+<ul>
+<li>Como inserir simbolos na tabela de simbolos dos ELFs gerados. Isso nos daria a possibilidade de chamar rotinas que estão &ldquo;no meio&rdquo; do código Assembly;</li>
+<li>Como trabalhar com relocação de simbolos. Quando vemos o disassembly de um ELF gerado em um projeto C+Assembly feito com <code>avr-gcc</code> vemos que os simbolos do código assembly são adicionados em uma seção especial do ELF chamada Relocation table. Sabendo manipular esse tabela pode ser que se torne bem mais fácil o uso de código assembly, sem precisar por exemplo desse hack da instrução <code>.org</code> que precisamos fazer;</li>
+<li>Descobrir como fazer a chamada no sentido contrário, ou seja, código assembly legado chamando código novo C. O que fizemos aqui foi apenas código C chamando código Assembly.</li>
+</ul>
+
+<p>Obrigado pela leitura e fique ligado em posts futuros sobre esse assunto. Ainda tenho muita pesquisa para fazer sobre isso.</p>
+
+<p>Próximo post: <code>Convertendo Intel HEX para ELF32-avr criando tabela de símbolos e tabela de realocação &lt;{filename}convertendo-ihex-para-elf-preservando-as-labels-originais-como-simbolos.rst&gt;</code>_.</p>
+
+</div>
+            <div class="footer">
+                
+
+
+            </div>
+        </div>
+        
+                
+    </body>
+</html>
