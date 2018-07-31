@@ -1,7 +1,7 @@
 ---
 title: Preparando uma Yubikey 4 Nano para uso diário
-date: 2018-09-30
-status: draft
+date: 2018-07-30
+status: published
 author: Dalton Barreto
 slug: preparando-uma-yubikey-4-nano-para-uso-diario
 ---
