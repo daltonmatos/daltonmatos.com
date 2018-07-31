@@ -23,5 +23,10 @@
         "weight": -10
       }
     ]
+  },
+  "permalinks": {
+    "posts": "/:year/:month/:title/"
   }
+
+
 }
