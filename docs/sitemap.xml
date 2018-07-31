@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://daltonmatos.com/posts/preparando-uma-yubikey-4-nano-para-uso-diario/</loc>
+    <loc>https://daltonmatos.com/2018/07/preparando-uma-yubikey-4-nano-para-uso-di%C3%A1rio/</loc>
     <lastmod>2018-07-30T00:00:00+00:00</lastmod>
   </url>
   
@@ -29,13 +29,44 @@
   </url>
   
   <url>
+    <loc>https://daltonmatos.com/tags/crypto/</loc>
+    <lastmod>2018-07-30T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/gnupg/</loc>
+    <lastmod>2018-07-30T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/gpg/</loc>
+    <lastmod>2018-07-30T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/posts/</loc>
     <lastmod>2018-07-30T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>https://daltonmatos.com/tags/smartcard/</loc>
+    <lastmod>2018-07-30T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/tags/</loc>
+    <lastmod>2018-07-30T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/yubikey/</loc>
+    <lastmod>2018-07-30T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

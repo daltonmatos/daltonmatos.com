@@ -13,10 +13,10 @@
     
     <item>
       <title>Preparando uma Yubikey 4 Nano para uso diário</title>
-      <link>https://daltonmatos.com/posts/preparando-uma-yubikey-4-nano-para-uso-diario/</link>
+      <link>https://daltonmatos.com/2018/07/preparando-uma-yubikey-4-nano-para-uso-di%C3%A1rio/</link>
       <pubDate>Mon, 30 Jul 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://daltonmatos.com/posts/preparando-uma-yubikey-4-nano-para-uso-diario/</guid>
+      <guid>https://daltonmatos.com/2018/07/preparando-uma-yubikey-4-nano-para-uso-di%C3%A1rio/</guid>
       <description>Intro Até saber da existência de smartcards, eu carregava minha chave RSA no meu computador pessoal e tinha uma chave para cada computador que eu usava, basicamene uma chave no trabalho e uma chave em casa.
 Meu primeiro interesse em smartcards nem foi para usar como storage para chaves criptográficas e sim para fazer Multi-Factor Autentication. Nesse caso o primeiro fator é algo que eu &amp;ldquo;sei&amp;rdquo; (minha senha) e o segundo fator é algo que eu &amp;ldquo;tenho&amp;rdquo;, ou seja, o smartcard.</description>
     </item>

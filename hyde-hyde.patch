@@ -1,24 +1,16 @@
-diff --git a/static/css/custom.css b/static/css/custom.css
-index 4f6bd95..d0bda7f 100644
---- a/static/css/custom.css
-+++ b/static/css/custom.css
-@@ -55,9 +55,7 @@ pre code, li code, td code, code
-     border-radius: 4px;
-     white-space: pre-wrap;
-     padding:1px 4px;
--	background: #eee;
- 	/* color: #444; */
--	border: 1px solid #d9d9d9;
- }
+diff --git a/static/css/hyde-hyde.css b/static/css/hyde-hyde.css
+index 996980c..1fc5a17 100644
+--- a/static/css/hyde-hyde.css
++++ b/static/css/hyde-hyde.css
+@@ -381,7 +381,7 @@ code {
  
  code {
-@@ -81,4 +79,4 @@ code {
- /* Changing from font-awesome 4 to 5, the class pull-right was removed */
- .pull-right {
-     float: right;
--}
-\ No newline at end of file
-+}
+   padding: 2px 4px;
+-  border: 1px dashed #adb5db;
++  border: 1px #adb5db;
+   background-color: #f9f9f9; }
+ 
+ .hljs {
 diff --git a/static/css/poole.css b/static/css/poole.css
 index c2f9e35..f74371e 100644
 --- a/static/css/poole.css
