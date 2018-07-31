@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title></title>
-    <link>http://1.daltonmatos.com/</link>
+    <link>https://daltonmatos.com/</link>
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
     <lastBuildDate>Mon, 30 Jul 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://1.daltonmatos.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://daltonmatos.com/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Preparando uma Yubikey 4 Nano para uso diário</title>
-      <link>http://1.daltonmatos.com/posts/preparando-uma-yubikey-4-nano-para-uso-diario/</link>
+      <link>https://daltonmatos.com/posts/preparando-uma-yubikey-4-nano-para-uso-diario/</link>
       <pubDate>Mon, 30 Jul 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://1.daltonmatos.com/posts/preparando-uma-yubikey-4-nano-para-uso-diario/</guid>
+      <guid>https://daltonmatos.com/posts/preparando-uma-yubikey-4-nano-para-uso-diario/</guid>
       <description>Intro Até saber da existência de smartcards, eu carregava minha chave RSA no meu computador pessoal e tinha uma chave para cada computador que eu usava, basicamene uma chave no trabalho e uma chave em casa.
 Meu primeiro interesse em smartcards nem foi para usar como storage para chaves criptográficas e sim para fazer Multi-Factor Autentication. Nesse caso o primeiro fator é algo que eu &amp;ldquo;sei&amp;rdquo; (minha senha) e o segundo fator é algo que eu &amp;ldquo;tenho&amp;rdquo;, ou seja, o smartcard.</description>
     </item>
     
     <item>
       <title>About</title>
-      <link>http://1.daltonmatos.com/about/</link>
+      <link>https://daltonmatos.com/about/</link>
       <pubDate>Mon, 14 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://1.daltonmatos.com/about/</guid>
+      <guid>https://daltonmatos.com/about/</guid>
       <description>Quem sou Olá! Me chamo Dalton Barreto e esse é meu site/blog. Aqui você encontrará conteúdos que escrevo sobre diversos assuntos de meu interesse, dentre eles desenvolvimento de software, eletrônica (circuitos analógicos/digitais), micro controladores (principalmente AVR), servidores e etc.
 Meus projetos estão publicados em meu perfil no GitHub: https://github.com/daltonmatos</description>
     </item>
