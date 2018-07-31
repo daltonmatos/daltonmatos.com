@@ -1,9 +1,10 @@
-:title: Preparando uma Yubikey 4 Nano para uso diário
-:date: 2017-09-27
-:status: draft
-:author: Dalton Barreto
-:slug: preparando-uma-yubikey-4-nano-para-uso-diario
-
+---
+title: Preparando uma Yubikey 4 Nano para uso diário
+date: 2017-09-27
+status: draft
+author: Dalton Barreto
+slug: preparando-uma-yubikey-4-nano-para-uso-diario
+---
 
 # Intro
 
@@ -160,7 +161,7 @@ Podemos usar assim: `ykchalresp -2 <string>`
 Ele retorna sempre a mesma resposta, para uma mesma `<string>`
 
 O que você pode fazer com isso é encriptar dados usando o resuldado de um challenge-response para uma `<string>` qualquer,
-ou seja, essa encriptação terá dois fatores de check: A `<string>`, que é a senha que você "sabe", mais usa yibikey que é o **único** dispositivo capaz de gerar a saída correta
+ou seja, essa encriptação terá dois fatores de check: A `<string>`, que é a senha que você "sabe", mais sua yubikey que é o **único** dispositivo capaz de gerar a saída correta
 a partir da entrada que você digitou.
 
 ## Um exemplo simples
@@ -175,8 +176,8 @@ $ ykchalresp -2 supersecret
 6ad2ad635dbf37cbbabff2e1cdef2320fe909a49
 ```
 
-E aí, podemos encriptar nosso arquivo usando com senha o valor `6ad2ad635dbf37cbbabff2e1cdef2320fe909a49`. A partir de agora temos dois fatores de autenticação
-pois a úncia forma de re-gerar essa senha que escolhemos é digitando o valor "supersecret" e entregando esse valor para nosaa yubikey, que vai **sempre** geraro valor
+Agora podemos encriptar nosso arquivo usando com senha o valor `6ad2ad635dbf37cbbabff2e1cdef2320fe909a49`. A partir de agora temos dois fatores de autenticação
+pois a úncia forma de re-gerar essa senha que escolhemos é digitando o valor "supersecret" e entregando esse valor para nossa yubikey, que vai **sempre** geraro valor
 `6ad2ad635dbf37cbbabff2e1cdef2320fe909a49`.
 
 
@@ -191,25 +192,18 @@ $ gpg --card-status
 ```
 
 Isso vai te dar algumas informações sobre a funcionalidade OpenPGP da sua chave. Agora que confirmamos que o GnuPG consegue
-falar com ela, é hora de gerar suas chaves e grava-lasem sua chave yubikey.
+falar com ela, é hora de gerar suas chaves e grava-las em sua chave yubikey.
 
-Explicar a importância de poder ter sua chave privada sempre com você e de forma segura.
-Explicar que o PIN e Admin PIN default são 123456 e 12345678.
-Apontar para docs do gnupg onde mostra como trocar esses PINs.
-Apontar para docs que mostram com gerar uma par de chaves GnuPG
-Explicar como mantenhouma cópia da minha master key, fora do meu PC, mas de forma segura:
-   - Gerei 256bits de dados randômiccos
-   - Encripteri esses dados de duas formas:
-     - Uma passphrase muito longa (+- 20 palavras)
-     - Segunda passphrase: Resultado do challenge response da yubikey com uma string de 8 digitos
-        - Assim posso decriptar minha master key de forma conveninente, usando uma passphrase menor (mais fácil de digitar) mas com um "salt" sendo a própria yubikey. Se a yubikey eventualmente morrer, uso a outra passphrase enquanto não compro outra key.
+Não vamos detalhar aqui como gerar seu keyring GPG, pois existem muitos tutoriais bons por aí. Nem vamos detalhar como
+mover suas chaves privadas para dentro do seu smartcard, pois a documentação do GnuPG é suficiente: https://wiki.gnupg.org/SmartCard
 
-Explicar queé possível ativar a funcionalidade de "touch to sign", o que aumenta a segurança pois mesmo que algum código alicioso já esteja rodando no seu PC, elenão vai conseguir assinar/decriptar nada seu, pois a yubikey vai exigir um toque **físico** antes de qualquer opreção de criptografia.
+O que achei de mais interessante em relação a poder ter chaves GPG dentro do smartcard é que a partir de agora posso levar minhas chaves
+comigo, no meu molho de chaves e não mais dentro de um computador. Agora não dependo mais de um PC específico para usar minhas chaves, pois
+tenho elas sempre à mão.
 
+Unindo isso ao fato do GnuPG permitir gerar chaves de autenticação, posso agora ter minha chave privada SSH também dentro do smartcard junto com 
+duas outras chaves: Chave para assinatura digital e Chave para encriptação.
 
-
-
-
-
-
-
+O uso do GnuPG é transparente, ou seja, você usa como se tivesse com suas chaves privadas no PC, mas na verdade estão no smartcard. Quando você usa
+o GnuPG para mover as chaves privadas pro smartcard ele já sabe que elas estão lá e sempre que você precisa executar uma ação que dependa de uma de 
+suas chaves privadas ele já faz a comunicação com o smartcard pra você.
