@@ -55,7 +55,9 @@ pre code, li code, td code, code
     border-radius: 4px;
     white-space: pre-wrap;
     padding:1px 4px;
+	background: #eee;
 	/* color: #444; */
+	border: 1px solid #d9d9d9;
 }
 
 code {

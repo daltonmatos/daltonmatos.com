@@ -13,30 +13,15 @@
     
     <item>
       <title>About</title>
-<<<<<<< HEAD
       <link>http://1.daltonmatos.com/about/</link>
       <pubDate>Mon, 14 May 2018 00:00:00 +0000</pubDate>
       
       <guid>http://1.daltonmatos.com/about/</guid>
-=======
-      <link>http://1.daltonmatos.com/pages/about/</link>
-      <pubDate>Mon, 14 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>http://1.daltonmatos.com/pages/about/</guid>
->>>>>>> Gerando versão final HTML
       <description>Quem sou Olá! Me chamo Dalton Barreto e esse é meu site/blog. Aqui você encontrará conteúdos que escrevo sobre diversos assuntos de meu interesse, dentre eles desenvolvimento de software, eletrônica (circuitos analógicos/digitais), micro controladores (principalmente AVR), servidores e etc.
 Meus projetos estão publicados em meu perfil no GitHub: https://github.com/daltonmatos</description>
     </item>
     
     <item>
-<<<<<<< HEAD
-      <title>Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc)</title>
-      <link>http://1.daltonmatos.com/post/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/</link>
-      <pubDate>Sun, 12 Apr 2015 00:00:00 +0000</pubDate>
-      
-      <guid>http://1.daltonmatos.com/post/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/</guid>
-      <description>Contexto Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando avr-gcc. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Isso significa que o código assembly deve estar na sintaxe que o avr-as (GNU Assembler) espera encontrar. Quando me refiro a &amp;ldquo;código legado&amp;rdquo; estou falando de Assembly feito no AVR Studio, usando o AVRASM2 como Assembler.</description>
-=======
       <title>Preparando uma Yubikey 4 Nano para uso diário</title>
       <link>http://1.daltonmatos.com/posts/preparando-uma-yubikey-4-nano-para-uso-diario/</link>
       <pubDate>Wed, 27 Sep 2017 00:00:00 +0000</pubDate>
@@ -44,7 +29,15 @@ Meus projetos estão publicados em meu perfil no GitHub: https://github.com/dalt
       <guid>http://1.daltonmatos.com/posts/preparando-uma-yubikey-4-nano-para-uso-diario/</guid>
       <description>Intro Até saber da existência de smartcards, eu carregava minha chave RSA no meu computador pessoal e tinha uma chave para cada computador que eu usava, basicamene uma chave no trabalho e uma chave em casa.
 Meu primeiro interesse em smartcards nem foi para usar como storage para chaves criptográficas e sim para fazer Multi-Factor Autentication. Nesse caso o primeiro fator é algo que eu &amp;ldquo;sei&amp;rdquo; (minha senha) e o segundo fator é algo que eu &amp;ldquo;tenho&amp;rdquo;, ou seja, o smartcard.</description>
->>>>>>> Gerando versão final HTML
+    </item>
+    
+    <item>
+      <title>Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc)</title>
+      <link>http://1.daltonmatos.com/post/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/</link>
+      <pubDate>Sun, 12 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://1.daltonmatos.com/post/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/</guid>
+      <description>Contexto Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando avr-gcc. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Isso significa que o código assembly deve estar na sintaxe que o avr-as (GNU Assembler) espera encontrar. Quando me refiro a &amp;ldquo;código legado&amp;rdquo; estou falando de Assembly feito no AVR Studio, usando o AVRASM2 como Assembler.</description>
     </item>
     
   </channel>
