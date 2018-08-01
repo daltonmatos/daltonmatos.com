@@ -125,7 +125,7 @@ para usar sua chave. https://www.yubico.com/support/knowledge-base/categories/ar
 E para o Github: https://help.github.com/articles/configuring-two-factor-authentication-via-fido-u2f/
 
 
-# Usando a funconalidade de Chanlenge Response
+# Usando a funcionalidade de Challenge Response
 
 Instale os seguintes pacotes:
 
