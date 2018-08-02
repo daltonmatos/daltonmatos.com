@@ -4,6 +4,7 @@ date: 2018-07-30
 tags: [crypto, gpg, gnupg, smartcard, yubikey]
 status: published
 author: Dalton Barreto
+slug: preparando-uma-yubikey-4-nano-para-uso-diario
 ---
 
 # Intro

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Crypt on </title>
+    <link>https://daltonmatos.com/tags/crypt/</link>
+    <description>Recent content in Crypt on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>pt-br</language>
+    <lastBuildDate>Wed, 01 Aug 2018 21:41:17 -0300</lastBuildDate>
+    
+	<atom:link href="https://daltonmatos.com/tags/crypt/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>(Arch) Linux Com Full Disk Encryption</title>
+      <link>https://daltonmatos.com/2018/08/arch-linux-com-full-disk-encryption/</link>
+      <pubDate>Wed, 01 Aug 2018 21:41:17 -0300</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/08/arch-linux-com-full-disk-encryption/</guid>
+      <description>Atualmente é tão simples e transparente ter o disco encriptdo que não faz sentido não ter. Se você pensar na possível perda de performance (pelo fato do seu disco estar sendo encriptado/decriptado em tempo de execução) vai perceber que, a não ser que você faça um uso muito específico do seu PC, essa &amp;ldquo;perda de performance&amp;rdquo; não fará nenhuma diferença.
+Sempre que me perguntam se a performance de um disco encriptado é boa ou rum, eu respondo que não sei pois nunca tive um laptop onde o disco não estava encriptado.</description>
+    </item>
+    
+  </channel>
+</rss>
