@@ -7,8 +7,6 @@ author: Dalton Barreto
 slug: preparando-uma-yubikey-4-nano-para-uso-diario
 ---
 
-# Intro
-
 Até saber da existência de smartcards, eu carregava minha chave RSA no meu computador pessoal
 e tinha uma chave para cada computador que eu usava, basicamene uma chave no trabalho e uma
 chave em casa.
