@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://daltonmatos.com/2018/08/arch-linux-com-full-disk-encryption/</loc>
+    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/</loc>
     <lastmod>2018-07-30T00:00:00+00:00</lastmod>
   </url>
@@ -19,12 +24,18 @@
   
   <url>
     <loc>https://daltonmatos.com/</loc>
-    <lastmod>2018-07-30T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://daltonmatos.com/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/crypt/</loc>
+    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -47,8 +58,20 @@
   </url>
   
   <url>
+    <loc>https://daltonmatos.com/tags/linux/</loc>
+    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/luks/</loc>
+    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/posts/</loc>
-    <lastmod>2018-07-30T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -60,7 +83,7 @@
   
   <url>
     <loc>https://daltonmatos.com/tags/</loc>
-    <lastmod>2018-07-30T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
