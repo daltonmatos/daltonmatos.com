@@ -84,7 +84,7 @@ Só precisamos alterar uma linha. Ache a linha `HOOKS="...."` e adicione a essa 
 Geralmente a linha, depois de ser alterada, fica assim:
 
 ```
-HOOKS=(base udev autodetect modconf block encrypt lvm2 filesystems keyboard fsck)
+HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)
 ```
 
 # Configurando o GRUB
