@@ -4,7 +4,7 @@ date: 2018-08-02
 tags: [linux, crypt, luks]
 ---
 
-Atualmente é tão simples e transparente ter o disco encriptdo que não faz sentido não ter. Se você pensar na
+Atualmente é tão simples e transparente ter o disco encriptado que não faz sentido não ter. Se você pensar na
 possível perda de performance (pelo fato do seu disco estar sendo encriptado/decriptado em tempo de execução)
 vai perceber que, a não ser que você faça um uso **muito específico** do seu PC, essa "perda de performance"
 não fará nenhuma diferença.
