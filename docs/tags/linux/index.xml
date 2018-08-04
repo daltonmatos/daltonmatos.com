@@ -6,10 +6,20 @@
     <description>Recent content in Linux on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Thu, 02 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 04 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Curl de Guerrilha</title>
+      <link>https://daltonmatos.com/2018/08/curl-de-guerrilha/</link>
+      <pubDate>Sat, 04 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/08/curl-de-guerrilha/</guid>
+      <description>Vou escrever aqui algumas das opções que mais uso no dia a dia quando preciso do comando curl. Muitas vezes o curl é usado apenas para &amp;ldquo;baixar arquivos&amp;rdquo; e pelo fato dele usar por padrão o stdout muitas vezes as pessoas preferem até mesmo usar o wget, que por padrão salva o output em um arquivo.
+O curl é muito mais do que um &amp;ldquo;baixador de arquivos&amp;rdquo; e diria até que o propósito principal dele nem é esse, apesar dele conseguir fazer isso também.</description>
+    </item>
     
     <item>
       <title>(Arch) Linux Com Full Disk Encryption</title>

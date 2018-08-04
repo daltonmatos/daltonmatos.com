@@ -1,8 +1,7 @@
 ---
-title: "Curl de guerrilha"
+title: "Curl de Guerrilha"
 author: "Dalton Barreto"
-draft: true
-date: 2018-08-03
+date: 2018-08-04 
 tags: [curl, cli, linux, commandline]
 ---
 
@@ -64,6 +63,8 @@ $ curl -H "X-Meu-Header: Meu Valor" https://httpbin.org/headers
   }
 }
 ```
+
+A opção `-H` também pode ser usada com a sintaxe `-H@file`, onde `file` é um arquivo ontendo os headers que serão adicionados ao request, muito útil quando são muitos headers e você não quer passar uma opção `-H` para cada header.
 
 # curl -u
 
@@ -140,7 +141,7 @@ A opção `-d` serve para passar dados no corpo de um request, geralmente um req
 $ meu-script.sh | curl -d@- https://api.myservice/new
 ```
 
-Usar `-d` implica em trocar o método HTTP para `POST`, a não ser que seja passada a opção `-X` com um método diferente.
+Usar `-d` implica em trocar o método HTTP para `POST`.
 
 # curl -X
 
@@ -148,4 +149,9 @@ A opção `-X` permite escolher qual será o método HTTP usado. Por exemplo: `-
 
 # Outras opções
 
-Existem outras opções também muito úteis mas que ficaram de fora desse post, exemplo: `-L` para seguir redirects automaticamente. `-k` para escolher **não validar** o certificado SSL.
+Existem outras opções também muito úteis mas que ficaram de fora desse post, exemplo: 
+
+* `-L`: Para seguir redirects automaticamente; 
+* `-k` para escolher **não validar** o certificado SSL;
+* `--connect-timeout`: Para definir um timeout na chamada que o crul fará;
+
