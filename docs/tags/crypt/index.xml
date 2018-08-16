@@ -22,6 +22,16 @@ Minhas chaves de assinatura e encriptação expiram a cada 6 meses. Isso forçar
     </item>
     
     <item>
+      <title>Mantendo variáveis de ambiente encriptadas</title>
+      <link>https://daltonmatos.com/2018/08/mantendo-variaveis-de-ambiente-encriptadas/</link>
+      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/08/mantendo-variaveis-de-ambiente-encriptadas/</guid>
+      <description>Desde que me interessei mais sobre encriptação, chaves GPG e afins comecei a tentar montar um workflow que fosse ao mesmo tempo agradável e seguro (para os padrões que escolhi). Depois de ter começado a usar um smartcard para armazenar minhas chaves ([1] e [2]) comecei a usá-lo em vários pontos do meu dia a dia que achei que deveriam/poderiam ser mais seguros.
+Variáveis de ambiente Variáveis de ambiente, ou apenas ENVs são muito comuns no dia a dia de quem lida com desenvolvimento.</description>
+    </item>
+    
+    <item>
       <title>(Arch) Linux Com Full Disk Encryption</title>
       <link>https://daltonmatos.com/2018/08/arch-linux-com-full-disk-encryption/</link>
       <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
