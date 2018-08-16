@@ -6,10 +6,20 @@
     <description>Recent content in Gnupg on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Sun, 12 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 16 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/tags/gnupg/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>GPG public key</title>
+      <link>https://daltonmatos.com/gpg/</link>
+      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/gpg/</guid>
+      <description>Aqui você poderá encontrar uma cópia da minha chave pública GPG. Essa chave sempre terá todas as identidades pelas quais respondo: Minha identidade pessoal e a identidade de qualquer empregadores que eu estiver trabalhando no momento.
+Minhas chaves de assinatura e encriptação expiram a cada 6 meses. Isso forçará todas as pessoas que possuem minha chave a terem sempre uma chave atualizada, pois sempre que a data de expiração chegar precisarão voltar aqui e pegar a mesma chave atualizada, ou seja, com o prazo de expiração estendido.</description>
+    </item>
     
     <item>
       <title>Usando seu keyring GPG para guardar sua chave SSH</title>

@@ -29,11 +29,6 @@
         "name": "Home",
         "url": "/",
         "weight": -10
-      },
-      {
-        "name": "GPG",
-        "url": "/daltonmatos.pub",
-        "weight": 300
       }
     ]
   },
