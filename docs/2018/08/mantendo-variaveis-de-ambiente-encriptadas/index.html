@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://daltonmatos.com/css/print.css" media="print">
     <link rel="stylesheet" href="https://daltonmatos.com/css/poole.css">
     <link rel="stylesheet" href="https://daltonmatos.com/css/hyde.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/syntax.css">
     <!-- Font-Awesome -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
     <!-- highlight.js-->
@@ -121,7 +122,7 @@
       
       
       <br/>
-      <i class="fas fa-clock"></i> 4 min read 
+      <i class="fas fa-clock"></i> 5 min read 
       </span>  
   </div>    
   
@@ -168,7 +169,30 @@ pPWRurxuZxJmRsUJy1gzQrUbcA==
 </code></pre>
 
 <p>Agora salvamos isso em algum arquivo que será importado pelo nosso shell. Eu tenho essas (e outras) coisas em um arquivo <code>~/.shell-extras</code>, mas pode ser em qualquer lugar, desde que seja importado pelo seu shell.</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">CRYPT_API_AUTH_TOKEN</span><span class="o">=</span><span class="s2">&#34;
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">CRYPT_API_AUTH_TOKEN</span><span class="o">=</span><span class="s2">&#34;
 </span><span class="s2">-----BEGIN PGP MESSAGE-----
 </span><span class="s2">
 </span><span class="s2">hQIMA0V2jZ1vFNR0AQ/9FqSgxyz5hdrwTiYNEkvPf4s+IvXophjbR9dxfRj2shYq
@@ -186,7 +210,9 @@ pPWRurxuZxJmRsUJy1gzQrUbcA==
 </span><span class="s2">mMFvsc7xLBzsdsioIQCQdnEwHQ==
 </span><span class="s2">=JCIv
 </span><span class="s2">-----END PGP MESSAGE-----
-</span><span class="s2">&#34;</span></code></pre></div>
+</span><span class="s2">&#34;</span></code></pre></td></tr></table>
+</div>
+</div>
 <p>Para fazer um teste rápido podemos rodar:</p>
 
 <pre><code>printenv CRYPT_API_AUTH_TOKEN | gpg -d
