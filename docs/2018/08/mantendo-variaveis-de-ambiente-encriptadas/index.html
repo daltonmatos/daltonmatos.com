@@ -121,7 +121,7 @@
       
       
       <br/>
-      <i class="fas fa-clock"></i> 5 min read 
+      <i class="fas fa-clock"></i> 4 min read 
       </span>  
   </div>    
   
@@ -146,7 +146,7 @@ Depois de ter começado a usar um <a href="/tags/yubikey">smartcard</a> para arm
 
 <p>Depois pressione <code>^D</code> (<code>Ctrl+d</code>). Precisamos disso porque o <code>gnupg</code> está lendo do <code>stdin</code> e o <code>^D</code> é o sinal de que a entrada terminou.</p>
 
-<pre><code>$ gpg -e -r daltonmatos@gmail.com
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh">$ gpg -e -r daltonmatos@gmail.com
 AQUI VAI O CONTEÚDO SENSÍVEL
 -----BEGIN PGP MESSAGE-----
 
@@ -162,36 +162,13 @@ WbNODvKL2Q3FABECsOAtmPtYLn3kLrqcuz5RKacCs0jfxS5N6p7b6VI6ZpX39Z+3
 3y33+bJL4ezLPWXCUtLvu4n0Krl2UYVJZJuy9rVaGguP/MYKjFp5pfCy8XjYUE0v
 U4QzWxVe9RNAmhe0fW0ivjuMNtzlS7BqAwTqMugzBeWw8/uXoT4tCtCqAJF4eMTS
 QgFVR9Ybw5m1IANObGBPKBdwAMkd4wsYNvjPGNgu5S01YGbt+qjt/P9JhZzAvSxO
-pPWRurxuZxJmRsUJy1gzQrUbcA==
-=lCiu
------END PGP MESSAGE-----
-</code></pre>
+<span class="nv">pPWRurxuZxJmRsUJy1gzQrUbcA</span><span class="o">==</span>
+<span class="o">=</span>lCiu
+-----END PGP MESSAGE-----</code></pre></div>
 
 <p>Agora salvamos isso em algum arquivo que será importado pelo nosso shell. Eu tenho essas (e outras) coisas em um arquivo <code>~/.shell-extras</code>, mas pode ser em qualquer lugar, desde que seja importado pelo seu shell.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">CRYPT_API_AUTH_TOKEN</span><span class="o">=</span><span class="s2">&#34;
+
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh"><span class="nb">export</span> <span class="nv">CRYPT_API_AUTH_TOKEN</span><span class="o">=</span><span class="s2">&#34;
 </span><span class="s2">-----BEGIN PGP MESSAGE-----
 </span><span class="s2">
 </span><span class="s2">hQIMA0V2jZ1vFNR0AQ/9FqSgxyz5hdrwTiYNEkvPf4s+IvXophjbR9dxfRj2shYq
@@ -209,16 +186,14 @@ pPWRurxuZxJmRsUJy1gzQrUbcA==
 </span><span class="s2">mMFvsc7xLBzsdsioIQCQdnEwHQ==
 </span><span class="s2">=JCIv
 </span><span class="s2">-----END PGP MESSAGE-----
-</span><span class="s2">&#34;</span></code></pre></td></tr></table>
-</div>
-</div>
+</span><span class="s2">&#34;</span></code></pre></div>
+
 <p>Para fazer um teste rápido podemos rodar:</p>
 
-<pre><code>printenv CRYPT_API_AUTH_TOKEN | gpg -d
-gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
-      &quot;Dalton Barreto &lt;daltonmatos@gmail.com&gt;&quot;
-AQUI VAI O CONTEÚDO SENSÍVEL
-</code></pre>
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh">printenv CRYPT_API_AUTH_TOKEN <span class="p">|</span> gpg -d
+gpg: encrypted with <span class="m">4096</span>-bit RSA key, ID 45768D9D6F14D474, created <span class="m">2017</span>-09-14
+      <span class="s2">&#34;Dalton Barreto &lt;daltonmatos@gmail.com&gt;&#34;</span>
+AQUI VAI O CONTEÚDO SENSÍVEL</code></pre></div>
 
 <p>Isso vai nos dar o resultado original. Essa é a confirmação de que tudo está correto e já podemos usar esse valor em quaisquer comandos em nosso shell prompt (ou script!).</p>
 
@@ -226,19 +201,18 @@ AQUI VAI O CONTEÚDO SENSÍVEL
 
 <p>O uso na linha de comando é bem simples, na verdade o que temos que fazer é encaixar esse <code>printnev</code> que fizemos aí em cima no meio da linha de comando onde precisamos usar o valor sensível. Algo assim:</p>
 
-<pre><code>curl -H &quot;X-Secret: $(printenv CRYPT_API_AUTH_TOKEN| gpg -d)&quot; https://httpbin.org/headers            
-gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
-      &quot;Dalton Barreto &lt;daltonmatos@gmail.com&gt;&quot;
-{
-  &quot;headers&quot;: {
-    &quot;Accept&quot;: &quot;*/*&quot;, 
-    &quot;Connection&quot;: &quot;close&quot;, 
-    &quot;Host&quot;: &quot;httpbin.org&quot;, 
-    &quot;User-Agent&quot;: &quot;curl/7.61.0&quot;, 
-    &quot;X-Secret&quot;: &quot;AQUI VAI O CONTEÚDO SENSÍVEL&quot;
-  }
-}
-</code></pre>
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh">curl -H <span class="s2">&#34;X-Secret: </span><span class="k">$(</span>printenv CRYPT_API_AUTH_TOKEN<span class="p">|</span> gpg -d<span class="k">)</span><span class="s2">&#34;</span> https://httpbin.org/headers            
+gpg: encrypted with <span class="m">4096</span>-bit RSA key, ID 45768D9D6F14D474, created <span class="m">2017</span>-09-14
+      <span class="s2">&#34;Dalton Barreto &lt;daltonmatos@gmail.com&gt;&#34;</span>
+<span class="o">{</span>
+  <span class="s2">&#34;headers&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;Accept&#34;</span>: <span class="s2">&#34;*/*&#34;</span>, 
+    <span class="s2">&#34;Connection&#34;</span>: <span class="s2">&#34;close&#34;</span>, 
+    <span class="s2">&#34;Host&#34;</span>: <span class="s2">&#34;httpbin.org&#34;</span>, 
+    <span class="s2">&#34;User-Agent&#34;</span>: <span class="s2">&#34;curl/7.61.0&#34;</span>, 
+    <span class="s2">&#34;X-Secret&#34;</span>: <span class="s2">&#34;AQUI VAI O CONTEÚDO SENSÍVEL&#34;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 
 <p>Veja como o header <code>X-Secret</code> foi enviado contendo o valor da nossa <code>ENV</code>, já decriptado.</p>
 
@@ -248,28 +222,26 @@ gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
 
 <p>Para poder diferenciar, pelo nome, envs que são encriptadas sempre uso o prefixo <code>CRYPT_</code> em todas as <code>ENVs</code> que possuem conteúdo encriptado. Essa shell function é bem simples:</p>
 
-<pre><code>decrypt_env() {
-  local env_name_sufix=$1
-  local env_name=CRYPT_${env_name_sufix}
-  gpg -d &lt;&lt;&lt;${(P)env_name} 2&gt;/dev/null
-}
-</code></pre>
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh">decrypt_env<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">env_name_sufix</span><span class="o">=</span><span class="nv">$1</span>
+  <span class="nb">local</span> <span class="nv">env_name</span><span class="o">=</span>CRYPT_<span class="si">${</span><span class="nv">env_name_sufix</span><span class="si">}</span>
+  gpg -d <span class="o">&lt;&lt;&lt;</span><span class="si">${</span><span class="p">(P)env_name</span><span class="si">}</span> <span class="m">2</span>&gt;/dev/null
+<span class="o">}</span></code></pre></div>
 
 <p>Esse código está no meu <a href="https://github.com/daltonmatos/dotfiles/blob/master/zsh/zshrc#L194-L198">dotfiles</a>.</p>
 
 <p>De posse dessa função, nossa linha de comando de exemplo ficaria assim:</p>
 
-<pre><code>curl -H &quot;X-Secret: $(decrypt_env API_AUTH_TOKEN)&quot; https://httpbin.org/headers           
-{
-  &quot;headers&quot;: {
-    &quot;Accept&quot;: &quot;*/*&quot;, 
-    &quot;Connection&quot;: &quot;close&quot;, 
-    &quot;Host&quot;: &quot;httpbin.org&quot;, 
-    &quot;User-Agent&quot;: &quot;curl/7.61.0&quot;, 
-    &quot;X-Secret&quot;: &quot;AQUI VAI O CONTEÚDO SENSÍVEL&quot;
-  }
-}
-</code></pre>
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh">curl -H <span class="s2">&#34;X-Secret: </span><span class="k">$(</span>decrypt_env API_AUTH_TOKEN<span class="k">)</span><span class="s2">&#34;</span> https://httpbin.org/headers           
+<span class="o">{</span>
+  <span class="s2">&#34;headers&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;Accept&#34;</span>: <span class="s2">&#34;*/*&#34;</span>, 
+    <span class="s2">&#34;Connection&#34;</span>: <span class="s2">&#34;close&#34;</span>, 
+    <span class="s2">&#34;Host&#34;</span>: <span class="s2">&#34;httpbin.org&#34;</span>, 
+    <span class="s2">&#34;User-Agent&#34;</span>: <span class="s2">&#34;curl/7.61.0&#34;</span>, 
+    <span class="s2">&#34;X-Secret&#34;</span>: <span class="s2">&#34;AQUI VAI O CONTEÚDO SENSÍVEL&#34;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 
 <p>Perceba que passamos apenas o &ldquo;nome&rdquo; da env, sem mencionar o prefixo <code>CRYPT_</code>. Outra coisa que a function faz é suprimir o que o <code>gnupg</code> imprime no <code>stderr</code>, apenas para não termos eventuais problemas, já que estáriamos alterando o <code>stderr</code> do shell e essa function deveria ser totalmente transparente.</p>
 
