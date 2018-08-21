@@ -26,7 +26,7 @@ Aqui vamos apenas chamar o comando mostrado, colar o conteúdo a ser encriptado 
 
 Depois pressione `^D` (`Ctrl+d`). Precisamos disso porque o `gnupg` está lendo do `stdin` e o `^D` é o sinal de que a entrada terminou.
 
-```
+{{< highlight zsh>}}
 $ gpg -e -r daltonmatos@gmail.com
 AQUI VAI O CONTEÚDO SENSÍVEL
 -----BEGIN PGP MESSAGE-----
@@ -46,11 +46,11 @@ QgFVR9Ybw5m1IANObGBPKBdwAMkd4wsYNvjPGNgu5S01YGbt+qjt/P9JhZzAvSxO
 pPWRurxuZxJmRsUJy1gzQrUbcA==
 =lCiu
 -----END PGP MESSAGE-----
-```
+{{< /highlight >}}
 
 Agora salvamos isso em algum arquivo que será importado pelo nosso shell. Eu tenho essas (e outras) coisas em um arquivo `~/.shell-extras`, mas pode ser em qualquer lugar, desde que seja importado pelo seu shell.
 
-```shell
+{{<highlight zsh>}}
 export CRYPT_API_AUTH_TOKEN="
 -----BEGIN PGP MESSAGE-----
 
@@ -70,16 +70,16 @@ mMFvsc7xLBzsdsioIQCQdnEwHQ==
 =JCIv
 -----END PGP MESSAGE-----
 "
-```
+{{</highlight>}}
 
 Para fazer um teste rápido podemos rodar:
 
-```
+{{<highlight zsh>}}
 printenv CRYPT_API_AUTH_TOKEN | gpg -d
 gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
       "Dalton Barreto <daltonmatos@gmail.com>"
 AQUI VAI O CONTEÚDO SENSÍVEL
-```
+{{</highlight>}}
 
 Isso vai nos dar o resultado original. Essa é a confirmação de que tudo está correto e já podemos usar esse valor em quaisquer comandos em nosso shell prompt (ou script!).
 
@@ -88,7 +88,7 @@ Isso vai nos dar o resultado original. Essa é a confirmação de que tudo está
 
 O uso na linha de comando é bem simples, na verdade o que temos que fazer é encaixar esse `printnev` que fizemos aí em cima no meio da linha de comando onde precisamos usar o valor sensível. Algo assim:
 
-```
+{{<highlight zsh>}}
 curl -H "X-Secret: $(printenv CRYPT_API_AUTH_TOKEN| gpg -d)" https://httpbin.org/headers            
 gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
       "Dalton Barreto <daltonmatos@gmail.com>"
@@ -101,7 +101,7 @@ gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
     "X-Secret": "AQUI VAI O CONTEÚDO SENSÍVEL"
   }
 }
-```
+{{</highlight>}}
 
 Veja como o header `X-Secret` foi enviado contendo o valor da nossa `ENV`, já decriptado.
 
@@ -111,19 +111,19 @@ Para não precisar digitar todo esse comando do `printenv` sempre que precisar u
 
 Para poder diferenciar, pelo nome, envs que são encriptadas sempre uso o prefixo `CRYPT_` em todas as `ENVs` que possuem conteúdo encriptado. Essa shell function é bem simples:
 
-```
+{{< highlight zsh >}}
 decrypt_env() {
   local env_name_sufix=$1
   local env_name=CRYPT_${env_name_sufix}
   gpg -d <<<${(P)env_name} 2>/dev/null
 }
-```
+{{</highlight>}}
 
 Esse código está no meu [dotfiles](https://github.com/daltonmatos/dotfiles/blob/master/zsh/zshrc#L194-L198).
 
 De posse dessa função, nossa linha de comando de exemplo ficaria assim:
 
-```
+{{< highlight zsh >}}
 curl -H "X-Secret: $(decrypt_env API_AUTH_TOKEN)" https://httpbin.org/headers           
 {
   "headers": {
@@ -134,7 +134,7 @@ curl -H "X-Secret: $(decrypt_env API_AUTH_TOKEN)" https://httpbin.org/headers
     "X-Secret": "AQUI VAI O CONTEÚDO SENSÍVEL"
   }
 }
-```
+{{</highlight>}}
 
 Perceba que passamos apenas o "nome" da env, sem mencionar o prefixo `CRYPT_`. Outra coisa que a function faz é suprimir o que o `gnupg` imprime no `stderr`, apenas para não termos eventuais problemas, já que estáriamos alterando o `stderr` do shell e essa function deveria ser totalmente transparente.
 

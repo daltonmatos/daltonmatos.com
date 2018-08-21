@@ -4,9 +4,7 @@
   "title": "",
   "theme": "hyde-hyde",
   "publishDir": "docs/",
-  "PygmentsCodeFences": true,
   "pygmentsUseClasses": true,
-  "pygmentsOptions": "linenos=1",
   "params": {
     "layoutReverse": false,
     "themeColor": "theme-base-08",
