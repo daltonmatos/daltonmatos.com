@@ -6,10 +6,21 @@
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Thu, 16 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 26 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>SSH de Guerrilha</title>
+      <link>https://daltonmatos.com/2018/08/ssh-de-guerrilha/</link>
+      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/08/ssh-de-guerrilha/</guid>
+      <description>Boa parte do meu dia envolve usar ssh. Às vezes como comando direto para fazer acesso remoto a algum servidor e às vezes como ferramenta para poder executar alguma outra tarefa.
+Nesse texto vamos ver os usos mais comuns que faço desse comando e algumas configurações que fui acumulando ao longo do tempo.
+SSH Config O primeiro ponto que temos que ter bastante atenção é o arquivo de configuração. Muita gente acha que apenas o ssh-server possui um config, mas isso não é verdade.</description>
+    </item>
     
     <item>
       <title>GPG public key</title>
