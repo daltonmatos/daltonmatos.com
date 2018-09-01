@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://daltonmatos.com/2018/08/compilando-polybar-no-arch-linux/</loc>
+    <lastmod>2018-08-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/2018/08/ssh-de-guerrilha/</loc>
     <lastmod>2018-08-26T00:00:00+00:00</lastmod>
   </url>
@@ -49,7 +54,7 @@
   
   <url>
     <loc>https://daltonmatos.com/</loc>
-    <lastmod>2018-08-26T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-31T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -101,8 +106,14 @@
   </url>
   
   <url>
+    <loc>https://daltonmatos.com/tags/i3/</loc>
+    <lastmod>2018-08-31T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/tags/linux/</loc>
-    <lastmod>2018-08-26T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-31T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -114,7 +125,7 @@
   
   <url>
     <loc>https://daltonmatos.com/posts/</loc>
-    <lastmod>2018-08-26T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-31T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -137,6 +148,12 @@
   </url>
   
   <url>
+    <loc>https://daltonmatos.com/tags/statusbar/</loc>
+    <lastmod>2018-08-31T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/tags/</loc>
     <lastmod>2018-08-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -145,6 +162,18 @@
   <url>
     <loc>https://daltonmatos.com/tags/terminal/</loc>
     <lastmod>2018-08-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/tiling/</loc>
+    <lastmod>2018-08-31T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/wm/</loc>
+    <lastmod>2018-08-31T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

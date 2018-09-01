@@ -75,9 +75,18 @@
     </item>
     
     <item>
+      <title>I3</title>
+      <link>https://daltonmatos.com/tags/i3/</link>
+      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/i3/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Linux</title>
       <link>https://daltonmatos.com/tags/linux/</link>
-      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/tags/linux/</guid>
       <description></description>
@@ -120,11 +129,38 @@
     </item>
     
     <item>
+      <title>Statusbar</title>
+      <link>https://daltonmatos.com/tags/statusbar/</link>
+      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/statusbar/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Terminal</title>
       <link>https://daltonmatos.com/tags/terminal/</link>
       <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/tags/terminal/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tiling</title>
+      <link>https://daltonmatos.com/tags/tiling/</link>
+      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/tiling/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Wm</title>
+      <link>https://daltonmatos.com/tags/wm/</link>
+      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/wm/</guid>
       <description></description>
     </item>
     
