@@ -6,10 +6,21 @@
     <description>Recent content in Gpg on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Thu, 16 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 06 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/tags/gpg/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Modelos de segurança para uso de smartcards</title>
+      <link>https://daltonmatos.com/2018/09/modelos-de-seguran%C3%A7a-para-uso-de-smartcards/</link>
+      <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/09/modelos-de-seguran%C3%A7a-para-uso-de-smartcards/</guid>
+      <description>Desde que descobri a existência de smartcards que podem ser usados como segundo fator de autenticação, fiquei curioso em como seria usar um dispositivo desses no dia a dia.
+Minha curiosidade era mais no sentido de quanta &amp;ldquo;burocracia&amp;rdquo; um dispositivo desse poderia inserir no meu dia de trabalho.
+Na época eu já queria um desses pelo simples fato de ser um token físico, mas pensando bem usar o celular com algum App de TOTP seria bem semelhante, talvez até &amp;ldquo;melhor&amp;rdquo; já que o App do celular pode exigir uma senha antes de abrir e no caso do token físico, não tem senha nenhuma, basta inserir na porta USB e tocar com o dedo.</description>
+    </item>
     
     <item>
       <title>GPG public key</title>

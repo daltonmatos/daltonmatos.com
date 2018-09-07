@@ -3,7 +3,7 @@
 
 ## Tema
 
-O tema usado no blgo é o [hyde-hyde](https://github.com/htr3n/hyde-hyde), versão 1.0.0
+O tema usado no blog é o [hyde-hyde](https://github.com/htr3n/hyde-hyde), versão 1.0.0
 
 ```
 commit ea1fcd379a235832d5a103c6a2d1cadc108db93d (HEAD, tag: v1.0.0)
