@@ -6,7 +6,7 @@
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Thu, 06 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 15 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>2fa</title>
       <link>https://daltonmatos.com/tags/2fa/</link>
-      <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 15 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/tags/2fa/</guid>
       <description></description>
@@ -113,9 +113,27 @@
     <item>
       <title>Mfa</title>
       <link>https://daltonmatos.com/tags/mfa/</link>
-      <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 15 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/tags/mfa/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Otp</title>
+      <link>https://daltonmatos.com/tags/otp/</link>
+      <pubDate>Sat, 15 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/otp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Pass</title>
+      <link>https://daltonmatos.com/tags/pass/</link>
+      <pubDate>Sat, 15 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/pass/</guid>
       <description></description>
     </item>
     
@@ -170,6 +188,15 @@
       <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/tags/tiling/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Totp</title>
+      <link>https://daltonmatos.com/tags/totp/</link>
+      <pubDate>Sat, 15 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/totp/</guid>
       <description></description>
     </item>
     

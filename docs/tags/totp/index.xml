@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Totp on </title>
+    <link>https://daltonmatos.com/tags/totp/</link>
+    <description>Recent content in Totp on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>pt-br</language>
+    <lastBuildDate>Sat, 15 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://daltonmatos.com/tags/totp/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Multi Factor Authentication na linha de comando</title>
+      <link>https://daltonmatos.com/2018/09/multi-factor-authentication-na-linha-de-comando/</link>
+      <pubDate>Sat, 15 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/09/multi-factor-authentication-na-linha-de-comando/</guid>
+      <description>Acredito que a forma mais comum de MFA atualmente é o uso de &amp;ldquo;Authenticator Apps&amp;rdquo;. Usei por muito tempo o Google Authenticator até que percebi que, se perdesse meu celular, estaria preso pra fora de todas as contas onde tinha MFA configurado.
+Quando percebi isso, descobri o Authy, que faz backup dos seus MFAs pra você e pode sincronizar entre múltiplos dispositivos. Isso já é muito bom, pois você não fica totalmente dependente do celular.</description>
+    </item>
+    
+  </channel>
+</rss>

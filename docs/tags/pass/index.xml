@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Mfa on </title>
-    <link>https://daltonmatos.com/tags/mfa/</link>
-    <description>Recent content in Mfa on </description>
+    <title>Pass on </title>
+    <link>https://daltonmatos.com/tags/pass/</link>
+    <description>Recent content in Pass on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
     <lastBuildDate>Sat, 15 Sep 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://daltonmatos.com/tags/mfa/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://daltonmatos.com/tags/pass/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -30,17 +30,6 @@ Quando percebi isso, descobri o Authy, que faz backup dos seus MFAs pra você e 
       <description>Desde que pude guardar minha chave GPG de forma segura em um token físico, passei a pensar em como voltar a ter controle sobre minhas informações já que agora posso guardá-las encriptadas com essa chave.
 Os primeiros dados que comecei a encriptar foram documentos sensíveis que guardo de backup, como comprovantes, documentos pessoais e afins.
 O segundo passo foi fazer algo em relação ao password manager. Uso o LastPass já há muito tempo e sempre funcionou muito bem, cumpriu seu propósito.</description>
-    </item>
-    
-    <item>
-      <title>Modelos de segurança para uso de smartcards</title>
-      <link>https://daltonmatos.com/2018/09/modelos-de-seguran%C3%A7a-para-uso-de-smartcards/</link>
-      <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/2018/09/modelos-de-seguran%C3%A7a-para-uso-de-smartcards/</guid>
-      <description>Desde que descobri a existência de smartcards que podem ser usados como segundo fator de autenticação, fiquei curioso em como seria usar um dispositivo desses no dia a dia.
-Minha curiosidade era mais no sentido de quanta &amp;ldquo;burocracia&amp;rdquo; um dispositivo desse poderia inserir no meu dia de trabalho.
-Na época eu já queria um desses pelo simples fato de ser um token físico, mas pensando bem usar o celular com algum App de TOTP seria bem semelhante, talvez até &amp;ldquo;melhor&amp;rdquo; já que o App do celular pode exigir uma senha antes de abrir e no caso do token físico, não tem senha nenhuma, basta inserir na porta USB e tocar com o dedo.</description>
     </item>
     
   </channel>

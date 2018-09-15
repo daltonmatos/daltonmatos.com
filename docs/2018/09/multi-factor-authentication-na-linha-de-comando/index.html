@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="wf-firasans-n4-active wf-active">
+	<head>
+    <link href="http://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Enable responsiveness on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    <meta name="generator" content="Hugo 0.48" />
+    
+    <title>Multi Factor Authentication na linha de comando &middot; </title>
+    <meta content="Multi Factor Authentication na linha de comando - " property="og:title">
+    <meta content=" - " property="og:description">
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i|Roboto+Mono:300,300i,400,400i" rel="stylesheet">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/print.css" media="print">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/poole.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/hyde.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/syntax.css">
+    <!-- Font-Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+    
+    <!-- Customised CSS -->
+    <link rel="stylesheet" href="https://daltonmatos.com/css/custom.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+	</head>
+    <body class="theme-base-08 ">
+        <div class="sidebar">
+  <div class="container text-center ">
+    <div class="sidebar-about text-center">
+      <a href="https://daltonmatos.com/"><h1 class="brand"></h1></a>
+       <img src="/daltonmatos.jpeg" alt="Author Image" class="img-circle headshot center"> 
+      <p class="lead">
+         Dalton Barreto 
+      </p>
+    </div>
+    
+<div>
+	<ul class="sidebar-nav">
+		
+		
+				<li>
+					<a href="/"> <span>Home</span></a>
+				</li>
+				<li>
+					<a href="/gpg/"> <span>GPG Public Key</span></a>
+				</li>
+				<li>
+					<a href="/about/"> <span>About</span></a>
+				</li>
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="row text-center">
+	
+	<a href="https://twitter.com/daltonmatos"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://github.com/daltonmatos"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</section>
+
+    </p>
+    <p class="copyright">&copy; 2018 Dalton Barreto.
+      <a href="https://creativecommons.org/licenses/by/4.0">Some Rights Reserved</a>.<br/>Built with <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            <div class="post">
+  <h1>Multi Factor Authentication na linha de comando</h1>
+  
+  <div class="col-sm-12 col-md-12">
+    <span class="text-left post-date meta">
+            
+       
+        <i class="fas fa-calendar-alt"></i> Sep 15, 2018
+      
+      
+      
+      
+        
+        
+            <br/>
+             <i class="fas fa-tags"></i>
+            
+            <a class="meta" href="/tags/2fa">2fa</a> 
+        
+            <a class="meta" href="/tags/mfa">mfa</a> 
+        
+            <a class="meta" href="/tags/otp">otp</a> 
+        
+            <a class="meta" href="/tags/pass">pass</a> 
+        
+            <a class="meta" href="/tags/totp">totp</a>
+        
+      
+      
+      <br/>
+      <i class="fas fa-clock"></i> 4 min read 
+      </span>  
+  </div>    
+  
+  
+
+<p>Acredito que a forma mais comum de MFA atualmente é o uso de &ldquo;Authenticator Apps&rdquo;. Usei por muito tempo o Google Authenticator até que percebi que, se perdesse meu celular, estaria preso pra fora de todas as contas onde tinha MFA configurado.</p>
+
+<p>Quando percebi isso, descobri o <a href="https://authy.com/">Authy</a>, que faz backup dos seus MFAs pra você e pode sincronizar entre múltiplos dispositivos. Isso já é muito bom, pois você não fica totalmente dependente do celular.</p>
+
+<p>O problema começa quando você precisa recuperar o controle da sua conta Authy. Se você perde o celular sem ter o Authy sincronizado em nenhum outro dispositivo, só resta a você passar por um processo de comprovação de identidade exigido pelo Authy para poder ter novamente em mãos seus tokens MFA (Esse processo pode ser desconsiderado se você mantiver o mesmo número de telefone).</p>
+
+<p>Esse processo, segundo a documentação deles, leva alguns dias. Isso nem é tão ruim assim considerando que depois disso (e dando tudo certo!) você terá de volta todos os seus tokens e isso significa que não precisará passar pelo processo de recuperação de conta de <strong>todos</strong> os lugares onde você tem MFA habilitado.</p>
+
+<p>Pensando em facilitar minha vida nesse sentido, pensei em eu mesmo ter uma cópia de todos os meus tokens MFA. Minha primeira tentativa foi pedir o meu próprio backup para o suporte do Authy, o que me foi negado.</p>
+
+<p>A opção que restou então foi re-gerar todos os meus MFAs e desa vez, guardar uma cópia de cada um deles.</p>
+
+<p>Já que vou tê-los nas mãos, comecei então a pesquisar como funcionava o algoritmo que gera os tokens que ficam sendo renovados no Authenticator App, afinal, descobrindo isso poderia gerar esses tokens eu mesmo, até mesmo fora de um app de celular.</p>
+
+<h1 id="o-protocolo">O Protocolo</h1>
+
+<p>Acontece que o protocolo usado pelos apps e obviamente também usados pelas suas contas que requerem MFA é conhecido e pode ser implementado por qualquer um.</p>
+
+<p>O protocolo é o TOTP (Time-Based One Time Password). Como a intenção desse texto não é estudar o algoritmo e si, deixo aqui um link com uma explicação mais detalhada. <a href="https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm">TOTP na Wikipédia</a></p>
+
+<h1 id="totp-na-linha-de-comando">TOTP na linha de comando</h1>
+
+<p>Existe um comando já disponível e que implementa esse algoritmo, é o <code>oathtool</code>.</p>
+
+<p>O que você precisa para usá-lo é a chave privada gerada pelo seu provider, ou seja, o provedor da conta onde você está habilitando MFA.</p>
+
+<p>Já reparou que, além do QRcode que geralmente é mostrado, sempre tem um link dizendo algo nessa linha: &ldquo;Não consegue scanear o código acima?” ou, &ldquo;Digite manualmente&rdquo;, etc.</p>
+
+<p>Esse é o link que vai te dar o <strong>conteúdo</strong> da chave privada que está codificada no QRcode. De posse desse conteúdo, basta passá-lo para o <code>oathtool</code>:</p>
+
+<p><strong>Nota</strong>: Acabei de descobrir que o Mercado Livre não permite que você veja essa informação. Eles, de alguma forma, mandam os dados direto pro aplicativo, no caso deles é o Authy.</p>
+
+<p>Veja um exemplo de como é na AWS, no momento em que você está ativando MFA para uma conta qualquer:</p>
+
+<p><a href="/static/19a55b06/mfa-aws.png"><img src="/static/19a55b06/mfa-aws.png" alt="Ativação de MFA na AWS" /></a></p>
+
+<p>Nesse caso, a chave é <code>YOPZKAL6OQSQM6FTM6TI4OHHDIWUOS5U5IAP7OEQZTGMPMFDFT7JT6RR4R4HEE2J</code>. É esse valor que precisamos passar para a ferramenta e é ele que vamos usar de exemplo nesse texto.</p>
+
+<pre><code>$ oathtool -b YOPZKAL6OQSQM6FTM6TI4OHHDIWUOS5U5IAP7OEQZTGMPMFDFT7JT6RR4R4HEE2J
+038301
+</code></pre>
+
+<p>Dessa forma ele vai gerar <strong>exatamente</strong> os mesmos tokens que o celular geraria, caso tivesse escaneado o QRcode correspondente.</p>
+
+<p>A partir de agora podemos gerar nossos tokens na linha de comando, sempre que formos perguntados pelo segundo fator, no momento do login.</p>
+
+<p><strong>Nota</strong>: Já tentou scanear esse QRcode sem usar o aplicativo de Autenticação? Dá uma olhada e vai ver que a chave privada está lá, em algum lugar.</p>
+
+<h1 id="plugin-otp-para-o-pass">Plugin OTP para o pass</h1>
+
+<p>Minha <a href="/2018/09/so-long-lastpass-and-thank-you-for-all-the-fish/">migração do LastPass para o pass</a> ficou ainda melhor quando descobri que existe um plugin para o <code>pass</code> que é capaz de gerar esses tokens MFA.</p>
+
+<p>O que precisamos fazer é apenas ter em mãos a chave privada de cada um dos MFAs e passar isso para o plugin, dessa forma:</p>
+
+<pre><code>$ pass otp append -s -i &lt;provider&gt; &lt;pass-name&gt;
+</code></pre>
+
+<p>Onde <code>&lt;provider&gt;</code> é um identificador <strong>qualquer</strong> apenas para te dizer de qual conta é esse MFA e <code>&lt;pass-name&gt;</code> é uma entrada no seu <a href="https://www.passwordstore.org/">password-store</a>.
+A partir desse ponto podemos fazer isso:</p>
+
+<pre><code>$ pass otp &lt;pass-name&gt;
+645398
+</code></pre>
+
+<p>E ele vai gerar um token MFA <strong>válido</strong> pra nós referente ao MFA da entrada <code>&lt;pass-name&gt;</code>.</p>
+
+<h1 id="registrando-esse-mesmo-mfa-no-celular">Registrando esse mesmo MFA no celular</h1>
+
+<p>Se você preferir ou até mesmo quiser esse esse MFA no PC <strong>e</strong> no celular, basta re-gerar o qrcode original, usando esse mesmo plugin do <code>pass</code>, assim:</p>
+
+<pre><code>$ pass otp uri -q &lt;pass-name&gt;
+</code></pre>
+
+<p>Onde <code>&lt;pass-name&gt;</code> é a entrada onde o MFA está gravado. Nesse momento o <code>pass</code> vai te mostrar um QRcode que você pode escanear no celular e usar normalmente.</p>
+
+<p>Essa é uma forma de você ter <strong>total</strong> controle de todos os seus tokens MFA. Tendo as chaves privadas de cada um deles, não importa mais se você perdeu o celular ou não, pois você não depende mais <strong>exclusivamente</strong> do celular para gerar os tokens.</p>
+
+<p>Mas também cabe a você guardar esses tokens de forma segura.</p>
+
+</div>
+            <div class="footer">
+                
+
+    
+
+            </div>
+        </div>
+        
+        
+    </body>
+</html>
