@@ -1,5 +1,5 @@
 ---
-title: So long, LastPass and thank you for all the fish
+title: So long LastPass and thank you for all the fish
 date: 2018-09-14
 author: Dalton Barreto
 tags: [mfa, pass, 2fa]
