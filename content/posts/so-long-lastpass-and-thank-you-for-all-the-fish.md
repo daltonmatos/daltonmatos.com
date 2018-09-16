@@ -11,9 +11,9 @@ Os primeiros dados que comecei a encriptar foram documentos sensíveis que guard
 
 O segundo passo foi fazer algo em relação ao password manager. Uso o [LastPass](https://lastpass.com) já há muito tempo e sempre funcionou muito bem, cumpriu seu propósito.
 
-Mas a ideia de mudar de password manager surgiu quando comecei a querer tentar ter o total controle sobre os dados e também ter a certeza de que eles estão encriptados com a [minha chave GPG]({{<relref path="/gpg">}}). No caso do LastPass a senhas estão encriptadas, mas com uma senha que eu tenho que lembrar. Fazendo essa migração e tendo as senhas encriptadas com minha chave GPG eu poderia ter a senha do LastPass nesse novo password manager, logo seria uma senha a menos para me lembrar.
+Mas a ideia de mudar de password manager surgiu quando comecei a querer tentar ter o total controle sobre os dados e também ter a certeza de que eles estão encriptados com a [minha chave GPG]({{<relref path="/gpg">}}). No caso do LastPass as senhas estão encriptadas, mas com uma senha que eu tenho que lembrar. Fazendo essa migração e tendo as senhas encriptadas com minha chave GPG eu poderia ter a senha do LastPass nesse novo password manager, logo seria uma senha a menos para me lembrar.
 
-Continuando no caminho de ter que lembrar do mínimo de senhas possível, ter minha senhas encriptadas com minha chave GPG (que está em um smartcard e protegida pela única senha que quero ter que lembrar) parecia (e ainda parece!) uma boa ideia.
+Continuando no caminho de ter que lembrar do mínimo de senhas possível, ter minhas senhas encriptadas com minha chave GPG (que está em um smartcard e protegida pela única senha que quero ter que lembrar) parecia (e ainda parece!) uma boa ideia.
 
 # Pass
 
@@ -31,7 +31,7 @@ O fato de ser uma command line application também abre inúmeras possibilidades
 
 O projeto é formato por apenas um comando: `pass`. Através dele você consegue manipular todas as entradas que tiverem sido criadas.
 
-Por padrão, a senhas estão gravadas em `~/.password-store` e essa pasta é um repositório Git. Isso já é a primeira vantagem pois permite que você tenha esses dados em múltiplos dispositivos. Eu, por exemplo, tenho no meu computador pessoal, no computador do trabalho e no celular.
+Por padrão, as senhas estão gravadas em `~/.password-store` e essa pasta é um repositório Git. Isso já é a primeira vantagem pois permite que você tenha esses dados em múltiplos dispositivos. Eu, por exemplo, tenho no meu computador pessoal, no computador do trabalho e no celular.
 
 # Estrutura do ~/.password-store
 
@@ -48,7 +48,7 @@ social
     └── user@host.com
 ```
 
-Nesse caso temos uma pasta. `social/` e dentro dela temos tres "sites". Cada site possui um usuário cadastrado. Como disse antes, essa estrutura você pode escolher como vai criar.
+Nesse caso temos uma pasta. `social/` e dentro dela temos três "sites". Cada site possui um usuário cadastrado. Como disse antes, essa estrutura você pode escolher como vai criar.
 
 ## Formato de cada umas das entradas
 
@@ -114,7 +114,7 @@ Existe também uma extensão pro Chrome (e Firefox) que permite ler as senhas do
 
 O uso é bem simples: `Ctrl+Shift+L` ativa a extensão e permite que você faça uma busca. Depois que você selecionar a entrada desejada: `Shift+C` copia o usuário e `Ctrl+C` copia a senha.
 
-Essa extensão também tem suporte a `TOTP`, então a través dela você também consegue gerar os tokens MFA para poder concluir seu login, tudo isso sem sair do browser. Na real, você consegue pegar essas três informações (User, Senha e Token OTP) sem nem encostar no mouse.
+Essa extensão também tem suporte a `TOTP`, então através dela você também consegue gerar os tokens MFA para poder concluir seu login, tudo isso sem sair do browser. Na real, você consegue pegar essas três informações (User, Senha e Token OTP) sem nem encostar no mouse.
 
 
 Usando o `pass` tenho a certeza de que minhas senhas estão encriptadas com minha chave (ou quaisquer outras que **eu** tiver escolhido) e eu posso, a partir desse momento, não saber mais uma senha, a do LastPass (Caso eu ainda use para guardar alguma coisa).
