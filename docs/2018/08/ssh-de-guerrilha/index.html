@@ -137,7 +137,7 @@
 
 <h2 id="server-alias">Server alias</h2>
 
-<p>O primeiro ponto que o config trás é a possibilidade de dar apelidos para servidores que você acessa com frequência.</p>
+<p>O primeiro ponto que o config traz é a possibilidade de dar apelidos para servidores que você acessa com frequência.</p>
 
 <p>A configuração mais simples que você pode fazer é essa:</p>
 
@@ -286,7 +286,7 @@ Hostname public.server.com.br
 
 <p>Você pode também encadear quantos &ldquo;saltos&rdquo; você quiser. Cada bloco de configuração (<code>Host</code>) pode ter seu próprio <code>ProxyCommand</code>.</p>
 
-<p>Como exemplo, para eu a essar minha estação de trabalho eu faço 2 &ldquo;saltos&rdquo;. O caminho é mais ou menos esse: Minha casa -&gt; AWS -&gt; Datacenter on-premise -&gt; Minha estação de trabalho.</p>
+<p>Como exemplo, para eu acessar minha estação de trabalho eu faço 2 &ldquo;saltos&rdquo;. O caminho é mais ou menos esse: Minha casa -&gt; AWS -&gt; Datacenter on-premise -&gt; Minha estação de trabalho.</p>
 
 <p>Isso funciona porque a máquina da aws é pública, essa conta da aws tem VPN com o datacenter on-premise e esse datacenter tem VPN com o escritório. Tudo isso é feito com <code>ProxyCommand</code> e ainda assim digito apenas <code>ssh minha-maquina</code> para cair já dentro da minha estação de trabalho.</p>
 
@@ -301,7 +301,7 @@ LocalForward 3306 127.0.0.1:3306
 
 <p><strong>Nota</strong>: Aqui estamos assumindo que as configurações de <code>ProxyCommand</code> (caso necessárias) já estão feitas.</p>
 
-<p>Usando esse config, quando acessamos <code>ssh myhost</code> um porta (<code>3306</code>) é aberta em nossa máquina local e <strong>todo o tráfego</strong> que chegar nessa porta é automaticamente redirecionado para a porta remota no endereço <code>127.0.0.1:3306</code>. Como nesse caso colocamos o destino como <code>127.0.0.1</code> significa que estamos querendo uma porta no host de destino.</p>
+<p>Usando esse config, quando acessamos <code>ssh myhost</code> uma porta (<code>3306</code>) é aberta em nossa máquina local e <strong>todo o tráfego</strong> que chegar nessa porta é automaticamente redirecionado para a porta remota no endereço <code>127.0.0.1:3306</code>. Como nesse caso colocamos o destino como <code>127.0.0.1</code> significa que estamos querendo uma porta no host de destino.</p>
 
 <p>Mas isso não é uma restrição, ou seja, podemos nos conectar no host <code>A</code> mas fazer o <code>LocalForward</code> para um host <code>B</code>. Para isso basta que o host <code>A</code> tenha conectividade <strong>direta</strong> com o host <code>B</code>. E você precisa ter acesso <code>ssh</code> ao host <code>A</code> para que consiga fazer esse <code>LocalForward</code>. Sua conexão com o Host <code>A</code> pode passar por quantas &ldquo;máquinas-ponte&rdquo; você quiser, não há restrições nesse sentido.</p>
 
