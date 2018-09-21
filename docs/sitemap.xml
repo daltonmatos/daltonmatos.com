@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://daltonmatos.com/2018/09/o-que-acontece-se-minha-yubikey-parar-de-funcionar/</loc>
+    <lastmod>2018-09-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/2018/09/multi-factor-authentication-na-linha-de-comando/</loc>
     <lastmod>2018-09-15T00:00:00+00:00</lastmod>
   </url>
@@ -69,7 +74,7 @@
   
   <url>
     <loc>https://daltonmatos.com/</loc>
-    <lastmod>2018-09-15T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-20T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -122,7 +127,7 @@
   
   <url>
     <loc>https://daltonmatos.com/tags/gpg/</loc>
-    <lastmod>2018-09-06T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-20T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -158,13 +163,13 @@
   
   <url>
     <loc>https://daltonmatos.com/tags/pass/</loc>
-    <lastmod>2018-09-15T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-20T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://daltonmatos.com/posts/</loc>
-    <lastmod>2018-09-15T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-20T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -224,7 +229,7 @@
   
   <url>
     <loc>https://daltonmatos.com/tags/yubikey/</loc>
-    <lastmod>2018-09-06T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-20T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
