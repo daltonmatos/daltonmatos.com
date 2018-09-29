@@ -2,7 +2,7 @@
 title: "Curl de Guerrilha"
 author: "Dalton Barreto"
 date: 2018-08-04 
-tags: [curl, cli, linux, commandline]
+tags: [curl, cli, linux]
 ---
 
 Vou escrever aqui algumas das opções que mais uso no dia a dia quando preciso do comando `curl`. Muitas vezes o curl é usado apenas para "baixar arquivos" e pelo fato dele usar por padrão o `stdout` muitas vezes as pessoas preferem até mesmo usar o `wget`, que por padrão salva o output em um arquivo.
