@@ -6,10 +6,21 @@
     <description>Recent content in Gpg on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Thu, 20 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 29 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/tags/gpg/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Uso da Yubikey no Android</title>
+      <link>https://daltonmatos.com/2018/09/uso-da-yubikey-no-android/</link>
+      <pubDate>Sat, 29 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/09/uso-da-yubikey-no-android/</guid>
+      <description>O último ponto que faltava na minha migração para um novo password manager era poder acessar meus dados usando o celular.
+Aqui vou mostrar cada um dos apps que uso para poder ter o celular como uma ferramenta completa para poder usar meu smartcard.
+Suporte à yubikey Os smartcards da Yubico já são naturalmente suportados pelo Android. Os smartcards que possuem NFC têm suporte ainda melhor, pois basta aproximar o telefone do smartcard para que eles se comuniquem.</description>
+    </item>
     
     <item>
       <title>O que acontece se minha Yubikey parar de funcionar?</title>
