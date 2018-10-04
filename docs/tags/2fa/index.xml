@@ -6,10 +6,21 @@
     <description>Recent content in 2fa on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Sat, 15 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/tags/2fa/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Como armazeno de forma segura meus dados sensíveis de acessos a contas online</title>
+      <link>https://daltonmatos.com/2018/10/como-armazeno-de-forma-segura-meus-dados-sens%C3%ADveis-de-acessos-a-contas-online/</link>
+      <pubDate>Thu, 04 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/10/como-armazeno-de-forma-segura-meus-dados-sens%C3%ADveis-de-acessos-a-contas-online/</guid>
+      <description>Esse texto é uma descrição geral do modelo de segurança que escolhi usar depois de pesquisar sobre como outras pessoas guardam dados sensíveis de forma segura.
+A motivação principal, além de poder ter os dados guardados de forma segura (e aprender muito sobre esse assunto), foi poder ter o total controle sobre eles.
+Se você usa um password manager online por exemplo, o mínimo que você deveria fazer seria manter esses dados encriptados.</description>
+    </item>
     
     <item>
       <title>Multi Factor Authentication na linha de comando</title>
