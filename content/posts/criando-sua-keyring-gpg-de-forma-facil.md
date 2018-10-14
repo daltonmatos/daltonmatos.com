@@ -46,6 +46,7 @@ Subkey-usage: encrypt
 ```
 **Notas**:
 
+* Aqui você provavelmente vai querer trocar os valores das opções: `Name-Real:` e `Name-Email`;
 * Quando rodar o comando abaixo, será perguntada a Passphrase. Aqui é uma escolha sua ter uma senha para sua chave, ou não;
 * Aqui usei `Exprire-Date: 0`. Caso queira escolher uma data de expiração, coloque aqui. Um exemplo: para expirar em 6 meses coloque `6m`.
 
