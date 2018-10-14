@@ -3,6 +3,8 @@ title: Modelos de segurança para uso de smartcards
 author: Dalton Barreto
 date: 2018-09-06
 tags: [crypt, yubikey, gpg, mfa, 2fa]
+aliases:
+  - /2018/09/modelos-de-segurança-para-uso-de-smartcards/
 ---
 
 Desde que descobri a existência de smartcards que podem ser usados como segundo fator de autenticação, fiquei curioso em como seria usar um dispositivo desses no dia a dia.

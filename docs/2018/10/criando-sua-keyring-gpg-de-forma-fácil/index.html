@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="wf-firasans-n4-active wf-active">
+	<head>
+    <link href="http://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Enable responsiveness on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    <meta name="generator" content="Hugo 0.49" />
+    
+    <title>Criando sua keyring GPG de forma fácil &middot; </title>
+    <meta content="Criando sua keyring GPG de forma fácil - " property="og:title">
+    <meta content=" - " property="og:description">
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i|Roboto+Mono:300,300i,400,400i" rel="stylesheet">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/print.css" media="print">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/poole.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/hyde.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/syntax.css">
+    <!-- Font-Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+    
+    <!-- Customised CSS -->
+    <link rel="stylesheet" href="https://daltonmatos.com/css/custom.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+	</head>
+    <body class="theme-base-08 ">
+        <div class="sidebar">
+  <div class="container text-center ">
+    <div class="sidebar-about text-center">
+      <a href="https://daltonmatos.com/"><h1 class="brand"></h1></a>
+       <img src="/daltonmatos.jpeg" alt="Author Image" class="img-circle headshot center"> 
+      <p class="lead">
+         Dalton Barreto 
+      </p>
+    </div>
+    
+<div>
+	<ul class="sidebar-nav">
+		
+		
+				<li>
+					<a href="/"> <span>Home</span></a>
+				</li>
+				<li>
+					<a href="/gpg/"> <span>GPG Public Key</span></a>
+				</li>
+				<li>
+					<a href="/about/"> <span>About</span></a>
+				</li>
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="row text-center">
+	
+	<a href="https://twitter.com/daltonmatos"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://github.com/daltonmatos"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</section>
+
+    </p>
+    <p class="copyright">&copy; 2018 Dalton Barreto.
+      <a href="https://creativecommons.org/licenses/by/4.0">Some Rights Reserved</a>.<br/>Built with <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            <div class="post">
+  <h1>Criando sua keyring GPG de forma fácil</h1>
+  
+  <div class="col-sm-12 col-md-12">
+    <span class="text-left post-date meta">
+            
+       
+        <i class="fas fa-calendar-alt"></i> Oct 14, 2018
+      
+      
+      
+      
+        
+        
+            <br/>
+             <i class="fas fa-tags"></i>
+            
+            <a class="meta" href="/tags/crypt">crypt</a> 
+        
+            <a class="meta" href="/tags/gnupg">gnupg</a> 
+        
+            <a class="meta" href="/tags/gpg">gpg</a> 
+        
+            <a class="meta" href="/tags/pass">pass</a> 
+        
+            <a class="meta" href="/tags/yubikey">yubikey</a>
+        
+      
+      
+      <br/>
+      <i class="fas fa-clock"></i> 5 min read 
+      </span>  
+  </div>    
+  
+  
+
+<p>Nesse texto preparei um forma fácil e semi-automatizada para que você possa criar sua keyring GPG. Em vez
+de criar tudo usando o prompt interavido do <a href="https://www.gnupg.org/">GnuPG</a> vamos usar uma funcionalidade que ele tem
+e que permite que chaves sejam criadas a partir de arquivos de configuração. É o que ele mesmo chama de <a href="https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html">Unattended GPG key generation</a>.</p>
+
+<h1 id="estrutura-da-keyring">Estrutura da keyring</h1>
+
+<p>O que vamos fazer é criar 3 chaves, um para cada finalidade:</p>
+
+<ul>
+<li>Encriptação/Decriptação; (<code>encrypt</code>, <code>[E]</code>)</li>
+<li>Assinatura digital; (<code>sign</code>, <code>[S]</code>)</li>
+<li>Autenticação (SSH). (<code>auth</code>, <code>[A]</code>)</li>
+</ul>
+
+<h1 id="template-inicial">Template inicial</h1>
+
+<p>Criando a chave principal + a chave de encriptação. Como o GnuPG só permite ciar <strong>uma</strong> sub-chave de forma semi-automatizada, precisaremos
+criar essa chave primeiro e depois vamos criar as outras.</p>
+
+<p>Esse é o template inicial. Esse template criará a chave principal mais uma sub-chave capaz de Encriptar.</p>
+
+<pre><code>%echo Generating a basic OpenPGP key
+
+Key-Type: RSA
+Key-Length: 4096
+Key-Usage: sign
+Name-Real: Dalton Barreto
+Name-Email: daltonmatos@gmail.com
+Expire-Date: 0
+Preferences: CAMELLIA256 SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed
+
+Subkey-Type: RSA
+Subkey-Length: 4096
+Subkey-usage: encrypt
+
+%commit
+%echo done
+</code></pre>
+
+<p><strong>Notas</strong>:</p>
+
+<ul>
+<li>Quando rodar o comando abaixo, será perguntada a Passphrase. Aqui é uma escolha sua ter uma senha para sua chave, ou não;</li>
+<li>Aqui usei <code>Exprire-Date: 0</code>. Caso queira escolher uma data de expiração, coloque aqui. Um exemplo: para expirar em 6 meses coloque <code>6m</code>.</li>
+</ul>
+
+<p>Salve esse conteúdo em um arquivo e rode, na linha de comando:</p>
+
+<pre><code>$ gpg --batch --generate-key &lt;/caminho/para/o/arquivo/com/o/conteudo/acima&gt;
+gpg: keybox '/tmp/tmp.78eBuVusrk/pubring.kbx' created
+gpg: Generating a basic OpenPGP key
+gpg: /tmp/tmp.78eBuVusrk/trustdb.gpg: trustdb created
+gpg: key DD83AB94915A267F marked as ultimately trusted
+gpg: directory '/tmp/tmp.78eBuVusrk/openpgp-revocs.d' created
+gpg: revocation certificate stored as '/tmp/tmp.78eBuVusrk/openpgp-revocs.d/FDAB9DF86F913B749FCD23E4DD83AB94915A267F.rev'
+gpg: done
+</code></pre>
+
+<p>Esse é um output possível, principalmente se sua keyring nunca tiver sido inicializada antes.</p>
+
+<p>Para olhar as chaves recém criadas rode <code>gpg -K</code>:</p>
+
+<pre><code>$ gpg -K
+gpg: checking the trustdb
+gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+/tmp/tmp.78eBuVusrk/pubring.kbx
+-------------------------------
+sec   rsa4096 2018-10-14 [SC]
+      FDAB9DF86F913B749FCD23E4DD83AB94915A267F
+uid           [ultimate] Dalton Barreto &lt;daltonmatos@gmail.com&gt;
+ssb   rsa4096 2018-10-14 [E]
+</code></pre>
+
+<p>Aqui já vemos as duas chaves criadas. A chave <em>master</em> e uma sub-chave para encriptação (<code>[E]</code>). Agora vamos criar mais duas chaves, uma para assinatura (<code>sign</code>) e uma para autenticação (<code>auth</code>).</p>
+
+<h2 id="criando-as-subkeys">Criando as subkeys</h2>
+
+<p>Como não é possível criar mais de uma subkey usando esse template de configuração, vamos criar as subkeys adicionais na linha de comando. As configurações globais (ciphers, compression, hash) já estão escolhidas então precisamos escolher poucas opções para as sub-chaves.</p>
+
+<p>O que temos que escolher para cada chave é:</p>
+
+<ul>
+<li>Algoritmo que será usado;</li>
+<li>Tamanho da chave;</li>
+<li>Data de expiração;</li>
+<li>Capacidade que chave terá. Criaremos uma chave para cada capacidade adicional: <code>sign</code> e <code>auth</code>.</li>
+</ul>
+
+<p>Para adicionar uma nova sub-chave à chave que já criamos precisamos descobrir o fingerprint da chave principal. Descobrimos isso com: <code>gpg -K</code>.</p>
+
+<pre><code>$ gpg -K
+gpg: checking the trustdb
+gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+/tmp/tmp.78eBuVusrk/pubring.kbx
+-------------------------------
+sec   rsa4096 2018-10-14 [SC]
+      FDAB9DF86F913B749FCD23E4DD83AB94915A267F
+uid           [ultimate] Dalton Barreto &lt;daltonmatos@gmail.com&gt;
+ssb   rsa4096 2018-10-14 [E]
+</code></pre>
+
+<p>O seu fingerprint é esse ID que aparece logo abaixo das informações da chave <em>master</em>, nesse caso: <code>FDAB9DF86F913B749FCD23E4DD83AB94915A267F</code>.</p>
+
+<p>Então vamos criar nossa chave para assinatura digital:</p>
+
+<pre><code>gpg --quick-add-key FDAB9DF86F913B749FCD23E4DD83AB94915A267F rsa4096 sign 6m
+</code></pre>
+
+<p>Aqui o parametros são: algoritmo+keysize (<code>rsa4096</code>), usage-type (<code>sign</code>) e data de expiração (<code>6m</code>). Aqui escolhi expirar essa chave em 6 meses, mas caso você omita esse parâmetro sua chave não terá data de expiração. A data de expiração é facilmente modificável, caso você precise extender essa data posteriormente.</p>
+
+<p>e essa é a criação da última sub-chave, a que é capaz de autenticar:</p>
+
+<pre><code>gpg --quick-add-key FDAB9DF86F913B749FCD23E4DD83AB94915A267F rsa4096 auth 6m
+</code></pre>
+
+<p>E para visualizar todas as chaves:</p>
+
+<pre><code>gpg -K
+/tmp/tmp.78eBuVusrk/pubring.kbx
+-------------------------------
+sec   rsa4096 2018-10-14 [SC]
+      FDAB9DF86F913B749FCD23E4DD83AB94915A267F
+uid           [ultimate] Dalton Barreto &lt;daltonmatos@gmail.com&gt;
+ssb   rsa4096 2018-10-14 [E]
+ssb   rsa4096 2018-10-14 [S] [expires: 2019-04-12]
+ssb   rsa4096 2018-10-14 [A] [expires: 2019-04-12]
+</code></pre>
+
+<p>E agora temos nossa keyring pronta para ser usada, com uma chave para cada responsabilidade: Encriptação, Assinatura e Autenticação.</p>
+
+<p>Fazendo dessa forma podemos expirar e rotacionar as chaves de forma independente.</p>
+
+<p>A partir daqui é hora de fazer um backup da sua keyring e <a href="/2018/09/modelos-de-seguran%C3%A7a-para-uso-de-smartcards/">guardá-lo de forma segura</a>.</p>
+
+<h1 id="configurações-mínimas-para-o-gnupg">Configurações mínimas para o gnupg</h1>
+
+<p>Uma configuração essencial para que possamos usar o gpg de uma forma agradável é adicionar algumas opções em seu arquivo <code>~/.gnupg/gpg.conf</code>. Essas opções são:</p>
+
+<pre><code>keyid-format long
+armor
+</code></pre>
+
+<p>Especialmente o <code>armor</code> que serve para gerar outputs &ldquo;ASCII-Friendly&rdquo; na linha de comando. Sem essa opção os outputs são todos binários, o que torna inviável de copiar/colar.</p>
+
+<h1 id="exportando-suas-chaves-públicas">Exportando suas chaves públicas</h1>
+
+<p>Depois de ter sua keyring pronta é hora de exportar sua chave pública e começar a distrubí-la para que pessoas possam te enviar conteúdo encriptado, certificar as assinaturas digitais feitas por você e também te dar acesso remoto a servidores.</p>
+
+<h2 id="chave-pública-gpg">Chave pública GPG</h2>
+
+<p>Para exportar sua chave rode:</p>
+
+<pre><code>$ gpg --export &lt;email&gt;
+</code></pre>
+
+<p>nesse nosso caso:</p>
+
+<pre><code>$ gpg --export --armor daltonmatos@gmail.com &gt; chave.pub
+</code></pre>
+
+<p><strong>Nota</strong>: Caso já tenha configurado seu <code>gpg.conf</code>, pode remover o <code>--armor</code> desse comando (e de todos os outros no futuro).</p>
+
+<p>Aqui o arquivo <code>chave.pub</code> conterá sua chave pública GPG. Como exemplo <a href="/gpg/">aqui está a minha</a>.</p>
+
+<h2 id="exportando-sua-chave-pública-no-formato-openssh">Exportando sua chave pública no formato openssh</h2>
+
+<p>Para exportar sua chave em um formato que pode ser diretamento usado com ssh server, rode:</p>
+
+<pre><code>$ gpg --export-ssh-key daltonmatos@gmail.com                                  
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCaejFQzR+ezk8Dz1MecJBmnMn2xrSmhcR5WhS/29+R0drc4ttc2Bq0b9VNM1WKEyH7dB0LZ6LbogXJT+h/yrsAl0v5cmgsQBt3kRmVE7Ig6s601gnZMvNLQA2Rq5CI/+q2AcxmJ/BnJMt42Tg3gx+hNZTnl8a8tyl9/HV5B5hEPH9Vc3ERW7eZDJ424pnr5+1O3bQdRGHX3kJMQozWOFeUZ7YPar5Qi/MlcY1Rqja1JEp+ddfCIIQkm72xLeIj07eUk8tYoegUREpcBZgdZGVxQuuVvTo2ThNtHc6o51VmjeoYeH2Pnn4W7EhU75q6gv7XfBME00sl8hKzaxeoN/WTbag7kO90ey3W0B7zVkX12hYeeV17nFVZ9mfhKSqA9kkhrs76QBNSuuPgOFrt6jn1osI3W2MYfEj0wxkmdGHXBPrkMh1hlMGwWCe2PvNBkyIC86bq/V6ynCJUiXJBc01aAFQNE10tp92oouKzDvw6CpRke+MvSxk0Z3fTBjPIUYdW+hoLhCAsYwmRV8V+N+46NHzZO5VMYgRW0tjbrpaf0rDz45oa8rD5q6R8ctg2e21wamyCfgKwPFQLoulUD8lz3sO0bZdNX4UAF6xLlprGl38CJz3IxPafiONz8Ok0eQLNUG5Rwbpr0RTL8LGsNk5PXlNEgqFK1YuXNSkCpvPPgw== openpgp:0xFB41DA06
+</code></pre>
+
+<p>Esse é o conteúdo que deve ser colocado na sua home, no servidor remoto, no arquivo <code>~/.ssh/authorized_keys</code>.</p>
+
+<p>A partir daqui é uma opção sua manter as chaves privadas (que estão nesse momento dentro da sua keyring) no seu PC ou <a href="/2018/08/usando-seu-keyring-gpg-para-guardar-sua-chave-ssh/">movê-las para um smartcard</a> e <strong>apagar</strong> do PC (mantendo apenas as cópias do backup).</p>
+
+<h1 id="limpando-sua-keyring">Limpando sua keyring</h1>
+
+<p>Se sua opção for usar um smartcard o jeito mais fácil de limpar sua keyring é simplesmente apagando toda a pasta <code>~/.gnupg</code> e re-importar sua própria chave pública. Para importar sua chave rode esse comando:</p>
+
+<pre><code>gpg --import &lt; chave.pub
+</code></pre>
+
+<p>Onde <code>chave.pub</code> é a chave pública que você exportou no <a href="#chave-pública-gpg">passo anterior</a>. Aliás esse é o comando que você usará para importar a chave pública de qualquer pessoa.</p>
+
+</div>
+            <div class="footer">
+                
+
+    
+
+            </div>
+        </div>
+        
+        
+    </body>
+</html>
