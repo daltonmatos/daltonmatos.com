@@ -3,6 +3,8 @@ title: Como armazeno de forma segura meus dados sensíveis de acessos a contas o
 author: Dalton Barreto
 date: 2018-10-04
 tags: [pass, yubikey, gpg, mfa, 2fa]
+aliases:
+  - /2018/10/como-armazeno-de-forma-segura-meus-dados-sensíveis-de-acessos-a-contas-online
 ---
 
 Esse texto é uma descrição geral do [modelo de segurança]({{<relref "./modelo-de-seguranca-para-uso-de-uma-yubikey.md">}}) que escolhi usar depois de pesquisar sobre como outras pessoas guardam dados sensíveis de forma segura.

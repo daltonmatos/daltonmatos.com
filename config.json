@@ -5,6 +5,7 @@
   "theme": "hyde-hyde",
   "publishDir": "docs/",
   "pygmentsUseClasses": true,
+  "RemovePathAccents": true,
   "params": {
     "layoutReverse": false,
     "themeColor": "theme-base-08",

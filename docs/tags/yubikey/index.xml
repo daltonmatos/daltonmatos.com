@@ -6,17 +6,27 @@
     <description>Recent content in Yubikey on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Thu, 04 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 14 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/tags/yubikey/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>Criando sua keyring GPG de forma fácil</title>
+      <link>https://daltonmatos.com/2018/10/criando-sua-keyring-gpg-de-forma-facil/</link>
+      <pubDate>Sun, 14 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/10/criando-sua-keyring-gpg-de-forma-facil/</guid>
+      <description>Nesse texto preparei um forma fácil e semi-automatizada para que você possa criar sua keyring GPG. Em vez de criar tudo usando o prompt interavido do GnuPG vamos usar uma funcionalidade que ele tem e que permite que chaves sejam criadas a partir de arquivos de configuração. É o que ele mesmo chama de Unattended GPG key generation.
+Estrutura da keyring O que vamos fazer é criar 3 chaves, um para cada finalidade:</description>
+    </item>
+    
+    <item>
       <title>Como armazeno de forma segura meus dados sensíveis de acessos a contas online</title>
-      <link>https://daltonmatos.com/2018/10/como-armazeno-de-forma-segura-meus-dados-sens%C3%ADveis-de-acessos-a-contas-online/</link>
+      <link>https://daltonmatos.com/2018/10/como-armazeno-de-forma-segura-meus-dados-sensiveis-de-acessos-a-contas-online/</link>
       <pubDate>Thu, 04 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://daltonmatos.com/2018/10/como-armazeno-de-forma-segura-meus-dados-sens%C3%ADveis-de-acessos-a-contas-online/</guid>
+      <guid>https://daltonmatos.com/2018/10/como-armazeno-de-forma-segura-meus-dados-sensiveis-de-acessos-a-contas-online/</guid>
       <description>Esse texto é uma descrição geral do modelo de segurança que escolhi usar depois de pesquisar sobre como outras pessoas guardam dados sensíveis de forma segura.
 A motivação principal, além de poder ter os dados guardados de forma segura (e aprender muito sobre esse assunto), foi poder ter o total controle sobre eles.
 Se você usa um password manager online por exemplo, o mínimo que você deveria fazer seria manter esses dados encriptados.</description>
@@ -46,10 +56,10 @@ Cópia da chave que está no smartcard Estou assumindo aqui que existe uma cópi
     
     <item>
       <title>Modelos de segurança para uso de smartcards</title>
-      <link>https://daltonmatos.com/2018/09/modelos-de-seguran%C3%A7a-para-uso-de-smartcards/</link>
+      <link>https://daltonmatos.com/2018/09/modelos-de-seguranca-para-uso-de-smartcards/</link>
       <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://daltonmatos.com/2018/09/modelos-de-seguran%C3%A7a-para-uso-de-smartcards/</guid>
+      <guid>https://daltonmatos.com/2018/09/modelos-de-seguranca-para-uso-de-smartcards/</guid>
       <description>Desde que descobri a existência de smartcards que podem ser usados como segundo fator de autenticação, fiquei curioso em como seria usar um dispositivo desses no dia a dia.
 Minha curiosidade era mais no sentido de quanta &amp;ldquo;burocracia&amp;rdquo; um dispositivo desse poderia inserir no meu dia de trabalho.
 Na época eu já queria um desses pelo simples fato de ser um token físico, mas pensando bem usar o celular com algum App de TOTP seria bem semelhante, talvez até &amp;ldquo;melhor&amp;rdquo; já que o App do celular pode exigir uma senha antes de abrir e no caso do token físico, não tem senha nenhuma, basta inserir na porta USB e tocar com o dedo.</description>

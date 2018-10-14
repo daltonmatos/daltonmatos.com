@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="wf-firasans-n4-active wf-active">
+	<head>
+    <link href="http://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Enable responsiveness on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    <meta name="generator" content="Hugo 0.49" />
+    
+    <title>Modelos de segurança para uso de smartcards &middot; </title>
+    <meta content="Modelos de segurança para uso de smartcards - " property="og:title">
+    <meta content=" - " property="og:description">
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i|Roboto+Mono:300,300i,400,400i" rel="stylesheet">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/print.css" media="print">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/poole.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/hyde.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/syntax.css">
+    <!-- Font-Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+    
+    <!-- Customised CSS -->
+    <link rel="stylesheet" href="https://daltonmatos.com/css/custom.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+	</head>
+    <body class="theme-base-08 ">
+        <div class="sidebar">
+  <div class="container text-center ">
+    <div class="sidebar-about text-center">
+      <a href="https://daltonmatos.com/"><h1 class="brand"></h1></a>
+       <img src="/daltonmatos.jpeg" alt="Author Image" class="img-circle headshot center"> 
+      <p class="lead">
+         Dalton Barreto 
+      </p>
+    </div>
+    
+<div>
+	<ul class="sidebar-nav">
+		
+		
+				<li>
+					<a href="/"> <span>Home</span></a>
+				</li>
+				<li>
+					<a href="/gpg/"> <span>GPG Public Key</span></a>
+				</li>
+				<li>
+					<a href="/about/"> <span>About</span></a>
+				</li>
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="row text-center">
+	
+	<a href="https://twitter.com/daltonmatos"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://github.com/daltonmatos"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</section>
+
+    </p>
+    <p class="copyright">&copy; 2018 Dalton Barreto.
+      <a href="https://creativecommons.org/licenses/by/4.0">Some Rights Reserved</a>.<br/>Built with <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            <div class="post">
+  <h1>Modelos de segurança para uso de smartcards</h1>
+  
+  <div class="col-sm-12 col-md-12">
+    <span class="text-left post-date meta">
+            
+       
+        <i class="fas fa-calendar-alt"></i> Sep 06, 2018
+      
+      
+      
+      
+        
+        
+            <br/>
+             <i class="fas fa-tags"></i>
+            
+            <a class="meta" href="/tags/2fa">2fa</a> 
+        
+            <a class="meta" href="/tags/crypt">crypt</a> 
+        
+            <a class="meta" href="/tags/gpg">gpg</a> 
+        
+            <a class="meta" href="/tags/mfa">mfa</a> 
+        
+            <a class="meta" href="/tags/yubikey">yubikey</a>
+        
+      
+      
+      <br/>
+      <i class="fas fa-clock"></i> 8 min read 
+      </span>  
+  </div>    
+  
+  
+
+<p>Desde que descobri a existência de smartcards que podem ser usados como segundo fator de autenticação, fiquei curioso em como seria usar um dispositivo desses no dia a dia.</p>
+
+<p>Minha curiosidade era mais no sentido de quanta &ldquo;burocracia&rdquo; um dispositivo desse poderia inserir no meu dia de trabalho.</p>
+
+<p>Na época eu já queria um desses pelo simples fato de ser um token físico, mas pensando bem usar o celular com algum <a href="https://authy.com/">App</a> de <a href="https://en.m.wikipedia.org/wiki/Time-based_One-time_Password_algorithm">TOTP</a> seria bem semelhante, talvez até &ldquo;melhor&rdquo; já que o App do celular pode exigir uma senha antes de abrir e no caso do token físico, não tem senha nenhuma, basta inserir na porta USB e tocar com o dedo.</p>
+
+<p>Minha atração <strong>definitiva</strong> em relação às keys fabricadas pela <a href="https://Yubico.com">Yubico</a> foi o fato delas serem PGP Compatibile. Ou seja, não só elas são segundo fator de autenticação mas também podem armazenar de forma segura suas chaves privadas.</p>
+
+<p>Outro ponto que as chaves da Yubico têm é a possibilidade de <a href="https://www.yubico.com/solutions/smart-card/">armazenar certificados digitais</a>, aqueles no formato <a href="https://en.m.wikipedia.org/wiki/X.509">x509</a>. Isso faz ser possível, por exemplo, rodar um site com HTTPS onde a chave privada do certificado está na Yubikey. Um exemplo de experimento sobre isso: <a href="https://blog.benjojo.co.uk/post/tls-https-server-from-a-yubikey">aqui</a></p>
+
+<p><strong>Nota</strong>: Esses certificados também são usados na implementação do Secure Boot, o que me faz pensar que seria possível assinar o GRUB da minha máquina usando uma chave privada que está na minha Yubikey. Dessa forma seria possível fazer a proteção de ponta a ponta usando Secure Boot + <a href="/2018/08/arch-linux-com-full-disk-encryption/">Full disk encryption</a>. Até cheguei a mandar um <a href="https://twitter.com/daltonmatos/status/1032083641885765634?s=19">tweet para a Yubico</a> sugerindo uma documentação de como fazer isso. Nesse meio tempo, continuo estudando sobre Secure Boot.</p>
+
+<h1 id="modelo-de-segurança-para-usar-uma-yubikey-com-chaves-privadas">Modelo de segurança para usar uma Yubikey com chaves privadas</h1>
+
+<p>Assim que descobri a possibilidade de ter chaves privadas dentro de uma Yubikey comecei a pensar e a pesquisar sobre modelos de segurança para que eu pudesse fazer uso desse novo dispositivo de forma segura (minimamente!) mas ao mesmo tempo sem adicionar muita burocracia no dia a dia e também sem tornar fácil para terceiros terem acesso ao conteúdo das chaves, mas que seja relativamente fácil pra mim.</p>
+
+<h1 id="gerando-sua-chave-gpg">Gerando sua chave GPG</h1>
+
+<p>O primeiro ponto é como/onde gerar suas chaves. Essa escolha é importante pois você precisa considerar alguns fatores, sendo o mais importante deles: Se sua Yubikey falhar, que alternativas você tem? Você consegue reconstruir uma nova Yubikey com a mesma chave que estava na Yubikey anterior? É aceitável você perder sua chave GPG e simplesmente gerar uma nova, caso tenha que preparar uma nova Yubikey?</p>
+
+<p>Os método escolhido para gerar sua chave depende diretamente desses pontos e de outros quaisquer que fizerem sentido para você.</p>
+
+<h2 id="gerando-as-chaves-direto-na-yubikey">Gerando as chaves direto na Yubikey</h2>
+
+<p>As <a href="https://www.yubico.com/yubikey-4-overview/">Yubikey da série 4</a> (possivelmente outras também) possuem uma opção para que o próprio dispositivo gere as chaves pra você. Esse certamente é um jeito <strong>bem seguro</strong> de ter suas chaves, afinal uma vez dentro da Yubikey, sua chave nunca mais sai de lá.</p>
+
+<p>E esse é exatamente um problema também. Pois escolhendo esse modo, no dia em que houver uma falha de hardware na Yubikey <strong>tudo</strong> que tiver sido encriptado usando a chave estará perdido, por exemplo.</p>
+
+<p>Se essa é uma situação que pra você não pode ocorrer, uma outra opção é gerar as chaves por conta própria e depois copiá-las para dentro da sua Yubikey.</p>
+
+<h2 id="chaves-geradas-no-pc-como-armazenar-de-forma-minimamente-segura">Chaves geradas no PC, como armazenar de forma minimamente segura?</h2>
+
+<p>A partir do momento em que as chaves são geradas fora da Yubikey, um novo problema surge: Como guardar essa cópia das chaves de forma segura?</p>
+
+<p><strong>Nota</strong>: Vamos referenciar essa chave principal como &ldquo;Master Key&rdquo; para ficar mais fácil de identificar.</p>
+
+<p>A primeira coisa que vem em mente é guardar essa cópia encriptada, mas que tipo de encriptação usar?</p>
+
+<h3 id="guardar-a-master-key-usando-encriptação-assimétrica">Guardar a Master Key usando encriptação assimétrica</h3>
+
+<p>Para usar criptografia assimétrica seria preciso gerar um novo par de chaves para encriptar a Master Key, mas nesse momento o mesmo problema que estamos tentando resolver surge novamente: Como guardar essa nova chave de forma segura?</p>
+
+<p>E aí entramos em um loop infinito.</p>
+
+<h3 id="guardar-essa-nova-chave-em-um-usb-stick">Guardar essa nova chave em um USB stick</h3>
+
+<p>Uma opção seria guardar essa nova chave (usada para encriptar a Master Key) em um pendrive. Nesse momento eu tenho mais dois problemas:</p>
+
+<ol>
+<li>Onde guardar esse pendrive?</li>
+<li>E se ele parar de funcionar?</li>
+</ol>
+
+<p>Pesquisando sobre isso vi gente sugerindo guardar em uma safebox no banco, por exemplo. Novamente, o modelo de segurança tem um limite, e esse limite é você quem escolhe. Até onde você aceita perder? Até quanto de vulnerabilidade você aceita ter? Pense nisso.</p>
+
+<p>O problema de depender de um dispositivo físico é que você não sabe quando ele vai parar de funcionar. Imagina você guardar o seu pendrive em um lugar super seguro e na hora que você precisa dele ele simplesmente não funciona.</p>
+
+<h3 id="guardando-a-master-key-usando-encriptação-simétrica">Guardando a Master Key usando encriptação simétrica</h3>
+
+<p>Uma outra opção é usar encriptação simétrica, nesse caso você precisará escolher e armazenar/memorizar uma senha suficientemente segura (para o seu modelo de segurança).</p>
+
+<h4 id="gerando-sua-senha-usando-o-método-dos-dados">Gerando sua senha usando o método dos dados</h4>
+
+<p>Uma forma possível para gerar essa senha é usar o <a href="https://en.m.wikipedia.org/wiki/Diceware">método dos dados</a>, onde você tem um conjunto de X palavras, atribui um número a cada uma delas e vai jogando o dado para escolher essas palavras. Cada palavra requer 5 jogadas do dado. Esses 5 números sorteados no dado são usados para fazer o &ldquo;lookup&rdquo; de uma palavra na lista de palavras.</p>
+
+<p>Nesse método você vai precisar armazenar essa senha em algum lugar seguro, afinal memorizar todas as palavras sorteadas é um risco que pouca gente aceita correr.</p>
+
+<p>Lembra do problema de guardar a chave que encripta a Master Key? Aqui estamos na mesma situação. Onde/como guardar essa senha que você acabou de sortear?</p>
+
+<p>Nesse método o tamanho da senha é definido por você. Você escolhe a hora de parar de jogar o dado.</p>
+
+<h4 id="escolhendo-sua-senha-a-partir-de-uma-obra-literária">Escolhendo sua senha a partir de uma obra literária</h4>
+
+<p>Uma outra forma é escolher como senha o trecho de um livro. Nesse método você pode escolher um trecho de uma tamanho razoavelmente grande (2 parágrafos, por exemplo) pois você não precisa memorizar a senha em si, basta lembrar qual o livro e qual o trecho escolhido.</p>
+
+<p>O grande lance aqui é a escolha do livro. Você precisa ter cuidado na escolha da o obra, afinal se você escolher um livro que tem a chance de ser re-editado ou re-escrito de alguma maneira, você pode ter dificuldades de remontar sua senha, já que ela estará vinculada a uma edição específica desse livro.</p>
+
+<h1 id="uso-da-yubikey-no-dia-a-dia">Uso da Yubikey no dia a dia</h1>
+
+<p>Agora que já temos a chave gerada (e sua cópia guardada de forma segura), precisamos preparar a Yubikey para que ela possa ser usada no dia a dia. Escrevi sobre isso <a href="/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/">em um outro post</a>.</p>
+
+<p>Eu uso minha chave para 4 propósitos diferentes:</p>
+
+<ol>
+<li>Segundo fator de autenticação;</li>
+<li>Criptografia de dados;</li>
+<li>Assinatura digital;</li>
+<li>Autenticação em servidores remotos.</li>
+</ol>
+
+<p>Para usar sua chave basta que ela esteja inserida na porta USB. Na primeira vez que você for usá-la ela te pedirá uma senha para ser destravada. Essa senha pode ser cacheada pelo tempo que você quiser.</p>
+
+<p>Mas se você cachear essa senha por um tempo muito longo, qual a real segurança que essa chave te dá, se ela fica o dia todo já inserida na porta USB do seu PC? Afinal, qualquer pessoa que tiver acesso físico ao seu PC, conseguirá usá-la sem precisar saber a senha.</p>
+
+<p>Essa questão do tempo de cache é um ponto bem importante se você já está com algum nível de paranóia.</p>
+
+<p>Pensando por esse lado, seria melhor você ter que digitar a senha <strong>sempre</strong> que precisar usar a chave, ou então, para diminuir a janela onde um ataque seria possível de acontecer, configurar o cache para um tempo bem curto, como por exemplo 30min ou 1h.</p>
+
+<h2 id="paranóia-nível-hard">Paranóia nível hard</h2>
+
+<p>O nível de paranóia mais alto provavelmente pertence ao fabricante de um dispositivo desses, pois ele precisa pensar em todos os possíveis ataques que podem ser aplicados a alguém que faz uso dessa chave.</p>
+
+<p>E foi isso que eles provavelmente pensaram quando criaram a funcionalidade de &ldquo;require touch&rdquo; nas Yubikeys série 4.</p>
+
+<p>Essas chaves podem ser configuradas para, além de pedir a senha pedir também um toque físico (com o dedo mesmo) para que a operação seja concluída. Esse toque, a partir do momento que é configurado, é pedido <strong>sempre</strong>, não tem &ldquo;cache&rdquo;.</p>
+
+<p>Mas do que isso te protege? Resposta simples: Ataque remoto.</p>
+
+<p>Imagina o seguinte cenário: Sua chave está inserida na porta USB, você já digitou a senha (e ela está cacheada). Nesse momento, <strong>se por acaso</strong> alguém tiver acesso <strong>remoto</strong> à sua máquina, pode muito bem rodar um comando para decriptar algum conteúdo usando sua chave que está na USB. Como a senha já está cacheada a chave vai, feliz da vida, decriptar o conteúdo e você nem vai desconfiar que ela está fazendo isso.</p>
+
+<p>Agora imagina o mesmo cenário, mas sua chave exige um toque físico antes de completar qualquer ação (encriptação, assinatura, autenticação).</p>
+
+<p>Mesmo que o atacante consiga rodar o comando para decriptar ou assinar um conteúdo, esse comando ficará <strong>parado</strong> aguardando o toque na chave e para esse toque acontecer o atacante deve possui acesso <strong>físico</strong> à sua máquina.</p>
+
+<p>O fabricante ainda vai além. Existem duas formas de configurar esse toque físico: Temporária e definitiva.</p>
+
+<p>Na forma temporária você pode habilitar/desabilitar essa função sempre que quiser, mas na forma definitiva você só pode mudar essa opção se resetar a chave por completo, ou seja, preparar a Yubikey novamente como se fosse nova.</p>
+
+<p>Essas são algumas opções que encontrei durante o tempo que pesquisei para que pudesse fazer uso de uma Yubikey no dia a dia e para um armazenamento seguro de uma cópia das chaves, no caso de precisar refazer uma Yubikey contento o mesmo conjunto de chaves que a Yubikey anterior.</p>
+
+</div>
+            <div class="footer">
+                
+
+    
+
+            </div>
+        </div>
+        
+        
+    </body>
+</html>
