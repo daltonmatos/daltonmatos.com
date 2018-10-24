@@ -6,10 +6,20 @@
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Sun, 14 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 23 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Renovando a data de expiração de suas chaves GPG</title>
+      <link>https://daltonmatos.com/2018/10/renovando-a-data-de-expiracao-de-suas-chaves-gpg/</link>
+      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/10/renovando-a-data-de-expiracao-de-suas-chaves-gpg/</guid>
+      <description>Escolhi uma data de expiração de 6 meses para minhas chaves GPG. Penso nisso como uma forma de &amp;ldquo;prova de vida&amp;rdquo;, onde a comprovação que eu ainda mantenho o controle da chave privada é o fato de eu poder renovar a data de expiração de cada uma das chaves GPG.
+Eis que chegou hora de fazer a primeira renovação (desde que adotei essa ideia de expirar as chaves de tempos em tempos).</description>
+    </item>
     
     <item>
       <title>Criando sua keyring GPG de forma fácil</title>

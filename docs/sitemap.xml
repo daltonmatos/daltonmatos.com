@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://daltonmatos.com/2018/10/renovando-a-data-de-expiracao-de-suas-chaves-gpg/</loc>
+    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/2018/10/criando-sua-keyring-gpg-de-forma-facil/</loc>
     <lastmod>2018-10-14T00:00:00+00:00</lastmod>
   </url>
@@ -89,7 +94,7 @@
   
   <url>
     <loc>https://daltonmatos.com/</loc>
-    <lastmod>2018-10-14T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -112,7 +117,7 @@
   
   <url>
     <loc>https://daltonmatos.com/tags/crypt/</loc>
-    <lastmod>2018-10-14T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -124,13 +129,13 @@
   
   <url>
     <loc>https://daltonmatos.com/tags/gnupg/</loc>
-    <lastmod>2018-10-14T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://daltonmatos.com/tags/gpg/</loc>
-    <lastmod>2018-10-14T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -166,13 +171,13 @@
   
   <url>
     <loc>https://daltonmatos.com/tags/pass/</loc>
-    <lastmod>2018-10-14T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://daltonmatos.com/posts/</loc>
-    <lastmod>2018-10-14T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
