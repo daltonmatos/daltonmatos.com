@@ -32,6 +32,17 @@ Estrutura da keyring O que vamos fazer é criar 3 chaves, um para cada finalidad
     </item>
     
     <item>
+      <title>Múltiplos certificados SSL com Let&#39;s Encrypt e traefik</title>
+      <link>https://daltonmatos.com/2018/10/multiplos-certificados-ssl-com-lets-encrypt-e-traefik/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/10/multiplos-certificados-ssl-com-lets-encrypt-e-traefik/</guid>
+      <description>O que o let&amp;rsquo;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.
+Gerar um certificado é tão simples quanto rodar um comando. O única coisa que você precisa ter em me te é como comprovar que você controla o domínio para o qual você está gerando um certificado.
+Challenge http-01 Um dos challenges mais comuns é usar um server http para comprovar que você controla o domínio.</description>
+    </item>
+    
+    <item>
       <title>Como armazeno de forma segura meus dados sensíveis de acessos a contas online</title>
       <link>https://daltonmatos.com/2018/10/como-armazeno-de-forma-segura-meus-dados-sensiveis-de-acessos-a-contas-online/</link>
       <pubDate>Thu, 04 Oct 2018 00:00:00 +0000</pubDate>

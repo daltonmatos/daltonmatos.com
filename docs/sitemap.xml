@@ -13,6 +13,11 @@
   </url>
   
   <url>
+    <loc>https://daltonmatos.com/2018/10/multiplos-certificados-ssl-com-lets-encrypt-e-traefik/</loc>
+    <lastmod>2018-10-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/2018/10/como-armazeno-de-forma-segura-meus-dados-sensiveis-de-acessos-a-contas-online/</loc>
     <lastmod>2018-10-04T00:00:00+00:00</lastmod>
   </url>
@@ -110,6 +115,12 @@
   </url>
   
   <url>
+    <loc>https://daltonmatos.com/tags/certbot/</loc>
+    <lastmod>2018-10-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/tags/cli/</loc>
     <lastmod>2018-08-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -142,6 +153,12 @@
   <url>
     <loc>https://daltonmatos.com/tags/i3/</loc>
     <lastmod>2018-08-31T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/letsencrypt/</loc>
+    <lastmod>2018-10-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -200,6 +217,12 @@
   </url>
   
   <url>
+    <loc>https://daltonmatos.com/tags/ssl/</loc>
+    <lastmod>2018-10-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/tags/statusbar/</loc>
     <lastmod>2018-08-31T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -226,6 +249,12 @@
   <url>
     <loc>https://daltonmatos.com/tags/totp/</loc>
     <lastmod>2018-09-15T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/traefik/</loc>
+    <lastmod>2018-10-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
