@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://daltonmatos.com/2018/11/usando-vim-como-interpretador-de-codigo/</loc>
+    <lastmod>2018-11-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/2018/10/renovando-a-data-de-expiracao-de-suas-chaves-gpg/</loc>
     <lastmod>2018-10-23T00:00:00+00:00</lastmod>
   </url>
@@ -99,7 +104,7 @@
   
   <url>
     <loc>https://daltonmatos.com/</loc>
-    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
+    <lastmod>2018-11-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -123,6 +128,12 @@
   <url>
     <loc>https://daltonmatos.com/tags/cli/</loc>
     <lastmod>2018-08-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/code/</loc>
+    <lastmod>2018-11-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -194,7 +205,19 @@
   
   <url>
     <loc>https://daltonmatos.com/posts/</loc>
-    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
+    <lastmod>2018-11-25T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/programming/</loc>
+    <lastmod>2018-11-25T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/script/</loc>
+    <lastmod>2018-11-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -255,6 +278,24 @@
   <url>
     <loc>https://daltonmatos.com/tags/traefik/</loc>
     <lastmod>2018-10-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/vim/</loc>
+    <lastmod>2018-11-25T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/viml/</loc>
+    <lastmod>2018-11-25T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/vimscript/</loc>
+    <lastmod>2018-11-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Script on </title>
+    <link>https://daltonmatos.com/tags/script/</link>
+    <description>Recent content in Script on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>pt-br</language>
+    <lastBuildDate>Sun, 25 Nov 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://daltonmatos.com/tags/script/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Usando vim como interpretador de código</title>
+      <link>https://daltonmatos.com/2018/11/usando-vim-como-interpretador-de-codigo/</link>
+      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/11/usando-vim-como-interpretador-de-codigo/</guid>
+      <description>Pra quem traballha com programação, escrever código pode representar grande parte das atividades do dia-a-dia. À medida que o tempo vai passando vamos escrevendo código e nem mais percebendo o que é necesário para rodar esss códigos.
+Mas quando paramos para pensar nisso, idependente da linguagem que usamos, tudo acontece meio que da mesma forma: O código que escrevemos deve ser interpretado por &amp;ldquo;alguém&amp;rdquo;, seja esse &amp;ldquo;alguém&amp;rdquo; um outro código (um interpretador, por exemplo) ou um hardware (um processador, por exemplo).</description>
+    </item>
+    
+  </channel>
+</rss>

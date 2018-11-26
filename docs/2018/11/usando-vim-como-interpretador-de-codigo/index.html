@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="wf-firasans-n4-active wf-active">
+	<head>
+    <link href="http://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Enable responsiveness on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    <meta name="generator" content="Hugo 0.51" />
+    
+    <title>Usando vim como interpretador de código &middot; </title>
+    <meta content="Usando vim como interpretador de código - " property="og:title">
+    <meta content=" - " property="og:description">
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i|Roboto+Mono:300,300i,400,400i" rel="stylesheet">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/print.css" media="print">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/poole.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/hyde.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/syntax.css">
+    <!-- Font-Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+    
+    <!-- Customised CSS -->
+    <link rel="stylesheet" href="https://daltonmatos.com/css/custom.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+	</head>
+    <body class="theme-base-08 ">
+        <div class="sidebar">
+  <div class="container text-center ">
+    <div class="sidebar-about text-center">
+      <a href="https://daltonmatos.com/"><h1 class="brand"></h1></a>
+       <img src="/daltonmatos.jpeg" alt="Author Image" class="img-circle headshot center"> 
+      <p class="lead">
+         Dalton Barreto 
+      </p>
+    </div>
+    
+<div>
+	<ul class="sidebar-nav">
+		
+		
+				<li>
+					<a href="/"> <span>Home</span></a>
+				</li>
+				<li>
+					<a href="/gpg/"> <span>GPG Public Key</span></a>
+				</li>
+				<li>
+					<a href="/about/"> <span>About</span></a>
+				</li>
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="row text-center">
+	
+	<a href="https://twitter.com/daltonmatos"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://github.com/daltonmatos"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</section>
+
+    </p>
+    <p class="copyright">&copy; 2018 Dalton Barreto.
+      <a href="https://creativecommons.org/licenses/by/4.0">Some Rights Reserved</a>.<br/>Built with <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            <div class="post">
+  <h1>Usando vim como interpretador de código</h1>
+  
+  <div class="col-sm-12 col-md-12">
+    <span class="text-left post-date meta">
+            
+       
+        <i class="fas fa-calendar-alt"></i> Nov 25, 2018
+      
+      
+      
+      
+        
+        
+            <br/>
+             <i class="fas fa-tags"></i>
+            
+            <a class="meta" href="/tags/code">code</a> 
+        
+            <a class="meta" href="/tags/programming">programming</a> 
+        
+            <a class="meta" href="/tags/script">script</a> 
+        
+            <a class="meta" href="/tags/vim">vim</a> 
+        
+            <a class="meta" href="/tags/viml">viml</a> 
+        
+            <a class="meta" href="/tags/vimscript">vimscript</a>
+        
+      
+      
+      <br/>
+      <i class="fas fa-clock"></i> 7 min read 
+      </span>  
+  </div>    
+  
+  
+
+<p>Pra quem traballha com programação, escrever código pode representar grande parte das atividades do dia-a-dia.
+À medida que o tempo vai passando vamos escrevendo código e nem mais percebendo o que é necesário para rodar esss códigos.</p>
+
+<p>Mas quando paramos para pensar nisso, idependente da linguagem que usamos, tudo acontece meio que da mesma forma: O código que escrevemos
+deve ser interpretado por &ldquo;alguém&rdquo;, seja esse &ldquo;alguém&rdquo; um outro código (um interpretador, por exemplo) ou um hardware (um processador, por exemplo).</p>
+
+<p>O <a href="https://www.vim.org">Vim</a> é um editor de texto <strong>extremamente</strong> extensível e isso acontece pois a forma de extendê-lo é através de uma <a href="https://pt.wikipedia.org/wiki/Linguagem_de_programa%C3%A7%C3%A3o">linguagem de programação</a>. Isso praticamente não te impõe limites no que é possível fazer.</p>
+
+<p>A linguagem criada para extender o vim é chamada de vimscript ou vimL. É uma lingugem de programação como qualquer outra. Possui, dentre outras características:</p>
+
+<ul>
+<li>Variáveis (locais, globais, somente-leitura, etc);</li>
+<li>Condicionais (<code>if, else, elseif</code>);</li>
+<li>Operações lógicas (<code>&gt;, &lt;, &gt;=, &lt;=, ==</code>, etc);</li>
+<li>Expressoes matemáticas (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>);</li>
+<li>Expressões booleanas (<code>(a + 30) &gt; 5</code>, etc);</li>
+<li>Expressões bitwise (<code>and(), or(), xor()</code>);</li>
+<li>Funções (inclusive com númemro variável de parametros) e Ponteiros para funções (<code>FuncRef</code>);</li>
+<li>Variáveis complexas: (<code>List</code>, <code>Dict</code>);</li>
+<li>Comunicação assíncrona com outros processos (<code>Channels</code>);</li>
+<li>Genrenciamento de sub-processos (<code>job</code>);</li>
+<li>Exceptions (<code>try/catch/endtry</code>);</li>
+<li>Funções built-in.</li>
+</ul>
+
+<p>Alguns exemplos de funcções built-in:</p>
+
+<ul>
+<li>Manupilação de strings (<code>tolower(), toupper(), stridx()</code>);</li>
+<li>Manipulação de Listas (<code>len(), get(), empty(), insert(), add(), split()</code>);</li>
+<li>Manipulação de Dicionários (<code>get(), len(), has_key(), filter(), items()</code>);</li>
+<li>Input/Output (<code>input(), getchar(), confirm()</code>), passagem de parametros na linha de comando (<code>argc(), argv()</code>);</li>
+<li>Assert funcions (<code>assert_true(), assert_equal(), assert_exception()</code>);</li>
+</ul>
+
+<p>Na massiva maioria das vezes (todas?) onde vemos <code>vimL</code> o código está sendo aplicado para extender o próprio vim, geralmente em forma de um plugin. Mas <code>vimL</code> é uma linguagem bastante completa e podemos escrever scripts genéricos, para uso geral assim como escrevemos bash ou python.</p>
+
+<p>E é aqui que começa esse post. Vamos escrever um script simples e executá-lo como se fosse um script shell, mas o código estará escrito em <code>vimL</code>.</p>
+
+<h1 id="anatomia-de-um-script">Anatomia de um script</h1>
+
+<p>Um script é composto geralmente apenas por código. E para rodá-lo precismos de um interpretador que entenda esse código. Um exemplo simples de um script shell:</p>
+
+<pre><code>echo &quot;Hello World&quot;
+</code></pre>
+
+<p>E podemos rodar com <strong>qualquer</strong> shell que endenda esse código (pode ser <code>bash</code>, <code>zsh</code>, etc):</p>
+
+<pre><code>$ bash meu-script.sh
+Hello World
+</code></pre>
+
+<h2 id="indicando-o-interpretador-no-código-do-próprio-script">Indicando o interpretador no código do próprio script</h2>
+
+<p>Existe uma forma de já pré-escolher qual será o interpretador usado para rodar nosso script. Essa forma é usando o que chamamos de <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a>. O que fazemos é adicionar um comentário funcional na primeira linha do nosso script, assim:</p>
+
+<pre><code>#!/bin/bash
+echo &quot;Hello World&quot;
+</code></pre>
+
+<p>A partir de agora podemos chamar nosso script apenas pelo nome, assim:</p>
+
+<pre><code>./meu-script.sh
+Hello World
+</code></pre>
+
+<p>O que pouca gente sabe é que nessa linha podemos colocar o caminho de <strong>qualquer</strong> programa, inclusive de outro script. Porque não colocar ali uma chamada ao próprio vim?</p>
+
+<p>É isso que vamos fazer!</p>
+
+<h1 id="usando-vim-para-rodar-um-script-viml">Usando vim para rodar um script vimL</h1>
+
+<p>Vamos usar o seguinte script como prova de conceito:</p>
+
+<pre><code>echo &quot;Hello World&quot;
+</code></pre>
+
+<p>Gravamos esse código em <code>meu-script.vim</code>.</p>
+
+<p>Olhando o exemplo acima (do shell script), pensamos automaticamente em fazer apenas:</p>
+
+<pre><code>$ vim meu-script.vim
+</code></pre>
+
+<p>O problema começa pois como o vim é originalmente um editor de texto, essa linha que chamamos vai na verdade abrir o vim e nos mostrar o <strong>conteúdo</strong> do nosso script, que é exatamente o que fazemos quando estamos usando o <code>vim</code> no dia-a-dia. Então como dizer ao <code>vim</code> que queremos, na verdade, <strong>executar</strong> o script?</p>
+
+<p>O vim possui um flag, <code>--cmd</code> que permite que ele execute um comando qualquer. Então nossa primeira tentativa pode ser:</p>
+
+<pre><code>$ vim --cmd &quot;source ./hello-world.vim&quot;
+Hello World
+Press ENTER or type command to continue
+</code></pre>
+
+<p>De fato <strong>FUNCIONA</strong>, mas apenas parcialmente. Isso pois o <code>vim</code> executa nosso comando mas depois continua seu caminho normal, que é ser um editor de texto. Então aqui, depois de pertar <code>ENTER</code> acabamos com o vim aberto e não é o que queremos, já que queremos voltar ao terminal depois que nosso script terminar de rodar.</p>
+
+<p>Podemos então adicionar <code>:qall!</code> no final do nosso script, isso vai fazer com que o <code>vim</code> feche automaticamente.</p>
+
+<p>Nosso novo script fica assim:</p>
+
+<pre><code>echo &quot;Hello World&quot;
+:qall!
+</code></pre>
+
+<p>E podemos rodar assim:</p>
+
+<pre><code>$ vim --cmd &quot;source ./hello-world.vim&quot;
+Hello World
+</code></pre>
+
+<p>Nesse momento temos nosso primeiro script em <code>vimL</code> podendo ser rodado na linha de comando.</p>
+
+<h2 id="rodando-uma-instância-de-vim-sem-nenhuma-configuração-personalizada">Rodando uma instância de vim sem nenhuma configuração personalizada</h2>
+
+<p>Apesar de termos conseguido rodar nosso script, temos ainda um problema. Essa instância de <code>vim</code> que estamos usando para interpretar nosso script está carregando configurações customizadas escolhidas pelo usuário. Isso pode ser muito ruim pois não temos controle sobre quais são essas configurações e elas podem influenciar na execução do nosso script.</p>
+
+<p>Para rodar um <code>vim</code> sem nenhuma configuração, podemos usar a opção <code>-u &lt;file&gt;</code> que diz ao <code>vim</code> para usar o arquivo <code>&lt;file&gt;</code> como sendo o <code>.vimrc</code>. Assim nós conseguimos substituir toda e qualquer configuração feita pelo usuário.</p>
+
+<p>Então nosso script pode ser rodado assim:</p>
+
+<pre><code>$ vim -u hello-world.vim
+Hello World
+</code></pre>
+
+<h2 id="usando-vim-no-shebang-do-nosso-script">Usando vim no shebang do nosso script</h2>
+
+<p>Uma forma de podermos chamar nosso script diretamente é colocar o <code>vim</code> no <code>shebang</code> do nosso script, assim:</p>
+
+<pre><code>#! vim -u
+echo &quot;Hello World&quot;
+:qall!
+</code></pre>
+
+<p>e a partir de agora podemos rodar nosso script diretamente:</p>
+
+<pre><code>$ ./hello-world.vim
+Hello World
+</code></pre>
+
+<h1 id="exemplo-de-script-um-pouco-mais-complexo-e-novos-problems-que-isso-traz">Exemplo de script um pouco mais complexo e novos problems que isso traz</h1>
+
+<p>Vamos escrever um script um pouco mais complexo. Vamos retornar a soma de todos os parametros passados na linha de comando.</p>
+
+<p>Esse é o código:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-viml" data-lang="viml">#<span class="p">!</span> <span class="nx">vim</span> <span class="p">-</span><span class="nx">u</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">let</span> <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span> <span class="p">=</span> <span class="m">0</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nx">for</span> <span class="nx">n</span> <span class="nx">in</span> <span class="nx">argv</span><span class="p">()</span><span class="err">
+</span><span class="err"></span> <span class="k">let</span> <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span> <span class="p">+=</span> <span class="nx">n</span><span class="err">
+</span><span class="err"></span><span class="nx">endfor</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nx">echo</span> <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="p">:</span><span class="nx">qall</span><span class="p">!</span></code></pre></div>
+
+<p>Colocamos em <code>soma.vim</code>. E rodamos com:</p>
+
+<pre><code>$ ./soma.vim 10 20 30 40                        
+4 files to edit
+100
+</code></pre>
+
+<p>O <code>vim</code> sendo um editor de texto espera que seus argumentos sejam arquivos a serem editados e por isso coloca esse output junto com o output do nosso script:</p>
+
+<pre><code>4 files to edit
+</code></pre>
+
+<p>Infelizmente isso <a href="https://superuser.com/questions/545047/how-do-i-supress-the-2-files-to-edit-message-in-vimdiff">não é configurável</a>, ou seja, sempre que você passar mais de 1 argumento para o seu script, essa frase vai aparecer. Mas já já veremos uma forma de driblar isso.</p>
+
+<h2 id="quando-o-script-está-em-uma-linha-de-comando-com-pipe">Quando o script está em uma linha de comando com pipe (|)</h2>
+
+<p>Um outro problema é quando rodamos nosso script em um linha de comando mais complexa, com pipe (<code>|</code>). Veja:</p>
+
+<pre><code>$ ./soma.vim 10 20 30 40 | cat                  
+Vim: Warning: Output is not to a terminal
+100
+4 files to edit
+</code></pre>
+
+<p>Felizmente esse warning é configurável através da opção <code>--not-a-term</code>. Então basta adicoinar essa opção em nosso <code>shebang</code>, certo? Na verdade não. Uma das regras é que o comando que está no <code>shebang</code> só pode receber <strong>um</strong> parametro. Veja o que acontece quando tentamos passar mais de um parametro:</p>
+
+<pre><code>#! vim --not-a-ter -u
+echo &quot;Hello World&quot;
+:qall!
+</code></pre>
+
+<p>Quando rodamos, vemos:</p>
+
+<pre><code>$ ./hello-world.vim
+VIM - Vi IMproved 8.1 (2018 May 18, compiled Nov 11 2018 17:01:22)
+Unknown option argument: &quot;--not-a-ter -u&quot;
+More info with: &quot;vim -h&quot;
+</code></pre>
+
+<p>veja como o <code>vim</code> considera todos os parametros passados como sendo um só: <code>&quot;--not-a-ter -u&quot;</code>. Aqui coloquei de propósito um parametro errado pois caso contrário nenhum erro é mostrado e o <code>vim</code> apenas abre o arquivo que estamos tentando executar.</p>
+
+<h2 id="usando-um-segundo-script-como-interpretador">Usando um segundo script como interpretador</h2>
+
+<p>Apesar do comando no <code>shebang</code> poder receber apenas um parametro é permitido colocar ali o caminho de um outro script. Então podemos fazer uma espécie de &ldquo;wrapper&rdquo; que vai montar a linha de comando de chamada do <code>vim</code> pra nós. Esse pode ser nosso wrapper:</p>
+
+<pre><code>#! /bin/bash
+
+vim --not-a-term -u &quot;$@&quot; | sed '/files\ to\ edit$/d'
+</code></pre>
+
+<p>A partir de agora podemos usar esse script como sendo o &ldquo;interpretador&rdquo; do nosso script <code>vimL</code>. Mas ainda temos um problema, pois parece que tudo que o código <code>vimL</code> imprime vai para <code>stderr</code>. Então temos que adicionar <code>2&gt;&amp;1</code> em nosso runner, assim:</p>
+
+<pre><code>#! /bin/bash
+
+vim --not-a-term -u &quot;$@&quot; 2&gt;&amp;1 | sed '/files\ to\ edit$/d'
+</code></pre>
+
+<p>Podemos então gravar esse código em <code>/usr/local/bin/viml</code> e usá-lo no <code>shebang</code> de qualquer script escrito em <code>vimL</code>.</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-viml" data-lang="viml">#<span class="p">!</span> <span class="sr">/usr/</span><span class="nx">bin</span>/<span class="nx">env</span> <span class="nx">viml</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">let</span> <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span> <span class="p">=</span> <span class="m">0</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nx">echo</span> <span class="s1">&#39;Somando números: &#39;</span> . <span class="nx">join</span><span class="p">(</span><span class="nx">argv</span><span class="p">(),</span> <span class="s1">&#39; + &#39;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nx">for</span> <span class="nx">n</span> <span class="nx">in</span> <span class="nx">argv</span><span class="p">()</span><span class="err">
+</span><span class="err"></span> <span class="k">let</span> <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span> <span class="p">+=</span> <span class="nx">n</span><span class="err">
+</span><span class="err"></span><span class="nx">endfor</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nx">echo</span> <span class="s1">&#39;Resultado: &#39;</span> . <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="p">:</span><span class="nx">qall</span><span class="p">!</span></code></pre></div>
+
+<p>Assim podemos rodar nosso script diretamente:</p>
+
+<pre><code>./run.vim 3 4 4 5 5 6                      
+Somando números: 3 + 4 + 4 + 5 + 5 + 6
+Resultado: 27
+</code></pre>
+
+<p>E podemos também usar nosso script em uma linha de comando com pipe:</p>
+
+<pre><code>./run.vim 3 4 4 5 5 6 | grep Res
+Resultado: 27
+</code></pre>
+
+<p>E assim temos uma forma bem transparente para podermos escrever scripts de uso geral usando <code>vimL</code> como linguagem de programação e usando o próprio vim como interpretador desses scripts.</p>
+
+</div>
+            <div class="footer">
+                
+
+    
+
+            </div>
+        </div>
+        
+        
+    </body>
+</html>
