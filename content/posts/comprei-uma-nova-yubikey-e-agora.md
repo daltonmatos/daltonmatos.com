@@ -99,6 +99,54 @@ General key info..: [none]
 Assim que você digita `verify` no prompt e dá enter, a yubikey pedirá uma senha. Digite `123456` e se essa for mesmo a senha da yubikey os dados do cartão serão exibidos.
 Se essa senha for recusada significa que sua yubikey já foi configurada por alguém. Se você tiver **certeza** de que essa yubikey é nova e nunca foi usada o mlehor é entrar em contato com o fabricante.
 
+# Nota sobre o tamanho máximo da chave que pode ser movida para a yubikey
+
+Obsereve a seguinte linha:
+
+```
+Key attributes ...: rsa2048 rsa2048 rsa2048
+```
+Essa linha indica o tipo e tamanho máximo de cada uma das chaves que sua yubikey suporta. Nesse caso as três chaves (sign/encrypt/auth) são do tipo `RSA` e com tamanho máximo de `2048` bits.
+
+Se suas chaves são maiores do que esse tamanho, então antes você precisa ajustar os Key Attributes de sua yubikey. Para isso faça assim:
+
+```
+$ gpg --card-edit  
+
+gpg/card> admin
+Admin commands are allowed
+
+gpg/card> key-attr 
+Changing card key attribute for: Signature key
+Please select what kind of key you want:
+   (1) RSA
+   (2) ECC
+Your selection? 1
+What keysize do you want? (2048) 4096
+The card will now be re-configured to generate a key of 4096 bits
+Changing card key attribute for: Encryption key
+Please select what kind of key you want:
+   (1) RSA
+   (2) ECC
+Your selection? 1
+What keysize do you want? (2048) 4096
+The card will now be re-configured to generate a key of 4096 bits
+Changing card key attribute for: Authentication key
+Please select what kind of key you want:
+   (1) RSA
+   (2) ECC
+Your selection? 1
+What keysize do you want? (2048) 4096
+The card will now be re-configured to generate a key of 4096 bits
+
+gpg/card> verify
+
+Key attributes ...: rsa4096 rsa4096 rsa4096
+```
+
+Perceba agora que a indicação é `rsa4096`.
+
+
 # Editando os dados básicos da sua yubikey
 
 Os comandos que precisamos estão dentro do menu `admin`.
@@ -280,10 +328,29 @@ ssb  rsa4096/AB8F87FDAD12AD6E
      card-no: 0006 06250168
 ```
 
-Com a sub-chave correta selecionada (repare o `*` indicando a seleção), podemos movê-la:
+Com a sub-chave correta selecionada (repare o `*` indicando a seleção), podemos movê-la. Para mover basta usar o comando `keytocard`. A cada sub-chave o gnupg vai perguntar para qual slot você deseja mover, nesse momento você deve escolher o slot correspontende à capacidade da sua sub-chahve: Assinatura, Encriptação ou Autenticação.
+
+# Mudando o PIN e Admin PIN
+
+Agora chegou a hora de mudar os PINs defaut. Para isso edite o cartão e use o comando `passwd`:
 
 ```
+gpg/card> admin
+Admin commands are allowed
 
+gpg/card> passwd
+gpg: OpenPGP card no. D2760001240102010006090456150000 detected
+
+1 - change PIN
+2 - unblock PIN
+3 - change Admin PIN
+4 - set the Reset Code
+Q - quit
+
+Your selection? 
 ```
 
+Agora basta selecionar a opção desejada. A cada PIN mudado você deverá fornecer o PIN atual e o novo PIN.
+
+Agora sua nova yubikey está pronta pra uso!
 
