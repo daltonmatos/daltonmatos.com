@@ -6,7 +6,7 @@ tags: [yubikey, crypt, gpg, gnupg]
 ---
 
 
-Nesse POST vou descrever os passos que tenho que percorrer para preparar uma nova Yubikey para uso diário.
+Nesse post vou descrever os passos que tenho que percorrer para preparar uma nova Yubikey para uso diário.
 
 Recentemente comprei uma nova chave e chegou a hora de substituir minha chave atual por essa nova.
 
