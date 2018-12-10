@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="wf-firasans-n4-active wf-active">
+	<head>
+    <link href="http://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Enable responsiveness on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    <meta name="generator" content="Hugo 0.51" />
+    
+    <title>Comprei uma yubikey nova, e agora? &middot; </title>
+    <meta content="Comprei uma yubikey nova, e agora? - " property="og:title">
+    <meta content=" - " property="og:description">
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i|Roboto+Mono:300,300i,400,400i" rel="stylesheet">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/print.css" media="print">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/poole.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/hyde.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/syntax.css">
+    <!-- Font-Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+    
+    <!-- Customised CSS -->
+    <link rel="stylesheet" href="https://daltonmatos.com/css/custom.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+	</head>
+    <body class="theme-base-08 ">
+        <div class="sidebar">
+  <div class="container text-center ">
+    <div class="sidebar-about text-center">
+      <a href="https://daltonmatos.com/"><h1 class="brand"></h1></a>
+       <img src="/daltonmatos.jpeg" alt="Author Image" class="img-circle headshot center"> 
+      <p class="lead">
+         Dalton Barreto 
+      </p>
+    </div>
+    
+<div>
+	<ul class="sidebar-nav">
+		
+		
+				<li>
+					<a href="/"> <span>Home</span></a>
+				</li>
+				<li>
+					<a href="/gpg/"> <span>GPG Public Key</span></a>
+				</li>
+				<li>
+					<a href="/about/"> <span>About</span></a>
+				</li>
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="row text-center">
+	
+	<a href="https://twitter.com/daltonmatos"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://github.com/daltonmatos"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</section>
+
+    </p>
+    <p class="copyright">&copy; 2018 Dalton Barreto.
+      <a href="https://creativecommons.org/licenses/by/4.0">Some Rights Reserved</a>.<br/>Built with <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            <div class="post">
+  <h1>Comprei uma yubikey nova, e agora?</h1>
+  
+  <div class="col-sm-12 col-md-12">
+    <span class="text-left post-date meta">
+            
+       
+        <i class="fas fa-calendar-alt"></i> Dec 07, 2018
+      
+      
+      
+      
+        
+        
+            <br/>
+             <i class="fas fa-tags"></i>
+            
+            <a class="meta" href="/tags/crypt">crypt</a> 
+        
+            <a class="meta" href="/tags/gnupg">gnupg</a> 
+        
+            <a class="meta" href="/tags/gpg">gpg</a> 
+        
+            <a class="meta" href="/tags/yubikey">yubikey</a>
+        
+      
+      
+      <br/>
+      <i class="fas fa-clock"></i> 8 min read 
+      </span>  
+  </div>    
+  
+  
+
+<p>Nesse POST vou descrever os passos que tenho que percorrer para preparar uma nova Yubikey para uso diário.</p>
+
+<p>Recentemente comprei uma nova chave e chegou a hora de substituir minha chave atual por essa nova.</p>
+
+<p>A chave nova é uma Yubikey 5 NFC, e resolvi trocar por alguns motivos:</p>
+
+<ul>
+<li>Possui NFC, ou seja, posso usar no celular sem precisar de nenhum tipo de adaptador. Atualmente carrego comigo um adaptador USB-A &gt; USB-C;</li>
+<li>É a primeira chave da yubico que possui NFC e suporte a chaves GPG de 4096bits;</li>
+<li>Apesar da chave ser fisicamente um pouco maior ela já possui um furo que permite ser colocada diretamente na argola do meu molho chaves.</li>
+</ul>
+
+<h1 id="comunicando-com-a-chave-pela-primeira-vez">Comunicando com a chave pela primeira vez</h1>
+
+<p>Quando inserimos a nova chave pela primeira vez, após <a href="/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/">instalar os pacotes necessários</a> vemos que ela está vazia:</p>
+
+<pre><code>$ gpg --card-status               
+Reader ...........: 1050:0407:X:0
+Application ID ...: D2760001240102010006090456150000
+Version ..........: 2.1
+Manufacturer .....: Yubico
+Serial number ....: &lt;redacted&gt;
+Name of cardholder: [not set]
+Language prefs ...: [not set]
+Sex ..............: unspecified
+URL of public key : [not set]
+Login data .......: [not set]
+Signature PIN ....: not forced
+Key attributes ...: rsa2048 rsa2048 rsa2048
+Max. PIN lengths .: 127 127 127
+PIN retry counter : 3 0 3
+Signature counter : 0
+Signature key ....: [none]
+Encryption key....: [none]
+Authentication key: [none]
+General key info..: [none]
+</code></pre>
+
+<p>O que vamos preencher agora são os seguintes dados:</p>
+
+<ul>
+<li>Name of cardholder</li>
+<li>Language prefs</li>
+<li>URL of public key</li>
+<li>Login data</li>
+</ul>
+
+<p>Fazemos isso usando o <code>gpg --card-edit</code>.</p>
+
+<pre><code>$ gpg --card-edit
+gpg/card&gt; help
+quit           quit this menu
+admin          show admin commands
+help           show this help
+list           list all available data
+fetch          fetch the key specified in the card URL
+passwd         menu to change or unblock the PIN
+verify         verify the PIN and list all data
+unblock        unblock the PIN using a Reset Code
+</code></pre>
+
+<p>Aqui vemos os comandos básicos. O primeiro comando que vamos usar é o <code>verify</code>. Esse comando vai permitir que façamos uma checagem no PIN padrão que vem configurado na yubikey. Vamos <a href="#mudando-o-pin-e-admin-pin">trocar esse PIN mais tarde</a>. O PIN padrão que vem em todas as yubikeys é: <code>123456</code>.</p>
+
+<pre><code>gpg/card&gt; verify
+
+Reader ...........: 1050:0407:X:0
+Application ID ...: D2760001240102010006090456150000
+Version ..........: 2.1
+Manufacturer .....: Yubico
+Serial number ....: 09045615
+Name of cardholder: [not set]
+Language prefs ...: [not set]
+Sex ..............: unspecified
+URL of public key : [not set]
+Login data .......: [not set]
+Signature PIN ....: not forced
+Key attributes ...: rsa2048 rsa2048 rsa2048
+Max. PIN lengths .: 127 127 127
+PIN retry counter : 3 0 3
+Signature counter : 0
+Signature key ....: [none]
+Encryption key....: [none]
+Authentication key: [none]
+General key info..: [none]
+</code></pre>
+
+<p>Assim que você digita <code>verify</code> no prompt e dá enter, a yubikey pedirá uma senha. Digite <code>123456</code> e se essa for mesmo a senha da yubikey os dados do cartão serão exibidos.
+Se essa senha for recusada significa que sua yubikey já foi configurada por alguém. Se você tiver <strong>certeza</strong> que essa yubikey é nova e nunca foi usada o melhor é entrar em contato com o fabricante.</p>
+
+<h1 id="nota-sobre-o-tamanho-máximo-da-chave-que-pode-ser-movida-para-a-yubikey">Nota sobre o tamanho máximo da chave que pode ser movida para a yubikey</h1>
+
+<p>Obsereve a seguinte linha:</p>
+
+<pre><code>Key attributes ...: rsa2048 rsa2048 rsa2048
+</code></pre>
+
+<p>Essa linha indica o tipo e tamanho máximo de cada uma das chaves que sua yubikey suporta. Nesse caso as três chaves (sign/encrypt/auth) são do tipo <code>RSA</code> e com tamanho máximo de <code>2048</code> bits.</p>
+
+<p>Se suas chaves são maiores do que esse tamanho, então antes você precisa ajustar os Key Attributes de sua yubikey. Para isso faça assim:</p>
+
+<pre><code>$ gpg --card-edit  
+
+gpg/card&gt; admin
+Admin commands are allowed
+
+gpg/card&gt; key-attr 
+Changing card key attribute for: Signature key
+Please select what kind of key you want:
+   (1) RSA
+   (2) ECC
+Your selection? 1
+What keysize do you want? (2048) 4096
+The card will now be re-configured to generate a key of 4096 bits
+Changing card key attribute for: Encryption key
+Please select what kind of key you want:
+   (1) RSA
+   (2) ECC
+Your selection? 1
+What keysize do you want? (2048) 4096
+The card will now be re-configured to generate a key of 4096 bits
+Changing card key attribute for: Authentication key
+Please select what kind of key you want:
+   (1) RSA
+   (2) ECC
+Your selection? 1
+What keysize do you want? (2048) 4096
+The card will now be re-configured to generate a key of 4096 bits
+
+gpg/card&gt; verify
+
+Key attributes ...: rsa4096 rsa4096 rsa4096
+</code></pre>
+
+<p>Perceba agora que a indicação é <code>rsa4096</code>.</p>
+
+<h1 id="editando-os-dados-básicos-da-sua-yubikey">Editando os dados básicos da sua yubikey</h1>
+
+<p>Os comandos que precisamos estão dentro do menu <code>admin</code>.</p>
+
+<pre><code>gpg/card&gt; admin
+Admin commands are allowed
+
+gpg/card&gt; help
+quit           quit this menu
+admin          show admin commands
+help           show this help
+list           list all available data
+name           change card holder's name
+url            change URL to retrieve key
+fetch          fetch the key specified in the card URL
+login          change the login name
+lang           change the language preferences
+sex            change card holder's sex
+cafpr          change a CA fingerprint
+forcesig       toggle the signature force PIN flag
+generate       generate new keys
+passwd         menu to change or unblock the PIN
+verify         verify the PIN and list all data
+unblock        unblock the PIN using a Reset Code
+factory-reset  destroy all keys and data
+kdf-setup      setup KDF for PIN authentication
+key-attr       change the key attribute
+
+gpg/card&gt; 
+</code></pre>
+
+<p>Aqui vemos os comandos que vamos precisar usar:</p>
+
+<ul>
+<li><code>name</code> para trocar o nome do Card holder;</li>
+<li><code>lang</code> para trocar os dados de Language prefs;</li>
+<li><code>url</code> para mudar o endereço da chave pública (<a href="#mudando-url-da-chave-pública">veremos mais sobre isso adiante</a>);</li>
+<li><code>login</code> para mudar os dados sobre login.</li>
+</ul>
+
+<p>Com isso em mãos podemos começar:</p>
+
+<h2 id="mudando-no-nome-do-cardholder">Mudando no Nome do cardholder</h2>
+
+<pre><code>$ gpg --card-edit
+
+gpg/card&gt; admin
+Admin commands are allowed
+
+gpg/card&gt; name
+Cardholder's surname: Barreto
+Cardholder's given name: Dalton
+
+gpg/card&gt; 
+</code></pre>
+
+<p>Assim que você digita todas as informações a yubikey vai pedir uma senha, mas perceba que o que está pedindo agora <strong>não é</strong> o PIN e sim o <strong>ADMIN PIN</strong>. O ADMIN PIN padrão de toda yubikey nova é: <code>12345678</code>. Assim que você informa o ADMIN PIN correto os dados são salvos. Se rodarmos o comando <code>verify</code> novamente, vemos que agora o nome está preenchido:</p>
+
+<pre><code>gpg/card&gt; verify
+
+...
+Name of cardholder: Dalton Barreto
+...
+</code></pre>
+
+<p>Aqui coloquei apenas a parte do output que importa. Vamos seguir.</p>
+
+<h2 id="mudando-language-prefs">Mudando Language prefs</h2>
+
+<pre><code>gpg/card&gt; lang
+Language preferences: ptbr
+
+gpg/card&gt; verify
+
+Language prefs ...: ptbr
+</code></pre>
+
+<h2 id="mudando-url-da-chave-pública">Mudando URL da chave pública</h2>
+
+<pre><code>gpg/card&gt; url
+URL to retrieve public key: https://daltonmatos.com/daltonmatos.pub
+
+gpg/card&gt; verify
+
+URL of public key : https://daltonmatos.com/daltonmatos.pub
+</code></pre>
+
+<p>Essa informação serve para que o gnuPG saiba onde está a chave pública que é o par da chave privada que está dentro a yubikey. Essa URL é útil quando estamos em uma máquina que ainda não possui nossa chave pública.</p>
+
+<p>Para que o próprio gnuPG busque nossa chave pública e instale localmente:</p>
+
+<pre><code>$ gpg --card-edit  
+
+gpg/card&gt; fetch
+gpg: requesting key from 'https://daltonmatos.com/daltonmatos.pub'
+gpg: key 389D4E1EC7F29FEF: &quot;Dalton Barreto &lt;daltonmatos@gmail.com&gt;&quot; imported
+gpg: Total number processed: 1
+gpg:              unchanged: 1
+
+gpg/card&gt; 
+</code></pre>
+
+<p>Dessa forma, a chave pública estaria corretamente instalada.</p>
+
+<h2 id="mudando-login-data">Mudando login data</h2>
+
+<pre><code>gpg/card&gt; login
+Login data (account name): daltonmatos
+
+gpg/card&gt; verify
+
+Login data .......: daltonmatos
+</code></pre>
+
+<h1 id="movendo-suas-chaves-pra-dentro-da-sua-yubikey">Movendo suas chaves pra dentro da sua yubikey</h1>
+
+<p>Agora é a hora de mover a parte mais importante:  Suas chaves. Para isso precisamo <a href="/2018/09/o-que-acontece-se-minha-yubikey-parar-de-funcionar/">accessar nosso backup</a> para podermos pegar uma cópia dessas chaves e poder movê-las para dentro da yubikey.</p>
+
+<p>O que faço nesse ponto é o seguinte:</p>
+
+<ul>
+<li>Acesso meu backup e descompacto ele em um lugar qualquer, por exemplo: <code>/tmp/keys</code>;</li>
+<li>Faço <code>export GNUPGHOME=/tmp/keys</code>;</li>
+<li>Uso o GnupG para move as chaves.</li>
+</ul>
+
+<p>Para isso preciamos agora editar a chave que queremos move:</p>
+
+<pre><code>
+gpg --edit-key daltonmatos@gmail.com
+gpg (GnuPG) 2.2.11; Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Secret key is available.
+
+sec  rsa4096/389D4E1EC7F29FEF
+     created: 2017-02-04  expires: never       usage: SC  
+     trust: ultimate      validity: ultimate
+ssb  rsa4096/3B147A3234E02C43
+     created: 2017-02-04  expires: never       usage: S   
+ssb  rsa4096/05570C19E57F6BB4
+     created: 2017-05-16  expires: 2019-01-16  usage: S   
+     card-no: 0006 06250168
+ssb  rsa4096/45768D9D6F14D474
+     created: 2017-09-14  expires: 2019-01-16  usage: E   
+     card-no: 0006 06250168
+ssb  rsa4096/AB8F87FDAD12AD6E
+     created: 2017-09-14  expires: never       usage: A   
+     card-no: 0006 06250168
+[ultimate] (1). Dalton Barreto &lt;daltonmatos@gmail.com&gt;
+</code></pre>
+
+<p>Aqui vamos usar o comando <code>keytocard</code>, isso vai <strong>mover</strong> a chave privada para a yubikey.</p>
+
+<p>Primeiro precisamos escolher qual sub-chave quremos mover. Vamos começar pela sub-chave <code>rsa4096/05570C19E57F6BB4</code>. Para isso vamos selecioná-la com o comando <code>key</code>.</p>
+
+<pre><code>gpg&gt; key 2
+
+sec  rsa4096/389D4E1EC7F29FEF
+     created: 2017-02-04  expires: never       usage: SC  
+     trust: ultimate      validity: ultimate
+ssb  rsa4096/3B147A3234E02C43
+     created: 2017-02-04  expires: never       usage: S   
+ssb* rsa4096/05570C19E57F6BB4
+     created: 2017-05-16  expires: 2019-01-16  usage: S   
+     card-no: 0006 06250168
+ssb  rsa4096/45768D9D6F14D474
+     created: 2017-09-14  expires: 2019-01-16  usage: E   
+     card-no: 0006 06250168
+ssb  rsa4096/AB8F87FDAD12AD6E
+     created: 2017-09-14  expires: never       usage: A   
+     card-no: 0006 06250168
+</code></pre>
+
+<p>Com a sub-chave correta selecionada (repare o <code>*</code> indicando a seleção), podemos movê-la. Para mover basta usar o comando <code>keytocard</code>. A cada sub-chave o gnupg vai perguntar para qual slot você deseja mover, nesse momento você deve escolher o slot correspontende à capacidade da sua sub-chave: Assinatura, Encriptação ou Autenticação.</p>
+
+<h1 id="mudando-o-pin-e-admin-pin">Mudando o PIN e Admin PIN</h1>
+
+<p>Agora chegou a hora de mudar os PINs defaut. Para isso edite o cartão e use o comando <code>passwd</code>:</p>
+
+<pre><code>gpg/card&gt; admin
+Admin commands are allowed
+
+gpg/card&gt; passwd
+gpg: OpenPGP card no. D2760001240102010006090456150000 detected
+
+1 - change PIN
+2 - unblock PIN
+3 - change Admin PIN
+4 - set the Reset Code
+Q - quit
+
+Your selection? 
+</code></pre>
+
+<p>Agora basta selecionar a opção desejada. A cada PIN mudado você deverá fornecer o PIN atual e o novo PIN.</p>
+
+<p>Agora sua nova yubikey está pronta pra uso!</p>
+
+</div>
+            <div class="footer">
+                
+
+    
+
+            </div>
+        </div>
+        
+        
+    </body>
+</html>

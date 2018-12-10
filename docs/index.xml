@@ -6,10 +6,22 @@
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Sun, 25 Nov 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 07 Dec 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Comprei uma yubikey nova, e agora?</title>
+      <link>https://daltonmatos.com/2018/12/comprei-uma-yubikey-nova-e-agora/</link>
+      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2018/12/comprei-uma-yubikey-nova-e-agora/</guid>
+      <description>Nesse POST vou descrever os passos que tenho que percorrer para preparar uma nova Yubikey para uso diário.
+Recentemente comprei uma nova chave e chegou a hora de substituir minha chave atual por essa nova.
+A chave nova é uma Yubikey 5 NFC, e resolvi trocar por alguns motivos:
+ Possui NFC, ou seja, posso usar no celular sem precisar de nenhum tipo de adaptador. Atualmente carrego comigo um adaptador USB-A &amp;gt; USB-C; É a primeira chave da yubico que possui NFC e suporte a chaves GPG de 4096bits; Apesar da chave ser fisicamente um pouco maior ela já possui um furo que permite ser colocada diretamente na argola do meu molho chaves.</description>
+    </item>
     
     <item>
       <title>Usando vim como interpretador de código</title>

@@ -1,10 +1,8 @@
 ---
 title: Comprei uma yubikey nova, e agora?
 author: Dalton Barreto
-draft: true
 date: 2018-12-07
 tags: [yubikey, crypt, gpg, gnupg]
-
 ---
 
 
@@ -21,7 +19,7 @@ A chave nova é uma Yubikey 5 NFC, e resolvi trocar por alguns motivos:
 
 # Comunicando com a chave pela primeira vez
 
-Quando inserimos a nova chave pela primeira vez, após [instalar os pacotes necessários]({{<relref "./configurando-yubikey-para-auth-sign-otp-u2f.md">}}) vemos que els está vazia:
+Quando inserimos a nova chave pela primeira vez, após [instalar os pacotes necessários]({{<relref "./configurando-yubikey-para-auth-sign-otp-u2f.md">}}) vemos que ela está vazia:
 
 
 ```
@@ -70,7 +68,7 @@ verify         verify the PIN and list all data
 unblock        unblock the PIN using a Reset Code
 ```
 
-Aqui vemos os comandos básicos. O primeiro comando que vamos usar é o `verify`. Esse comando vai permitir que façamos uma checagem no PIN padrão que vem configurado na yubikey. Vamos trocar esse PIN mais tarde. O PIN padrão que vem em todas as yubikeys é: `123456`.
+Aqui vemos os comandos básicos. O primeiro comando que vamos usar é o `verify`. Esse comando vai permitir que façamos uma checagem no PIN padrão que vem configurado na yubikey. Vamos [trocar esse PIN mais tarde](#mudando-o-pin-e-admin-pin). O PIN padrão que vem em todas as yubikeys é: `123456`.
 
 ```
 gpg/card> verify
@@ -97,7 +95,7 @@ General key info..: [none]
 ```
 
 Assim que você digita `verify` no prompt e dá enter, a yubikey pedirá uma senha. Digite `123456` e se essa for mesmo a senha da yubikey os dados do cartão serão exibidos.
-Se essa senha for recusada significa que sua yubikey já foi configurada por alguém. Se você tiver **certeza** de que essa yubikey é nova e nunca foi usada o mlehor é entrar em contato com o fabricante.
+Se essa senha for recusada significa que sua yubikey já foi configurada por alguém. Se você tiver **certeza** que essa yubikey é nova e nunca foi usada o melhor é entrar em contato com o fabricante.
 
 # Nota sobre o tamanho máximo da chave que pode ser movida para a yubikey
 
@@ -183,7 +181,7 @@ Aqui vemos os comandos que vamos precisar usar:
 
 * `name` para trocar o nome do Card holder;
 * `lang` para trocar os dados de Language prefs;
-* `url` para mudar o endereço da chave pública (veremos mais sobre isso adiante);
+* `url` para mudar o endereço da chave pública ([veremos mais sobre isso adiante](#mudando-url-da-chave-pública));
 * `login` para mudar os dados sobre login.
 
 
@@ -240,14 +238,14 @@ URL of public key : https://daltonmatos.com/daltonmatos.pub
 
 Essa informação serve para que o gnuPG saiba onde está a chave pública que é o par da chave privada que está dentro a yubikey. Essa URL é útil quando estamos em uma máquina que ainda não possui nossa chave pública.
 
-Para que o próprio gnuPG busque nossa chave pública e instale localmente, veja:
+Para que o próprio gnuPG busque nossa chave pública e instale localmente:
 
 ```
 $ gpg --card-edit  
 
 gpg/card> fetch
 gpg: requesting key from 'https://daltonmatos.com/daltonmatos.pub'
-gpg: key 389D4E1EC7F29FEF: "Dalton Barreto <daltonmatos@gmail.com>" not changed
+gpg: key 389D4E1EC7F29FEF: "Dalton Barreto <daltonmatos@gmail.com>" imported
 gpg: Total number processed: 1
 gpg:              unchanged: 1
 
@@ -267,7 +265,7 @@ gpg/card> verify
 Login data .......: daltonmatos
 ```
 
-# Movendo duas chaves pra dentro da sua yubikey
+# Movendo suas chaves pra dentro da sua yubikey
 
 Agora é a hora de mover a parte mais importante:  Suas chaves. Para isso precisamo [accessar nosso backup]({{<relref "./o-que-acontece-se-minha-yubikey-parar-de-funcionar.md">}}) para podermos pegar uma cópia dessas chaves e poder movê-las para dentro da yubikey.
 
@@ -304,7 +302,7 @@ ssb  rsa4096/AB8F87FDAD12AD6E
 [ultimate] (1). Dalton Barreto <daltonmatos@gmail.com>
 ```
 
-Aqui vamos usaar o comando `keytocard`, isso vai **mover** a chave privada para a yubikey.
+Aqui vamos usar o comando `keytocard`, isso vai **mover** a chave privada para a yubikey.
 
 
 Primeiro precisamos escolher qual sub-chave quremos mover. Vamos começar pela sub-chave `rsa4096/05570C19E57F6BB4`. Para isso vamos selecioná-la com o comando `key`.
@@ -328,7 +326,7 @@ ssb  rsa4096/AB8F87FDAD12AD6E
      card-no: 0006 06250168
 ```
 
-Com a sub-chave correta selecionada (repare o `*` indicando a seleção), podemos movê-la. Para mover basta usar o comando `keytocard`. A cada sub-chave o gnupg vai perguntar para qual slot você deseja mover, nesse momento você deve escolher o slot correspontende à capacidade da sua sub-chahve: Assinatura, Encriptação ou Autenticação.
+Com a sub-chave correta selecionada (repare o `*` indicando a seleção), podemos movê-la. Para mover basta usar o comando `keytocard`. A cada sub-chave o gnupg vai perguntar para qual slot você deseja mover, nesse momento você deve escolher o slot correspontende à capacidade da sua sub-chave: Assinatura, Encriptação ou Autenticação.
 
 # Mudando o PIN e Admin PIN
 
