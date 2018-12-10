@@ -6,9 +6,9 @@ tags: [vim, script, code, programming, vimscript, vimL]
 ---
 
 Pra quem traballha com programação, escrever código pode representar grande parte das atividades do dia-a-dia.
-À medida que o tempo vai passando vamos escrevendo código e nem mais percebendo o que é necesário para rodar esss códigos.
+À medida que o tempo vai passando vamos escrevendo código e nem mais percebendo o que é necessário para rodar esss códigos.
 
-Mas quando paramos para pensar nisso, idependente da linguagem que usamos, tudo acontece meio que da mesma forma: O código que escrevemos
+Mas quando paramos para pensar nisso, independente da linguagem que usamos, tudo acontece meio que da mesma forma: O código que escrevemos
 deve ser interpretado por "alguém", seja esse "alguém" um outro código (um interpretador, por exemplo) ou um hardware (um processador, por exemplo).
 
 O [Vim](https://www.vim.org) é um editor de texto **extremamente** extensível e isso acontece pois a forma de extendê-lo é através de uma [linguagem de programação](https://pt.wikipedia.org/wiki/Linguagem_de_programa%C3%A7%C3%A3o). Isso praticamente não te impõe limites no que é possível fazer.
@@ -42,7 +42,7 @@ E é aqui que começa esse post. Vamos escrever um script simples e executá-lo 
 
 # Anatomia de um script
 
-Um script é composto geralmente apenas por código. E para rodá-lo precismos de um interpretador que entenda esse código. Um exemplo simples de um script shell:
+Um script é composto geralmente apenas por código. E para rodá-lo precisamos de um interpretador que entenda esse código. Um exemplo simples de um script shell:
 
 ```
 echo "Hello World"
@@ -204,7 +204,7 @@ Vim: Warning: Output is not to a terminal
 4 files to edit
 ```
 
-Felizmente esse warning é configurável através da opção `--not-a-term`. Então basta adicoinar essa opção em nosso `shebang`, certo? Na verdade não. Uma das regras é que o comando que está no `shebang` só pode receber **um** parametro. Veja o que acontece quando tentamos passar mais de um parametro:
+Felizmente esse warning é configurável através da opção `--not-a-term`. Então basta adicionar essa opção em nosso `shebang`, certo? Na verdade não. Uma das regras é que o comando que está no `shebang` só pode receber **um** parametro. Veja o que acontece quando tentamos passar mais de um parametro:
 
 ```
 #! vim --not-a-ter -u

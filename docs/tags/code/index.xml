@@ -17,8 +17,8 @@
       <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/2018/11/usando-vim-como-interpretador-de-codigo/</guid>
-      <description>Pra quem traballha com programação, escrever código pode representar grande parte das atividades do dia-a-dia. À medida que o tempo vai passando vamos escrevendo código e nem mais percebendo o que é necesário para rodar esss códigos.
-Mas quando paramos para pensar nisso, idependente da linguagem que usamos, tudo acontece meio que da mesma forma: O código que escrevemos deve ser interpretado por &amp;ldquo;alguém&amp;rdquo;, seja esse &amp;ldquo;alguém&amp;rdquo; um outro código (um interpretador, por exemplo) ou um hardware (um processador, por exemplo).</description>
+      <description>Pra quem traballha com programação, escrever código pode representar grande parte das atividades do dia-a-dia. À medida que o tempo vai passando vamos escrevendo código e nem mais percebendo o que é necessário para rodar esss códigos.
+Mas quando paramos para pensar nisso, independente da linguagem que usamos, tudo acontece meio que da mesma forma: O código que escrevemos deve ser interpretado por &amp;ldquo;alguém&amp;rdquo;, seja esse &amp;ldquo;alguém&amp;rdquo; um outro código (um interpretador, por exemplo) ou um hardware (um processador, por exemplo).</description>
     </item>
     
   </channel>
