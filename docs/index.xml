@@ -223,5 +223,16 @@ As visões apresentadas aqui são minhas e somente minhas, não refletindo a opn
 O textos plublicados aqui têm mais a intenção de serem lembretes do que tutoriais completos sobre quaisquer assuntos.</description>
     </item>
     
+    <item>
+      <title>Palestras</title>
+      <link>https://daltonmatos.com/talks/</link>
+      <pubDate>Mon, 14 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/talks/</guid>
+      <description>Aqui você encontra uma lista de apresentações que fiz por aí sobre projetos e/ou assuntos que achei interessante falar sobre.
+Asgard: Abstraindo orquestradores de containers Python Brasil 14, Natal. 19/10/2018
+O projeto Asgard é um projeto que tem como objetivo abstrair múltiplos aroquestradores de containers. A ideia é que o time de desenvolvimento não precise sem saber o que está rodando as aplpicações por baixo dos panos. Basta que alguém crie uma Aplicação e clique em &amp;ldquo;Salvar&amp;rdquo; e essa aplicação vai ganhar um IP e Porta.</description>
+    </item>
+    
   </channel>
 </rss>
