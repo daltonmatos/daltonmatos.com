@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://daltonmatos.com/2019/03/escrevendo-workers-assincronos-em-python-com-asyncowrker/</loc>
+    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://daltonmatos.com/2018/12/comprei-uma-yubikey-nova-e-agora/</loc>
     <lastmod>2018-12-07T00:00:00+00:00</lastmod>
   </url>
@@ -114,13 +119,19 @@
   
   <url>
     <loc>https://daltonmatos.com/</loc>
-    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://daltonmatos.com/tags/2fa/</loc>
     <lastmod>2018-10-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/async/</loc>
+    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -156,6 +167,12 @@
   <url>
     <loc>https://daltonmatos.com/tags/curl/</loc>
     <lastmod>2018-08-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/dev/</loc>
+    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -215,13 +232,19 @@
   
   <url>
     <loc>https://daltonmatos.com/posts/</loc>
-    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://daltonmatos.com/tags/programming/</loc>
     <lastmod>2018-11-25T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/python/</loc>
+    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -312,6 +335,12 @@
   <url>
     <loc>https://daltonmatos.com/tags/wm/</loc>
     <lastmod>2018-08-31T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/worker/</loc>
+    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

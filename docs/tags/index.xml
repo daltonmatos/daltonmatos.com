@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>Async</title>
+      <link>https://daltonmatos.com/tags/async/</link>
+      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/async/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Certbot</title>
       <link>https://daltonmatos.com/tags/certbot/</link>
       <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
@@ -62,6 +71,15 @@
       <pubDate>Sat, 04 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/tags/curl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Dev</title>
+      <link>https://daltonmatos.com/tags/dev/</link>
+      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/dev/</guid>
       <description></description>
     </item>
     
@@ -152,6 +170,15 @@
       <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/tags/programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>https://daltonmatos.com/tags/python/</link>
+      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/python/</guid>
       <description></description>
     </item>
     
@@ -278,6 +305,15 @@
       <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/tags/wm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Worker</title>
+      <link>https://daltonmatos.com/tags/worker/</link>
+      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/worker/</guid>
       <description></description>
     </item>
     

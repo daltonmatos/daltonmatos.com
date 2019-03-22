@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Worker on </title>
+    <link>https://daltonmatos.com/tags/worker/</link>
+    <description>Recent content in Worker on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>pt-br</language>
+    <lastBuildDate>Thu, 21 Mar 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://daltonmatos.com/tags/worker/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Escrevendo workers assíncronos em python com asyncowrker</title>
+      <link>https://daltonmatos.com/2019/03/escrevendo-workers-assincronos-em-python-com-asyncowrker/</link>
+      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2019/03/escrevendo-workers-assincronos-em-python-com-asyncowrker/</guid>
+      <description>Olhando o histórico de commits, o primeiro data de 19/Jan/2017. Essa talvez seja a data oficial do início do que chamamos de asyncworker.
+O projeto nasceu para facilitar a escrita de workers assíncronos em python. Inicialmente eram workers para rabbitmq. Mas com o tempo surgiram oportunidades de implementar suporte a outros &amp;ldquo;backends&amp;rdquo;, por assim dizer.
+Backends atualmente suportados Até a data de hoje o projeto suporta os seguintes backends:</description>
+    </item>
+    
+  </channel>
+</rss>

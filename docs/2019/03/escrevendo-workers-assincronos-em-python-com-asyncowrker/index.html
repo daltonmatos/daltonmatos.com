@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="wf-firasans-n4-active wf-active">
+	<head>
+    <link href="http://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Enable responsiveness on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    <meta name="generator" content="Hugo 0.54.0" />
+    
+    <title>Escrevendo workers assíncronos em python com asyncowrker &middot; </title>
+    <meta content="Escrevendo workers assíncronos em python com asyncowrker - " property="og:title">
+    <meta content=" - " property="og:description">
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i|Roboto+Mono:300,300i,400,400i" rel="stylesheet">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/print.css" media="print">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/poole.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/hyde.css">
+    <link rel="stylesheet" href="https://daltonmatos.com/css/syntax.css">
+    <!-- Font-Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+    
+    <!-- Customised CSS -->
+    <link rel="stylesheet" href="https://daltonmatos.com/css/custom.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+	</head>
+    <body class="theme-base-08 ">
+        <div class="sidebar">
+  <div class="container text-center ">
+    <div class="sidebar-about text-center">
+      <a href="https://daltonmatos.com/"><h1 class="brand"></h1></a>
+       <img src="/daltonmatos.jpeg" alt="Author Image" class="img-circle headshot center"> 
+      <p class="lead">
+         Dalton Barreto 
+      </p>
+    </div>
+    
+<div>
+	<ul class="sidebar-nav">
+		
+		
+				<li>
+					<a href="/"> <span>Home</span></a>
+				</li>
+				<li>
+					<a href="/gpg/"> <span>GPG Public Key</span></a>
+				</li>
+				<li>
+					<a href="/talks/"> <span>Palestras</span></a>
+				</li>
+				<li>
+					<a href="/about/"> <span>About</span></a>
+				</li>
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="row text-center">
+	
+	<a href="https://twitter.com/daltonmatos"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://github.com/daltonmatos"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</section>
+
+    </p>
+    <p class="copyright">&copy; 2019 Dalton Barreto.
+      <a href="https://creativecommons.org/licenses/by/4.0">Some Rights Reserved</a>.<br/>Built with <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            <div class="post">
+  <h1>Escrevendo workers assíncronos em python com asyncowrker</h1>
+  
+  <div class="col-sm-12 col-md-12">
+    <span class="text-left post-date meta">
+            
+       
+        <i class="fas fa-calendar-alt"></i> Mar 21, 2019
+      
+      
+      
+      
+        
+        
+            <br/>
+             <i class="fas fa-tags"></i>
+            
+            <a class="meta" href="/tags/async">async</a> 
+        
+            <a class="meta" href="/tags/dev">dev</a> 
+        
+            <a class="meta" href="/tags/python">python</a> 
+        
+            <a class="meta" href="/tags/worker">worker</a>
+        
+      
+      
+      <br/>
+      <i class="fas fa-clock"></i> 7 min read 
+      </span>  
+  </div>    
+  
+  
+
+<p>Olhando o histórico de commits, o primeiro data de 19/Jan/2017. Essa talvez seja a data oficial do início do que chamamos de <a href="https://github.com/B2W-BIT/async-worker"><code>asyncworker</code></a>.</p>
+
+<p>O projeto nasceu para facilitar a escrita de workers assíncronos em python. Inicialmente eram workers para rabbitmq. Mas com o tempo surgiram oportunidades de implementar suporte a outros &ldquo;backends&rdquo;, por assim dizer.</p>
+
+<h1 id="backends-atualmente-suportados">Backends atualmente suportados</h1>
+
+<p>Até a data de hoje o projeto suporta os seguintes backends:</p>
+
+<ul>
+<li>RabbitMQ</li>
+<li>Server Side Events</li>
+<li>HTTP</li>
+<li>Tarefas recorrentes</li>
+</ul>
+
+<p>E a ideia é adicionar suporte a mais backends com o tempo.</p>
+
+<p>Nesse post vamos ver um pouco da ideia geral do framework e no detalhe como escrever um worker para RabbitMQ.</p>
+
+<h1 id="estrutura-do-código-de-um-worker">Estrutura do código de um worker</h1>
+
+<p>A forma de se escrever um worker com o <a href="https://github.com/B2W-BIT/async-worker">asyncworker</a> foi muito inspirada no <a href="http://flask.pocoo.org">flask</a>. É uma sintaxe simples e limpa onde você escreve uma função e adiciona a essa função um <a href="https://docs.python.org/3/glossary.html#term-decorator">decorator</a> que vai efetivamente registrar esse função para ser usada quando o código estiver rodando.</p>
+
+<p>Pense no <a href="https://github.com/B2W-BIT/async-worker">asyncworker</a> como um framework genérico para implementação de handlers, onde esses handlers podem receber informações de várias origens distintas, é aqui que entram os &ldquo;backends&rdquo; que citei acima.</p>
+
+<p>Então a ideia geral da estrutura de um handler é a seguinte:</p>
+
+<pre><code class="language-python">    from asyncworker import App, RouteTypes
+    app = App(...)
+
+    @app.route([..., ...], type=RouteTypes.&lt;TYPE&gt;, options={})
+    async def myhandler(...):
+        ...
+        ...
+</code></pre>
+
+<p>O que estamos vendo aqui?</p>
+
+<p>Primeiro construímos nossa <code>App</code>. Esse é o ponto central do seu código. Ali estará registrado tudo que é necessário para que seus handlers possam trabalhar e fazer, cada um, o seu papel.</p>
+
+<p>Depois vem a definição propriamente dita do handler. Ele é decorado com <code>@app.route()</code>e é aqui que a mágica acontece.</p>
+
+<p>É nesse momento que escolhemos de qual tipo esse handler vai ser, ou seja, de onde virão os estímulos que farão esse handler ser executado.</p>
+
+<p>Isso é o mínimo necessário para se escrever um handler que fará alguma coisa.</p>
+
+<p>Nesse post veremos como usar o backend RabbitMQ para escrever um handler assíncrono.</p>
+
+<h1 id="usando-sua-app-como-storage-de-configurações">Usando sua App como storage de configurações</h1>
+
+<p>A <code>App()</code> que você cria se comporta também como um dicionário. Isso significa que você pode guardar o que quiser ali dentro.</p>
+
+<p>Por exemplo, parainiciar um logger assíncrono podemos fazer:</p>
+
+<pre><code class="language-python">    import logging
+    from asyncworker import App
+    from aiologger.loggers.json import JsonLogger
+
+    new_app = App(...)
+    async def init_app(app: App):
+      app[&quot;logger&quot;] = JsonLogger.default_with_handlers(level=logging.INFO)
+
+</code></pre>
+
+<p><strong>Nota</strong>: Se quiser saber mais sobre log assíncrono em python, veja <a href="https://medium.com/@diogommartins/aiologger-logger-assíncrono-para-python-e-asyncio-ba0b20a7b31e">esse post aqui</a> e também <a href="https://github.com/b2w-bit/aiologger">o código do projeto</a>.</p>
+
+<p>A partir do momento em que chamarmos a função <code>init_app()</code> sempre que acessarmos <code>app[&quot;logger&quot;]</code> teremos um logger assíncrono já configurado para gerar logs no formato JSON usando stdout/stderr.</p>
+
+<p>A ideia é que funções como essa sejam chamadas apenas durante a inicialização da nossa app, que é o que veremos logo a seguir.</p>
+
+<h1 id="registrando-callbacks-de-startup-e-shutdown">Registrando callbacks de startup e shutdown</h1>
+
+<p>Para isso o <a href="https://github.com/B2W-BIT/async-worker">asyncworker</a> permite que você registre callbacks de startup e shutdown para a sua app.</p>
+
+<p>Como estamos lidando com código assíncrono e é (ainda) impossível chamar código assíncrono no momento em que um módulo python é importado, as inicializações que antes fazíamos no import do módulo agora devem ser feitas dentro de funções específicas.</p>
+
+<p>Esses callbacks também são registrados com decoratos.</p>
+
+<pre><code class="language-python">from asyncworker import App, RouteTypes
+from asyncworker.options import Options
+
+app = App(...)
+
+@app.run_on_startup
+async def start_up(app):
+    print(&quot;Starting App...&quot;)
+
+@app.run_on_shutdown
+async def shut_down(app):
+    print(&quot;Shutdown app&quot;)
+</code></pre>
+
+<h1 id="escrevendo-um-worker-para-rabbitmq">Escrevendo um worker para RabbitMQ</h1>
+
+<p>Aqui vamos ver um exemplo funcional de um worker que pode ser rodado na linha de comando:</p>
+
+<pre><code class="language-python">from asyncworker import App, RouteTypes
+from asyncworker.options import Options
+from asyncworker.rabbitmq.message import RabbitMQMessage
+
+app = App(&quot;localhost&quot;, &quot;guest&quot;, &quot;guest&quot;, 1024)
+
+@app.route(
+    [&quot;items&quot;], type=RouteTypes.AMQP_RABBITMQ, options={Options.BULK_SIZE: 2014}
+)
+async def check(msgs):
+    for m in msgs:
+        print(m.body)
+
+app.run()
+</code></pre>
+
+<p>Vamos analisar os parâmetros que estamos passando aqui.</p>
+
+<p>Na linha de construção da <code>App()</code> passamos as credenciais de acesso ao RabbitMQ. Passamos também o parâmetro de <code>prefetch</code>, que diz quantas mensagens o RabbitMQ poderá entregar a esse consumer mesmo sem ele pedir.</p>
+
+<p>Agora vamos analisar a linha do <code>@app.route()</code>. O primeiro parâmetro é uma lista de nomes de filas que fornecerão mensagens para esse handler. Perceba que, como esse parâmetro é uma lista, podemos usar um mesmo handler para consumir de múltiplas filas diferentes.</p>
+
+<p>O <code>type=RouteTypes.AMQP_RABBITMQ</code> é auto explicativo. Estamos selecionando qual o tipo de backend fornecerá dados a esse handler.</p>
+
+<p>Agora a parte do <code>options=</code>. Essa opção serve para passarmos quaisquer tipos de opções adicionais para cada tipo de backend. Aqui estamos usando a opção <code>BULK_SIZE</code>. Essa opção permite que o asyncworker entregue as mensagens para o handler em &ldquo;lotes&rdquo; com tamanho de no máximo <code>BULK_SIZE</code> itens. Aqui temos uma observação importante: O valor final escolhido para o tamanho do lote é <code>min(prefetch, BULK_SIZE)</code>.</p>
+
+<p>Pensa em um handler que precisa processar muitas mensagens e gravar dados dessas mensagens em um storage. Em casos onde esse storage aceita operações em lote (como ElasticSearch e MongoDB, por exemplo) o handler pode se aproveitar disso e mandar os dados para o storage também em lote.</p>
+
+<p>Se você não específica o tamanho do lote, o valor padrão é 1. Isso significa que seu handler sempre recebe uma lista, mesmo quando está recebendo apenas uma mensagem de cada vez.</p>
+
+<p>Por padrão, caso o seu handler não levante nenhuma exceção, todas as mensagens do lote são confirmadas no RabbitMQ. Esse comportamento pode ser mudado com mais opções no parâmetro <code>options=</code>. Por exemplo, esse código abaixo joga fora quaisquer mensagens que gerem erros no momento em que o handler roda.</p>
+
+<pre><code class="language-python">from asyncworker import App, RouteTypes
+from asyncworker.options import Options, Events, Actions
+
+app = App(&quot;localhost&quot;, &quot;guest&quot;, &quot;guest&quot;, 2014)
+
+
+@app.route(
+    [&quot;items&quot;],
+    type=RouteTypes.AMQP_RABBITMQ,
+    options={Options.BULK_SIZE: 2014, Events.ON_EXCEPTION: Actions.REJECT},
+)
+async def check(msgs):
+    for m in msgs:
+        print(m.body)
+        1 / 0
+</code></pre>
+
+<p>Nesse caso, estamos provocando um exceção do código do handler e a opção <code>Events.ON_EXCEPTION: Actions.REJECT</code> fará com que as mensagens sejam rejeitadas, ou seja, jogadas fora automaticamente. Os eventos diponíveis para os handlers são: <code>Events.ON_EXCEPTION</code> e <code>Events.ON_SUCCESS</code> e as Actions são <code>Actions.ACK</code>, <code>Actions.REJECT</code> e <code>Actions.REQUEUE</code>. Os valores default para essas opções são: <code>Events.ON_SUCCESS = Actions.ACK</code> e <code>Events.ON_EXCEPTION = Actions.REQUEUE</code>.</p>
+
+<h1 id="escolhendo-a-ação-que-será-tomada-em-cada-mensagem-individualmente">Escolhendo a ação que será tomada em cada mensagem, individualmente</h1>
+
+<p>Além dessa ação padrão você pode escolher, individualmente, se cada mensagem vai ser confirmada ou devolvida pra fila.</p>
+
+<p>Então imagina que do lote de 512 mensagens que um handler recebeu, as 100 primeiras deram problema e precisam ser rejeitadas. Você pode chamar, em cada uma dessas 100 mensagens, o método <code>.reject()</code>. Isso vai fazer com que essas mensagens sejam devolvidas para fila, mas o restante seja confirmado, normalmente. Exemplo:</p>
+
+<pre><code class="language-python">    for i in msg:
+        try:
+           process_message(m)
+        except:
+           m.reject(requeue=True)
+</code></pre>
+
+<h2 id="flush-automático-de-mensagens">Flush automático de mensagens</h2>
+
+<p>Nem sempre a quantidade de mensagens que chega ao seu RabbitMQ consegue encher o <code>BULK_SIZE</code> que você escolheu, ou seja, mensagens ficariam &ldquo;paradas&rdquo; na fila até que o seu &ldquo;lote&rdquo; possa encher.</p>
+
+<p>Mas nem sempre podemos esperar por mais mensagens para processar as que estão paradas. Pense em um processo que roda uma vez por dia. Se você escolheu um <code>BULK_SIZE=1000</code> e a rodada de hoje gerou 1024 mensagens, essa 24 mensagens adicionais seriam processadas apenas na próxima rodada desse processo, no dia seguinte.</p>
+
+<p>Para resolver isso o asyncworker tem a possibilidade de fazer &ldquo;flush&rdquo; das mensagens em un intervalo escolhido por você. Para isso basta mudar o valor da envvar <code>ASYNCWORKER_FLUSH_TIMEOUT</code>, que por padrão tem o valor <code>60</code>.</p>
+
+<p>Isso significa que, a cada 60 segundos, independente de existirem mensagens suficientes para encher o tamanho do &ldquo;lote&rdquo; que você definiu o asyncworker vai enviar quaisquer mensagens adicionais para o seu handler.</p>
+
+<p>Nesse caso do exemplo cima seu handler seria chamado com um lote de 24 mensagens.</p>
+
+<h2 id="rodando-sua-app-asyncworker">Rodando sua app asyncworker</h2>
+
+<p>Para rodar sua app asyncworker, basta chamar <code>app.run()</code> na instância de <code>App()</code> que você criou. Esse é um exemplo completo de um worker:</p>
+
+<pre><code class="language-python"># worker.py
+from asyncworker import App, RouteTypes
+from asyncworker.options import Options
+from asyncworker.rabbitmq.message import RabbitMQMessage
+
+app = App(&quot;localhost&quot;, &quot;guest&quot;, &quot;guest&quot;, 1024)
+
+@app.route(
+    [&quot;items&quot;], type=RouteTypes.AMQP_RABBITMQ, options={Options.BULK_SIZE: 2014}
+)
+async def check(msgs):
+    for m in msgs:
+        print(m.body)
+
+app.run()
+
+</code></pre>
+
+<p>E esse worker pode ser rodado assim:</p>
+
+<pre><code>$ python worker.py
+</code></pre>
+
+<p>No próximo post veremos como usar um segundo backend do <a href="https://github.com/B2W-BIT/async-worker">asyncworker</a>. Até lá.</p>
+
+<p>Esse blog foi escrito com asyncworker <code>0.9.0-rc2</code>.</p>
+
+</div>
+            <div class="footer">
+                
+
+    
+
+            </div>
+        </div>
+        
+        
+    </body>
+</html>
