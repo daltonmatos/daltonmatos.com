@@ -30,15 +30,15 @@ Pense no [asyncworker](https://github.com/B2W-BIT/async-worker) como um framewor
 
 Então a ideia geral da estrutura de um handler é a seguinte:
 
-```python
-    from asyncworker import App, RouteTypes
-    app = App(...)
+{{<highlight python>}}
+from asyncworker import App, RouteTypes
+app = App(...)
 
-    @app.route([..., ...], type=RouteTypes.<TYPE>, options={})
-    async def myhandler(...):
-        ...
-        ...
-```
+@app.route([..., ...], type=RouteTypes.<TYPE>, options={})
+async def myhandler(...):
+    ...
+    ...
+{{</highlight>}}
 
 O que estamos vendo aqui?
 
@@ -58,7 +58,7 @@ A `App()` que você cria se comporta também como um dicionário. Isso significa
 
 Por exemplo, parainiciar um logger assíncrono podemos fazer:
 
-```python
+{{<highlight python>}}
     import logging
     from asyncworker import App
     from aiologger.loggers.json import JsonLogger
@@ -67,7 +67,7 @@ Por exemplo, parainiciar um logger assíncrono podemos fazer:
     async def init_app(app: App):
       app["logger"] = JsonLogger.default_with_handlers(level=logging.INFO)
 
-```
+{{</highlight>}}
 
 **Nota**: Se quiser saber mais sobre log assíncrono em python, veja [esse post aqui](https://medium.com/@diogommartins/aiologger-logger-assíncrono-para-python-e-asyncio-ba0b20a7b31e) e também [o código do projeto](https://github.com/b2w-bit/aiologger).
 
@@ -83,7 +83,7 @@ Como estamos lidando com código assíncrono e é (ainda) impossível chamar có
 
 Esses callbacks também são registrados com decoratos.
 
-```python
+{{<highlight python>}}
 from asyncworker import App, RouteTypes
 from asyncworker.options import Options
 
@@ -96,13 +96,13 @@ async def start_up(app):
 @app.run_on_shutdown
 async def shut_down(app):
     print("Shutdown app")
-```
+{{</highlight>}}
 
 # Escrevendo um worker para RabbitMQ
 
 Aqui vamos ver um exemplo funcional de um worker que pode ser rodado na linha de comando:
 
-```python
+{{<highlight python>}}
 from asyncworker import App, RouteTypes
 from asyncworker.options import Options
 from asyncworker.rabbitmq.message import RabbitMQMessage
@@ -117,7 +117,7 @@ async def check(msgs):
         print(m.body)
 
 app.run()
-```
+{{</highlight>}}
 
 Vamos analisar os parâmetros que estamos passando aqui.
 
@@ -135,7 +135,7 @@ Se você não específica o tamanho do lote, o valor padrão é 1. Isso signific
 
 Por padrão, caso o seu handler não levante nenhuma exceção, todas as mensagens do lote são confirmadas no RabbitMQ. Esse comportamento pode ser mudado com mais opções no parâmetro `options=`. Por exemplo, esse código abaixo joga fora quaisquer mensagens que gerem erros no momento em que o handler roda.
 
-```python
+{{<highlight python>}}
 from asyncworker import App, RouteTypes
 from asyncworker.options import Options, Events, Actions
 
@@ -151,7 +151,7 @@ async def check(msgs):
     for m in msgs:
         print(m.body)
         1 / 0
-```
+{{</highlight>}}
 
 Nesse caso, estamos provocando um exceção do código do handler e a opção `Events.ON_EXCEPTION: Actions.REJECT` fará com que as mensagens sejam rejeitadas, ou seja, jogadas fora automaticamente. Os eventos diponíveis para os handlers são: `Events.ON_EXCEPTION` e `Events.ON_SUCCESS` e as Actions são `Actions.ACK`, `Actions.REJECT` e `Actions.REQUEUE`. Os valores default para essas opções são: `Events.ON_SUCCESS = Actions.ACK` e `Events.ON_EXCEPTION = Actions.REQUEUE`.
 
@@ -162,13 +162,13 @@ Além dessa ação padrão você pode escolher, individualmente, se cada mensage
 Então imagina que do lote de 512 mensagens que um handler recebeu, as 100 primeiras deram problema e precisam ser rejeitadas. Você pode chamar, em cada uma dessas 100 mensagens, o método `.reject()`. Isso vai fazer com que essas mensagens sejam devolvidas para fila, mas o restante seja confirmado, normalmente. Exemplo:
 
 
-```python
+{{<highlight python>}}
     for i in msg:
         try:
            process_message(m)
         except:
            m.reject(requeue=True)
-```
+{{</highlight>}}
 
 ## Flush automático de mensagens
 
@@ -188,7 +188,7 @@ Para rodar sua app asyncworker, basta chamar `app.run()` na instância de `App()
 
 
 
-```python
+{{<highlight python>}}
 # worker.py
 from asyncworker import App, RouteTypes
 from asyncworker.options import Options
@@ -205,13 +205,14 @@ async def check(msgs):
 
 app.run()
 
-```
+{{</highlight>}}
 
 E esse worker pode ser rodado assim:
 
-```
+
+{{<highlight zsh>}}
 $ python worker.py
-```
+{{</highlight >}}
 
 No próximo post veremos como usar um segundo backend do [asyncworker](https://github.com/B2W-BIT/async-worker). Até lá.
 

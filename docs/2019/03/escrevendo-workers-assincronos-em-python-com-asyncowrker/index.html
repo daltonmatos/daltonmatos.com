@@ -157,14 +157,13 @@
 
 <p>Então a ideia geral da estrutura de um handler é a seguinte:</p>
 
-<pre><code class="language-python">    from asyncworker import App, RouteTypes
-    app = App(...)
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">asyncworker</span> <span class="kn">import</span> <span class="n">App</span><span class="p">,</span> <span class="n">RouteTypes</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
-    @app.route([..., ...], type=RouteTypes.&lt;TYPE&gt;, options={})
-    async def myhandler(...):
-        ...
-        ...
-</code></pre>
+<span class="nd">@app.route</span><span class="p">([</span><span class="o">...</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="n">RouteTypes</span><span class="o">.&lt;</span><span class="n">TYPE</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{})</span>
+<span class="n">async</span> <span class="k">def</span> <span class="nf">myhandler</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="o">...</span></code></pre></div>
 
 <p>O que estamos vendo aqui?</p>
 
@@ -184,15 +183,13 @@
 
 <p>Por exemplo, parainiciar um logger assíncrono podemos fazer:</p>
 
-<pre><code class="language-python">    import logging
-    from asyncworker import App
-    from aiologger.loggers.json import JsonLogger
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="kn">import</span> <span class="nn">logging</span>
+    <span class="kn">from</span> <span class="nn">asyncworker</span> <span class="kn">import</span> <span class="n">App</span>
+    <span class="kn">from</span> <span class="nn">aiologger.loggers.json</span> <span class="kn">import</span> <span class="n">JsonLogger</span>
 
-    new_app = App(...)
-    async def init_app(app: App):
-      app[&quot;logger&quot;] = JsonLogger.default_with_handlers(level=logging.INFO)
-
-</code></pre>
+    <span class="n">new_app</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">async</span> <span class="k">def</span> <span class="nf">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">:</span> <span class="n">App</span><span class="p">):</span>
+      <span class="n">app</span><span class="p">[</span><span class="s2">&#34;logger&#34;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JsonLogger</span><span class="o">.</span><span class="n">default_with_handlers</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span></code></pre></div>
 
 <p><strong>Nota</strong>: Se quiser saber mais sobre log assíncrono em python, veja <a href="https://medium.com/@diogommartins/aiologger-logger-assíncrono-para-python-e-asyncio-ba0b20a7b31e">esse post aqui</a> e também <a href="https://github.com/b2w-bit/aiologger">o código do projeto</a>.</p>
 
@@ -208,39 +205,37 @@
 
 <p>Esses callbacks também são registrados com decoratos.</p>
 
-<pre><code class="language-python">from asyncworker import App, RouteTypes
-from asyncworker.options import Options
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">asyncworker</span> <span class="kn">import</span> <span class="n">App</span><span class="p">,</span> <span class="n">RouteTypes</span>
+<span class="kn">from</span> <span class="nn">asyncworker.options</span> <span class="kn">import</span> <span class="n">Options</span>
 
-app = App(...)
+<span class="n">app</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
-@app.run_on_startup
-async def start_up(app):
-    print(&quot;Starting App...&quot;)
+<span class="nd">@app.run_on_startup</span>
+<span class="n">async</span> <span class="k">def</span> <span class="nf">start_up</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&#34;Starting App...&#34;</span><span class="p">)</span>
 
-@app.run_on_shutdown
-async def shut_down(app):
-    print(&quot;Shutdown app&quot;)
-</code></pre>
+<span class="nd">@app.run_on_shutdown</span>
+<span class="n">async</span> <span class="k">def</span> <span class="nf">shut_down</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&#34;Shutdown app&#34;</span><span class="p">)</span></code></pre></div>
 
 <h1 id="escrevendo-um-worker-para-rabbitmq">Escrevendo um worker para RabbitMQ</h1>
 
 <p>Aqui vamos ver um exemplo funcional de um worker que pode ser rodado na linha de comando:</p>
 
-<pre><code class="language-python">from asyncworker import App, RouteTypes
-from asyncworker.options import Options
-from asyncworker.rabbitmq.message import RabbitMQMessage
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">asyncworker</span> <span class="kn">import</span> <span class="n">App</span><span class="p">,</span> <span class="n">RouteTypes</span>
+<span class="kn">from</span> <span class="nn">asyncworker.options</span> <span class="kn">import</span> <span class="n">Options</span>
+<span class="kn">from</span> <span class="nn">asyncworker.rabbitmq.message</span> <span class="kn">import</span> <span class="n">RabbitMQMessage</span>
 
-app = App(&quot;localhost&quot;, &quot;guest&quot;, &quot;guest&quot;, 1024)
+<span class="n">app</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="s2">&#34;localhost&#34;</span><span class="p">,</span> <span class="s2">&#34;guest&#34;</span><span class="p">,</span> <span class="s2">&#34;guest&#34;</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
 
-@app.route(
-    [&quot;items&quot;], type=RouteTypes.AMQP_RABBITMQ, options={Options.BULK_SIZE: 2014}
-)
-async def check(msgs):
-    for m in msgs:
-        print(m.body)
+<span class="nd">@app.route</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&#34;items&#34;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="n">RouteTypes</span><span class="o">.</span><span class="n">AMQP_RABBITMQ</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="n">Options</span><span class="o">.</span><span class="n">BULK_SIZE</span><span class="p">:</span> <span class="mi">2014</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">async</span> <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">msgs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">msgs</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
 
-app.run()
-</code></pre>
+<span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></code></pre></div>
 
 <p>Vamos analisar os parâmetros que estamos passando aqui.</p>
 
@@ -258,22 +253,21 @@ app.run()
 
 <p>Por padrão, caso o seu handler não levante nenhuma exceção, todas as mensagens do lote são confirmadas no RabbitMQ. Esse comportamento pode ser mudado com mais opções no parâmetro <code>options=</code>. Por exemplo, esse código abaixo joga fora quaisquer mensagens que gerem erros no momento em que o handler roda.</p>
 
-<pre><code class="language-python">from asyncworker import App, RouteTypes
-from asyncworker.options import Options, Events, Actions
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">asyncworker</span> <span class="kn">import</span> <span class="n">App</span><span class="p">,</span> <span class="n">RouteTypes</span>
+<span class="kn">from</span> <span class="nn">asyncworker.options</span> <span class="kn">import</span> <span class="n">Options</span><span class="p">,</span> <span class="n">Events</span><span class="p">,</span> <span class="n">Actions</span>
 
-app = App(&quot;localhost&quot;, &quot;guest&quot;, &quot;guest&quot;, 2014)
+<span class="n">app</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="s2">&#34;localhost&#34;</span><span class="p">,</span> <span class="s2">&#34;guest&#34;</span><span class="p">,</span> <span class="s2">&#34;guest&#34;</span><span class="p">,</span> <span class="mi">2014</span><span class="p">)</span>
 
 
-@app.route(
-    [&quot;items&quot;],
-    type=RouteTypes.AMQP_RABBITMQ,
-    options={Options.BULK_SIZE: 2014, Events.ON_EXCEPTION: Actions.REJECT},
-)
-async def check(msgs):
-    for m in msgs:
-        print(m.body)
-        1 / 0
-</code></pre>
+<span class="nd">@app.route</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&#34;items&#34;</span><span class="p">],</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">RouteTypes</span><span class="o">.</span><span class="n">AMQP_RABBITMQ</span><span class="p">,</span>
+    <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="n">Options</span><span class="o">.</span><span class="n">BULK_SIZE</span><span class="p">:</span> <span class="mi">2014</span><span class="p">,</span> <span class="n">Events</span><span class="o">.</span><span class="n">ON_EXCEPTION</span><span class="p">:</span> <span class="n">Actions</span><span class="o">.</span><span class="n">REJECT</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="n">async</span> <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">msgs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">msgs</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+        <span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span></code></pre></div>
 
 <p>Nesse caso, estamos provocando um exceção do código do handler e a opção <code>Events.ON_EXCEPTION: Actions.REJECT</code> fará com que as mensagens sejam rejeitadas, ou seja, jogadas fora automaticamente. Os eventos diponíveis para os handlers são: <code>Events.ON_EXCEPTION</code> e <code>Events.ON_SUCCESS</code> e as Actions são <code>Actions.ACK</code>, <code>Actions.REJECT</code> e <code>Actions.REQUEUE</code>. Os valores default para essas opções são: <code>Events.ON_SUCCESS = Actions.ACK</code> e <code>Events.ON_EXCEPTION = Actions.REQUEUE</code>.</p>
 
@@ -283,12 +277,11 @@ async def check(msgs):
 
 <p>Então imagina que do lote de 512 mensagens que um handler recebeu, as 100 primeiras deram problema e precisam ser rejeitadas. Você pode chamar, em cada uma dessas 100 mensagens, o método <code>.reject()</code>. Isso vai fazer com que essas mensagens sejam devolvidas para fila, mas o restante seja confirmado, normalmente. Exemplo:</p>
 
-<pre><code class="language-python">    for i in msg:
-        try:
-           process_message(m)
-        except:
-           m.reject(requeue=True)
-</code></pre>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+           <span class="n">process_message</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+           <span class="n">m</span><span class="o">.</span><span class="n">reject</span><span class="p">(</span><span class="n">requeue</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></code></pre></div>
 
 <h2 id="flush-automático-de-mensagens">Flush automático de mensagens</h2>
 
@@ -306,28 +299,25 @@ async def check(msgs):
 
 <p>Para rodar sua app asyncworker, basta chamar <code>app.run()</code> na instância de <code>App()</code> que você criou. Esse é um exemplo completo de um worker:</p>
 
-<pre><code class="language-python"># worker.py
-from asyncworker import App, RouteTypes
-from asyncworker.options import Options
-from asyncworker.rabbitmq.message import RabbitMQMessage
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># worker.py</span>
+<span class="kn">from</span> <span class="nn">asyncworker</span> <span class="kn">import</span> <span class="n">App</span><span class="p">,</span> <span class="n">RouteTypes</span>
+<span class="kn">from</span> <span class="nn">asyncworker.options</span> <span class="kn">import</span> <span class="n">Options</span>
+<span class="kn">from</span> <span class="nn">asyncworker.rabbitmq.message</span> <span class="kn">import</span> <span class="n">RabbitMQMessage</span>
 
-app = App(&quot;localhost&quot;, &quot;guest&quot;, &quot;guest&quot;, 1024)
+<span class="n">app</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="s2">&#34;localhost&#34;</span><span class="p">,</span> <span class="s2">&#34;guest&#34;</span><span class="p">,</span> <span class="s2">&#34;guest&#34;</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
 
-@app.route(
-    [&quot;items&quot;], type=RouteTypes.AMQP_RABBITMQ, options={Options.BULK_SIZE: 2014}
-)
-async def check(msgs):
-    for m in msgs:
-        print(m.body)
+<span class="nd">@app.route</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&#34;items&#34;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="n">RouteTypes</span><span class="o">.</span><span class="n">AMQP_RABBITMQ</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="n">Options</span><span class="o">.</span><span class="n">BULK_SIZE</span><span class="p">:</span> <span class="mi">2014</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">async</span> <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">msgs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">msgs</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
 
-app.run()
-
-</code></pre>
+<span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></code></pre></div>
 
 <p>E esse worker pode ser rodado assim:</p>
 
-<pre><code>$ python worker.py
-</code></pre>
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh">$ python worker.py</code></pre></div>
 
 <p>No próximo post veremos como usar um segundo backend do <a href="https://github.com/B2W-BIT/async-worker">asyncworker</a>. Até lá.</p>
 
