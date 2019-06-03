@@ -6,10 +6,181 @@
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Thu, 04 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 21 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>async</title>
+      <link>https://daltonmatos.com/tags/async/</link>
+      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/async/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dev</title>
+      <link>https://daltonmatos.com/tags/dev/</link>
+      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/dev/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://daltonmatos.com/tags/python/</link>
+      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>worker</title>
+      <link>https://daltonmatos.com/tags/worker/</link>
+      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/worker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>crypt</title>
+      <link>https://daltonmatos.com/tags/crypt/</link>
+      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/crypt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gnupg</title>
+      <link>https://daltonmatos.com/tags/gnupg/</link>
+      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/gnupg/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gpg</title>
+      <link>https://daltonmatos.com/tags/gpg/</link>
+      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/gpg/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>yubikey</title>
+      <link>https://daltonmatos.com/tags/yubikey/</link>
+      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/yubikey/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>code</title>
+      <link>https://daltonmatos.com/tags/code/</link>
+      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/code/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>programming</title>
+      <link>https://daltonmatos.com/tags/programming/</link>
+      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>script</title>
+      <link>https://daltonmatos.com/tags/script/</link>
+      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/script/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vim</title>
+      <link>https://daltonmatos.com/tags/vim/</link>
+      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/vim/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vimL</title>
+      <link>https://daltonmatos.com/tags/viml/</link>
+      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/viml/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vimscript</title>
+      <link>https://daltonmatos.com/tags/vimscript/</link>
+      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/vimscript/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pass</title>
+      <link>https://daltonmatos.com/tags/pass/</link>
+      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/pass/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>certbot</title>
+      <link>https://daltonmatos.com/tags/certbot/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/certbot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>letsencrypt</title>
+      <link>https://daltonmatos.com/tags/letsencrypt/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/letsencrypt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ssl</title>
+      <link>https://daltonmatos.com/tags/ssl/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/ssl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>traefik</title>
+      <link>https://daltonmatos.com/tags/traefik/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/traefik/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>2fa</title>
@@ -21,124 +192,7 @@
     </item>
     
     <item>
-      <title>Async</title>
-      <link>https://daltonmatos.com/tags/async/</link>
-      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/async/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Certbot</title>
-      <link>https://daltonmatos.com/tags/certbot/</link>
-      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/certbot/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Cli</title>
-      <link>https://daltonmatos.com/tags/cli/</link>
-      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/cli/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Code</title>
-      <link>https://daltonmatos.com/tags/code/</link>
-      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/code/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Crypt</title>
-      <link>https://daltonmatos.com/tags/crypt/</link>
-      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/crypt/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Curl</title>
-      <link>https://daltonmatos.com/tags/curl/</link>
-      <pubDate>Sat, 04 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/curl/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Dev</title>
-      <link>https://daltonmatos.com/tags/dev/</link>
-      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/dev/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Gnupg</title>
-      <link>https://daltonmatos.com/tags/gnupg/</link>
-      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/gnupg/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Gpg</title>
-      <link>https://daltonmatos.com/tags/gpg/</link>
-      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/gpg/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>I3</title>
-      <link>https://daltonmatos.com/tags/i3/</link>
-      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/i3/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Letsencrypt</title>
-      <link>https://daltonmatos.com/tags/letsencrypt/</link>
-      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/letsencrypt/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Linux</title>
-      <link>https://daltonmatos.com/tags/linux/</link>
-      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/linux/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Luks</title>
-      <link>https://daltonmatos.com/tags/luks/</link>
-      <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/luks/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Mfa</title>
+      <title>mfa</title>
       <link>https://daltonmatos.com/tags/mfa/</link>
       <pubDate>Thu, 04 Oct 2018 00:00:00 +0000</pubDate>
       
@@ -147,7 +201,7 @@
     </item>
     
     <item>
-      <title>Otp</title>
+      <title>otp</title>
       <link>https://daltonmatos.com/tags/otp/</link>
       <pubDate>Sat, 15 Sep 2018 00:00:00 +0000</pubDate>
       
@@ -156,106 +210,7 @@
     </item>
     
     <item>
-      <title>Pass</title>
-      <link>https://daltonmatos.com/tags/pass/</link>
-      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/pass/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Programming</title>
-      <link>https://daltonmatos.com/tags/programming/</link>
-      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/programming/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Python</title>
-      <link>https://daltonmatos.com/tags/python/</link>
-      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Script</title>
-      <link>https://daltonmatos.com/tags/script/</link>
-      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/script/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Shell</title>
-      <link>https://daltonmatos.com/tags/shell/</link>
-      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/shell/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Smartcard</title>
-      <link>https://daltonmatos.com/tags/smartcard/</link>
-      <pubDate>Sun, 12 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/smartcard/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Ssh</title>
-      <link>https://daltonmatos.com/tags/ssh/</link>
-      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/ssh/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Ssl</title>
-      <link>https://daltonmatos.com/tags/ssl/</link>
-      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/ssl/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Statusbar</title>
-      <link>https://daltonmatos.com/tags/statusbar/</link>
-      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/statusbar/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Terminal</title>
-      <link>https://daltonmatos.com/tags/terminal/</link>
-      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/terminal/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tiling</title>
-      <link>https://daltonmatos.com/tags/tiling/</link>
-      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/tiling/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Totp</title>
+      <title>totp</title>
       <link>https://daltonmatos.com/tags/totp/</link>
       <pubDate>Sat, 15 Sep 2018 00:00:00 +0000</pubDate>
       
@@ -264,43 +219,43 @@
     </item>
     
     <item>
-      <title>Traefik</title>
-      <link>https://daltonmatos.com/tags/traefik/</link>
-      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      <title>i3</title>
+      <link>https://daltonmatos.com/tags/i3/</link>
+      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://daltonmatos.com/tags/traefik/</guid>
+      <guid>https://daltonmatos.com/tags/i3/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Vim</title>
-      <link>https://daltonmatos.com/tags/vim/</link>
-      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
+      <title>linux</title>
+      <link>https://daltonmatos.com/tags/linux/</link>
+      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://daltonmatos.com/tags/vim/</guid>
+      <guid>https://daltonmatos.com/tags/linux/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Viml</title>
-      <link>https://daltonmatos.com/tags/viml/</link>
-      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
+      <title>statusbar</title>
+      <link>https://daltonmatos.com/tags/statusbar/</link>
+      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://daltonmatos.com/tags/viml/</guid>
+      <guid>https://daltonmatos.com/tags/statusbar/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Vimscript</title>
-      <link>https://daltonmatos.com/tags/vimscript/</link>
-      <pubDate>Sun, 25 Nov 2018 00:00:00 +0000</pubDate>
+      <title>tiling</title>
+      <link>https://daltonmatos.com/tags/tiling/</link>
+      <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://daltonmatos.com/tags/vimscript/</guid>
+      <guid>https://daltonmatos.com/tags/tiling/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Wm</title>
+      <title>wm</title>
       <link>https://daltonmatos.com/tags/wm/</link>
       <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
       
@@ -309,20 +264,65 @@
     </item>
     
     <item>
-      <title>Worker</title>
-      <link>https://daltonmatos.com/tags/worker/</link>
-      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
+      <title>cli</title>
+      <link>https://daltonmatos.com/tags/cli/</link>
+      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://daltonmatos.com/tags/worker/</guid>
+      <guid>https://daltonmatos.com/tags/cli/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Yubikey</title>
-      <link>https://daltonmatos.com/tags/yubikey/</link>
-      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
+      <title>ssh</title>
+      <link>https://daltonmatos.com/tags/ssh/</link>
+      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://daltonmatos.com/tags/yubikey/</guid>
+      <guid>https://daltonmatos.com/tags/ssh/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>terminal</title>
+      <link>https://daltonmatos.com/tags/terminal/</link>
+      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/terminal/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>shell</title>
+      <link>https://daltonmatos.com/tags/shell/</link>
+      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/shell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>smartcard</title>
+      <link>https://daltonmatos.com/tags/smartcard/</link>
+      <pubDate>Sun, 12 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/smartcard/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>curl</title>
+      <link>https://daltonmatos.com/tags/curl/</link>
+      <pubDate>Sat, 04 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/curl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>luks</title>
+      <link>https://daltonmatos.com/tags/luks/</link>
+      <pubDate>Thu, 02 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/luks/</guid>
       <description></description>
     </item>
     
