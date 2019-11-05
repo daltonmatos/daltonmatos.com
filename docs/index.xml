@@ -6,10 +6,20 @@
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Thu, 21 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 05 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Guia definitivo sobre como guardo minhas senhas e outras informações sensíveis</title>
+      <link>https://daltonmatos.com/2019/11/guia-definitivo-sobre-como-guardo-minhas-senhas-e-outras-informacoes-sensiveis/</link>
+      <pubDate>Tue, 05 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2019/11/guia-definitivo-sobre-como-guardo-minhas-senhas-e-outras-informacoes-sensiveis/</guid>
+      <description>Introdução Desde que descobri a existência das chaves fabricadas pela Yubico (Token) fiquei interessado em ter uma para usar como Segundo fator de autenticação (MFA), quando descobri que além de segundo fator ela também suportava o uso de chaves GPG fiquei ainda mais curioso para testar um exemplar pessoalmente.
+Já escrevi bastante sobre as pesquisas que fiz em relação a isso e esse post é uma tentativa de juntar tudo de uma forma que uma pessoa que acabou de comprar sua chave possa prepará-la para fazer o mesmo uso que eu faço no dia a dia.</description>
+    </item>
     
     <item>
       <title>Escrevendo workers assíncronos em python com asyncowrker</title>

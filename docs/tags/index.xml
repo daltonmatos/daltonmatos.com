@@ -6,10 +6,46 @@
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Thu, 21 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 05 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>crypt</title>
+      <link>https://daltonmatos.com/tags/crypt/</link>
+      <pubDate>Tue, 05 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/crypt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gnupg</title>
+      <link>https://daltonmatos.com/tags/gnupg/</link>
+      <pubDate>Tue, 05 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/gnupg/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gpg</title>
+      <link>https://daltonmatos.com/tags/gpg/</link>
+      <pubDate>Tue, 05 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/gpg/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>yubikey</title>
+      <link>https://daltonmatos.com/tags/yubikey/</link>
+      <pubDate>Tue, 05 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/yubikey/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>async</title>
@@ -44,42 +80,6 @@
       <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/tags/worker/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>crypt</title>
-      <link>https://daltonmatos.com/tags/crypt/</link>
-      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/crypt/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>gnupg</title>
-      <link>https://daltonmatos.com/tags/gnupg/</link>
-      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/gnupg/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>gpg</title>
-      <link>https://daltonmatos.com/tags/gpg/</link>
-      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/gpg/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>yubikey</title>
-      <link>https://daltonmatos.com/tags/yubikey/</link>
-      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/yubikey/</guid>
       <description></description>
     </item>
     
