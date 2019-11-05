@@ -4,25 +4,54 @@
   
   <url>
     <loc>https://daltonmatos.com/</loc>
-    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/2019/11/guia-definitivo-sobre-como-guardo-minhas-senhas-e-outras-informacoes-sensiveis/</loc>
+    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/posts/</loc>
+    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/</loc>
+    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/crypt/</loc>
+    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/gnupg/</loc>
+    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/gpg/</loc>
+    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/yubikey/</loc>
+    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://daltonmatos.com/2019/03/escrevendo-workers-assincronos-em-python-com-asyncowrker/</loc>
     <lastmod>2019-03-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://daltonmatos.com/posts/</loc>
-    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://daltonmatos.com/tags/</loc>
-    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -52,30 +81,6 @@
   <url>
     <loc>https://daltonmatos.com/2018/12/comprei-uma-yubikey-nova-e-agora/</loc>
     <lastmod>2018-12-07T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://daltonmatos.com/tags/crypt/</loc>
-    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://daltonmatos.com/tags/gnupg/</loc>
-    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://daltonmatos.com/tags/gpg/</loc>
-    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://daltonmatos.com/tags/yubikey/</loc>
-    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
