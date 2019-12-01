@@ -1,0 +1,59 @@
+{{ define "header" }}
+  {{ partial "header.html" . }}
+{{ end }}
+
+{{ define "content" }}
+
+{{ $include_toc := .Params.include_toc}}
+
+{{ $paginator := .Paginate (where .Site.RegularPages "Type" "in" site.Params.mainSections) }}
+    {{ range first 1 $paginator.Pages }}
+
+<article>
+  <header>
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.subtitle }}
+    <span class="post__subtitle">
+      {{.}}
+    </span>
+    {{ end }}
+    {{ partial "page-single/post-meta.html" . }}
+  </header>
+  {{ $tableOfContents := .TableOfContents }}
+  {{ with .Site.Params.toc }}
+  {{ if ne $include_toc false }}
+    <div class="toc-wrapper">
+      <input type="checkbox" id="tocToggle">
+      <label for="tocToggle">Table of Content</label>
+      {{ if eq . "hugo" }}
+          {{ $tableOfContents }}
+      {{ else if eq . "tocbot"}}
+        <div class="toc" id="TableOfContents"></div>
+      {{ end }}
+    </div>
+  {{ end }}
+  {{ end }}
+  <div class="post">
+    {{ .Content }}
+  </div>
+  {{ partial "page-single/post-navigation.html" . }}
+  {{ partial "page-single/post-related.html" . }}
+  {{ partial "page-single/post-comment.html" . }}
+</article>
+
+    {{ end }}
+
+
+
+{{ end }}
+
+
+
+
+{{ define "footer" }}
+  {{ if .Site.GoogleAnalytics }}
+    <!-- Google Analytics -->
+    {{ template "_internal/google_analytics_async.html" . }}
+  {{ end }}
+  {{ partial "footer/font-awesome-js.html" . }}
+{{ end }}

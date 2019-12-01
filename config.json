@@ -6,6 +6,7 @@
   "publishDir": "docs/",
   "RemovePathAccents": true,
   "params": {
+    "mainSections": ["posts"],
     "highlightjs": true,
     "highlightjsstyle": "atom-one-dark",
     "layoutReverse": false,
@@ -25,6 +26,10 @@
       {
         "name": "Home",
         "url": "/",
+        "weight": -10
+      },{
+        "name": "Posts Antigos",
+        "url": "/posts",
         "weight": -10
       }
     ]

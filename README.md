@@ -15,3 +15,6 @@ Date:   Thu Nov 7 14:24:30 2019 +1100
 
     README: clarify UtternacesRepo syntax
 ```
+
+O arquivo `layout/index.html` foi copiado do tema e alterado para mostrar sempre o post mais recente.
+A única alteração foi no momento de paginar os itens, onde foi adicionado `first 1` para pegar o post mais recente.
