@@ -4,9 +4,10 @@
   "title": "",
   "theme": "hyde-hyde",
   "publishDir": "docs/",
-  "pygmentsUseClasses": true,
   "RemovePathAccents": true,
   "params": {
+    "highlightjs": true,
+    "highlightjsstyle": "atom-one-dark",
     "layoutReverse": false,
     "themeColor": "theme-base-08",
     "description": "Dalton Barreto",
