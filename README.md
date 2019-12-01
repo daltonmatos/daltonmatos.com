@@ -15,19 +15,3 @@ Date:   Wed Jun 6 11:24:24 2018 +1000
 
     Improvements for layoutReverse and sidebarSticky
 ```
-
-# Syntax Highlight
-
-O tema usado é o `colorful` (https://help.farbox.com/pygments.html). O CSS está gerado em `static/css/syntax.css`. Foi gerado com:
-
-```
-hugo gen chromastyles --style=colorful > static/css/syntax.css
-```
-
-A CSS de syntax é adicionado no partial `./layouts/partials/header.html`, junto com os CSS do tema.
-
-
-# Problemas atuais com Syntax Highlight
-
-* O bloco de código não está com background "contínuo", ou seja, as linhas de código possuem backgroud mas as linhas em branco não.
-
