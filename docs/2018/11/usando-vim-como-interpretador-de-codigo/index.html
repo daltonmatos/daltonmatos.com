@@ -18,10 +18,10 @@
     <link rel="stylesheet" href="https://daltonmatos.com/css/print.css" media="print">
     <link rel="stylesheet" href="https://daltonmatos.com/css/poole.css">
     <link rel="stylesheet" href="https://daltonmatos.com/css/hyde.css">
-    <link rel="stylesheet" href="https://daltonmatos.com/css/syntax.css">
     <!-- Font-Awesome -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
-    
+    <!-- highlight.js-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
     <!-- Customised CSS -->
     <link rel="stylesheet" href="https://daltonmatos.com/css/custom.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -278,17 +278,17 @@ Hello World
 
 <p>Esse é o código:</p>
 
-<div class="highlight"><pre class="chroma"><code class="language-viml" data-lang="viml">#<span class="p">!</span> <span class="nx">vim</span> <span class="p">-</span><span class="nx">u</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="k">let</span> <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span> <span class="p">=</span> <span class="m">0</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nx">for</span> <span class="nx">n</span> <span class="nx">in</span> <span class="nx">argv</span><span class="p">()</span><span class="err">
-</span><span class="err"></span> <span class="k">let</span> <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span> <span class="p">+=</span> <span class="nx">n</span><span class="err">
-</span><span class="err"></span><span class="nx">endfor</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nx">echo</span> <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="p">:</span><span class="nx">qall</span><span class="p">!</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-viml" data-lang="viml">#! <span style="color:#a6e22e">vim</span> -<span style="color:#a6e22e">u</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">s</span>:<span style="color:#a6e22e">sum</span> = <span style="color:#ae81ff">0</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">for</span> <span style="color:#a6e22e">n</span> <span style="color:#a6e22e">in</span> <span style="color:#a6e22e">argv</span>()<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span> <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">s</span>:<span style="color:#a6e22e">sum</span> += <span style="color:#a6e22e">n</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">endfor</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">echo</span> <span style="color:#a6e22e">s</span>:<span style="color:#a6e22e">sum</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>:<span style="color:#a6e22e">qall</span>!</code></pre></div>
 
 <p>Colocamos em <code>soma.vim</code>. E rodamos com:</p>
 
@@ -349,18 +349,18 @@ vim --not-a-term -u &quot;$@&quot; 2&gt;&amp;1 | sed '/files\ to\ edit$/d'
 
 <p>Podemos então gravar esse código em <code>/usr/local/bin/viml</code> e usá-lo no <code>shebang</code> de qualquer script escrito em <code>vimL</code>.</p>
 
-<div class="highlight"><pre class="chroma"><code class="language-viml" data-lang="viml">#<span class="p">!</span> <span class="sr">/usr/</span><span class="nx">bin</span>/<span class="nx">env</span> <span class="nx">viml</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="k">let</span> <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span> <span class="p">=</span> <span class="m">0</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nx">echo</span> <span class="s1">&#39;Somando números: &#39;</span> . <span class="nx">join</span><span class="p">(</span><span class="nx">argv</span><span class="p">(),</span> <span class="s1">&#39; + &#39;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nx">for</span> <span class="nx">n</span> <span class="nx">in</span> <span class="nx">argv</span><span class="p">()</span><span class="err">
-</span><span class="err"></span> <span class="k">let</span> <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span> <span class="p">+=</span> <span class="nx">n</span><span class="err">
-</span><span class="err"></span><span class="nx">endfor</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nx">echo</span> <span class="s1">&#39;Resultado: &#39;</span> . <span class="nx">s</span><span class="p">:</span><span class="nx">sum</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="p">:</span><span class="nx">qall</span><span class="p">!</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-viml" data-lang="viml">#! <span style="color:#e6db74">/usr/</span><span style="color:#a6e22e">bin</span>/<span style="color:#a6e22e">env</span> <span style="color:#a6e22e">viml</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">s</span>:<span style="color:#a6e22e">sum</span> = <span style="color:#ae81ff">0</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#39;Somando números: &#39;</span> . <span style="color:#a6e22e">join</span>(<span style="color:#a6e22e">argv</span>(), <span style="color:#e6db74">&#39; + &#39;</span>)<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">for</span> <span style="color:#a6e22e">n</span> <span style="color:#a6e22e">in</span> <span style="color:#a6e22e">argv</span>()<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span> <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">s</span>:<span style="color:#a6e22e">sum</span> += <span style="color:#a6e22e">n</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">endfor</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#39;Resultado: &#39;</span> . <span style="color:#a6e22e">s</span>:<span style="color:#a6e22e">sum</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>:<span style="color:#a6e22e">qall</span>!</code></pre></div>
 
 <p>Assim podemos rodar nosso script diretamente:</p>
 
@@ -379,7 +379,12 @@ Resultado: 27
 
 </div>
             <div class="footer">
-                
+                <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+<script type="text/javascript">
+    hljs.configure({languages: []});
+    hljs.initHighlightingOnLoad();
+</script>
 
     
 

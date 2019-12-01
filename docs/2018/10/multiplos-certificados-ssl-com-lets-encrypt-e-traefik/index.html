@@ -18,10 +18,10 @@
     <link rel="stylesheet" href="https://daltonmatos.com/css/print.css" media="print">
     <link rel="stylesheet" href="https://daltonmatos.com/css/poole.css">
     <link rel="stylesheet" href="https://daltonmatos.com/css/hyde.css">
-    <link rel="stylesheet" href="https://daltonmatos.com/css/syntax.css">
     <!-- Font-Awesome -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
-    
+    <!-- highlight.js-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
     <!-- Customised CSS -->
     <link rel="stylesheet" href="https://daltonmatos.com/css/custom.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -243,48 +243,48 @@ watch = true
 
 <p>O que nosso deploy-hook faz é descobrir o path final do certificado. Esse é o código:</p>
 
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">BaseLoader</span>
-<span class="kn">from</span> <span class="nn">hooks</span> <span class="kn">import</span> <span class="n">conf</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> os
+<span style="color:#f92672">from</span> jinja2 <span style="color:#f92672">import</span> Environment, BaseLoader
+<span style="color:#f92672">from</span> hooks <span style="color:#f92672">import</span> conf
 
 
-<span class="n">SSL_CONFIG_TEMPLATE</span> <span class="o">=</span> <span class="s2">&#34;&#34;&#34;
-</span><span class="s2">[[tls]]
-</span><span class="s2">  entryPoints = [&#34;https&#34;]
-</span><span class="s2">  [tls.certificate]
-</span><span class="s2">      certFile = &#34;{{certfile_path}}&#34;
-</span><span class="s2">      keyFile = &#34;{{keyfile_path}}&#34;
-</span><span class="s2">
-</span><span class="s2">&#34;&#34;&#34;</span>
+SSL_CONFIG_TEMPLATE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span><span style="color:#e6db74">[[tls]]
+</span><span style="color:#e6db74">  entryPoints = [&#34;https&#34;]
+</span><span style="color:#e6db74">  [tls.certificate]
+</span><span style="color:#e6db74">      certFile = &#34;{{certfile_path}}&#34;
+</span><span style="color:#e6db74">      keyFile = &#34;{{keyfile_path}}&#34;
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">&#34;&#34;&#34;</span>
 
-<span class="k">def</span> <span class="nf">generate_config_file_for_certificate</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">lineage_path</span><span class="p">):</span>
-    <span class="n">content</span> <span class="o">=</span> <span class="n">render_config_for_certificate</span><span class="p">(</span><span class="n">lineage_path</span><span class="p">)</span>
-    <span class="n">outputfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">lineage_path</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">)))</span>
-    <span class="n">outputfile</span> <span class="o">+=</span> <span class="s2">&#34;.toml&#34;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outputfile</span><span class="p">,</span> <span class="s2">&#34;wa&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
-        <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_config_file_for_certificate</span>(output_path, lineage_path):
+    content <span style="color:#f92672">=</span> render_config_for_certificate(lineage_path)
+    outputfile <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(output_path, os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>basename(lineage_path<span style="color:#f92672">.</span>strip(<span style="color:#e6db74">&#34;/&#34;</span>)))
+    outputfile <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;.toml&#34;</span>
+    <span style="color:#66d9ef">with</span> open(outputfile, <span style="color:#e6db74">&#34;wa&#34;</span>) <span style="color:#66d9ef">as</span> outfile:
+        outfile<span style="color:#f92672">.</span>write(content)
 
-    <span class="k">return</span> <span class="n">outputfile</span>
+    <span style="color:#66d9ef">return</span> outputfile
 
-<span class="k">def</span> <span class="nf">render_config_for_certificate</span><span class="p">(</span><span class="n">live_folder</span><span class="p">):</span>
-    <span class="n">certfile_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">live_folder</span><span class="p">,</span> <span class="s2">&#34;fullchain.pem&#34;</span><span class="p">)</span>
-    <span class="n">keyfile_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">live_folder</span><span class="p">,</span> <span class="s2">&#34;privkey.pem&#34;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="n">resolve_symlink</span><span class="p">(</span><span class="n">certfile_path</span><span class="p">),</span> <span class="n">resolve_symlink</span><span class="p">(</span><span class="n">keyfile_path</span><span class="p">))</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">render_config_for_certificate</span>(live_folder):
+    certfile_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(live_folder, <span style="color:#e6db74">&#34;fullchain.pem&#34;</span>)
+    keyfile_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(live_folder, <span style="color:#e6db74">&#34;privkey.pem&#34;</span>)
+    <span style="color:#66d9ef">return</span> render_template(resolve_symlink(certfile_path), resolve_symlink(keyfile_path))
 
-<span class="k">def</span> <span class="nf">render_template</span><span class="p">(</span><span class="n">certfile_path</span><span class="p">,</span> <span class="n">keyfile_path</span><span class="p">):</span>
-    <span class="n">jinja2_env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span><span class="n">loader</span><span class="o">=</span><span class="n">BaseLoader</span><span class="p">())</span>
-    <span class="n">rendered_config</span> <span class="o">=</span> <span class="n">jinja2_env</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">SSL_CONFIG_TEMPLATE</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
-        <span class="n">certfile_path</span><span class="o">=</span><span class="n">certfile_path</span><span class="p">,</span> <span class="n">keyfile_path</span><span class="o">=</span><span class="n">keyfile_path</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rendered_config</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">render_template</span>(certfile_path, keyfile_path):
+    jinja2_env <span style="color:#f92672">=</span> Environment(loader<span style="color:#f92672">=</span>BaseLoader())
+    rendered_config <span style="color:#f92672">=</span> jinja2_env<span style="color:#f92672">.</span>from_string(SSL_CONFIG_TEMPLATE)<span style="color:#f92672">.</span>render(
+        certfile_path<span style="color:#f92672">=</span>certfile_path, keyfile_path<span style="color:#f92672">=</span>keyfile_path
+    )
+    <span style="color:#66d9ef">return</span> rendered_config
 
-<span class="k">def</span> <span class="nf">resolve_symlink</span><span class="p">(</span><span class="n">symlink</span><span class="p">):</span>
-    <span class="n">link</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">readlink</span><span class="p">(</span><span class="n">symlink</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">symlink</span><span class="p">),</span> <span class="n">link</span><span class="p">))</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">resolve_symlink</span>(symlink):
+    link <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>readlink(symlink)
+    <span style="color:#66d9ef">return</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>abspath(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>dirname(symlink), link))
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">rendered_config</span> <span class="o">=</span> <span class="n">generate_config_file_for_certificate</span><span class="p">(</span><span class="n">conf</span><span class="o">.</span><span class="n">CERTBOT_HOOK_OUTPUT_DIR</span><span class="p">,</span> <span class="n">conf</span><span class="o">.</span><span class="n">CERTBOT_RENEWED_LINEAGE</span><span class="p">)</span>
-    <span class="n">p</span></code></pre></div>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
+    rendered_config <span style="color:#f92672">=</span> generate_config_file_for_certificate(conf<span style="color:#f92672">.</span>CERTBOT_HOOK_OUTPUT_DIR, conf<span style="color:#f92672">.</span>CERTBOT_RENEWED_LINEAGE)
+    p</code></pre></div>
 
 <p>Qual a ideia? O que esse código faz é o seguinte:</p>
 
@@ -302,7 +302,12 @@ watch = true
 
 </div>
             <div class="footer">
-                
+                <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+<script type="text/javascript">
+    hljs.configure({languages: []});
+    hljs.initHighlightingOnLoad();
+</script>
 
     
 

@@ -18,10 +18,10 @@
     <link rel="stylesheet" href="https://daltonmatos.com/css/print.css" media="print">
     <link rel="stylesheet" href="https://daltonmatos.com/css/poole.css">
     <link rel="stylesheet" href="https://daltonmatos.com/css/hyde.css">
-    <link rel="stylesheet" href="https://daltonmatos.com/css/syntax.css">
     <!-- Font-Awesome -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
-    
+    <!-- highlight.js-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
     <!-- Customised CSS -->
     <link rel="stylesheet" href="https://daltonmatos.com/css/custom.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -491,24 +491,29 @@ Connection to 10.234.55.68 closed.
 
 <p>O código dessas duas funções está abaixo, e está também em meu <a href="https://github.com/daltonmatos/dotfiles/blob/master/zsh/zshrc#L181-L194">dotfiles</a>.</p>
 
-<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh">_ssx_via<span class="o">(){</span>
-  <span class="nv">COMMAND</span><span class="o">=</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span>
-  <span class="nv">gateway</span><span class="o">=</span><span class="si">${</span><span class="nv">2</span><span class="si">}</span>
-  shift<span class="p">;</span> <span class="nb">shift</span>
-  <span class="nv">$COMMAND</span> -o <span class="s2">&#34;ProxyCommand=ssh </span><span class="si">${</span><span class="nv">gateway</span><span class="si">}</span><span class="s2"> -W %h:%p&#34;</span> -o <span class="s2">&#34;StrictHostKeyChecking=no&#34;</span> <span class="nv">$*</span>
-<span class="o">}</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">_ssx_via<span style="color:#f92672">(){</span>
+  COMMAND<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>1<span style="color:#e6db74">}</span>
+  gateway<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>2<span style="color:#e6db74">}</span>
+  shift; shift
+  $COMMAND -o <span style="color:#e6db74">&#34;ProxyCommand=ssh </span><span style="color:#e6db74">${</span>gateway<span style="color:#e6db74">}</span><span style="color:#e6db74"> -W %h:%p&#34;</span> -o <span style="color:#e6db74">&#34;StrictHostKeyChecking=no&#34;</span> $*
+<span style="color:#f92672">}</span>
 
-_ssh_via<span class="o">(){</span>
-  _ssx_via <span class="s1">&#39;ssh&#39;</span> <span class="nv">$*</span>
-<span class="o">}</span>
+_ssh_via<span style="color:#f92672">(){</span>
+  _ssx_via <span style="color:#e6db74">&#39;ssh&#39;</span> $*
+<span style="color:#f92672">}</span>
 
-_scp_via<span class="o">(){</span>
-  _ssx_via <span class="s1">&#39;scp&#39;</span> <span class="nv">$*</span>
-<span class="o">}</span></code></pre></div>
+_scp_via<span style="color:#f92672">(){</span>
+  _ssx_via <span style="color:#e6db74">&#39;scp&#39;</span> $*
+<span style="color:#f92672">}</span></code></pre></div>
 
 </div>
             <div class="footer">
-                
+                <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+<script type="text/javascript">
+    hljs.configure({languages: []});
+    hljs.initHighlightingOnLoad();
+</script>
 
     
 
