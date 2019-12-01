@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>traefik on </title>
@@ -17,7 +17,7 @@
       <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/2018/10/multiplos-certificados-ssl-com-lets-encrypt-e-traefik/</guid>
-      <description>O que o let&amp;rsquo;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.
+      <description>O que o let&#39;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.
 Gerar um certificado é tão simples quanto rodar um comando. O única coisa que você precisa ter em me te é como comprovar que você controla o domínio para o qual você está gerando um certificado.
 Challenge http-01 Um dos challenges mais comuns é usar um server http para comprovar que você controla o domínio.</description>
     </item>

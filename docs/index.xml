@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title></title>
@@ -29,7 +29,8 @@ Já escrevi bastante sobre as pesquisas que fiz em relação a isso e esse post 
       <guid>https://daltonmatos.com/2019/03/escrevendo-workers-assincronos-em-python-com-asyncowrker/</guid>
       <description>Olhando o histórico de commits, o primeiro data de 19/Jan/2017. Essa talvez seja a data oficial do início do que chamamos de asyncworker.
 O projeto nasceu para facilitar a escrita de workers assíncronos em python. Inicialmente eram workers para rabbitmq. Mas com o tempo surgiram oportunidades de implementar suporte a outros &amp;ldquo;backends&amp;rdquo;, por assim dizer.
-Backends atualmente suportados Até a data de hoje o projeto suporta os seguintes backends:</description>
+Backends atualmente suportados Até a data de hoje o projeto suporta os seguintes backends:
+ RabbitMQ Server Side Events HTTP Tarefas recorrentes  E a ideia é adicionar suporte a mais backends com o tempo.</description>
     </item>
     
     <item>
@@ -80,7 +81,7 @@ Estrutura da keyring O que vamos fazer é criar 3 chaves, um para cada finalidad
       <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/2018/10/multiplos-certificados-ssl-com-lets-encrypt-e-traefik/</guid>
-      <description>O que o let&amp;rsquo;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.
+      <description>O que o let&#39;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.
 Gerar um certificado é tão simples quanto rodar um comando. O única coisa que você precisa ter em me te é como comprovar que você controla o domínio para o qual você está gerando um certificado.
 Challenge http-01 Um dos challenges mais comuns é usar um server http para comprovar que você controla o domínio.</description>
     </item>
