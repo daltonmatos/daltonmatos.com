@@ -32,3 +32,5 @@ test/unit/app-path/
 cache/
 output/
 *.pid
+resources/
+themes/

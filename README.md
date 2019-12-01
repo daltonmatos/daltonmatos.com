@@ -3,15 +3,15 @@
 
 ## Tema
 
-O tema usado no blog é o [hyde-hyde](https://github.com/htr3n/hyde-hyde), versão 1.0.0
+O tema usado no blog é o [hyde-hyde](https://github.com/htr3n/hyde-hyde).
 
 ```
-commit ea1fcd379a235832d5a103c6a2d1cadc108db93d (HEAD, tag: v1.0.0)
-Merge: 5665044 4a0dd77
+commit 640ff27a42ee36311328a4ce36aaa48c995b53b0 (HEAD -> master, origin/master, origin/HEAD)
+Merge: f7a755e ca1c26a
 Author: Huy Tran <hoang.huy.tran@gmail.com>
-Date:   Wed Jun 6 11:24:24 2018 +1000
+Date:   Thu Nov 7 14:24:30 2019 +1100
 
-    Merge pull request #10 from tun/master
+    Merge pull request #91 from MarcoIeni/patch-1
 
-    Improvements for layoutReverse and sidebarSticky
+    README: clarify UtternacesRepo syntax
 ```
