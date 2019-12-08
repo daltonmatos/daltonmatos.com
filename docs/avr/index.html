@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.60.1" />
+
+    
+    
+    
+
+<title>Misturando código do avrasm2 com código do avr-gcc: Uma prova de conceito • </title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Misturando código do avrasm2 com código do avr-gcc: Uma prova de conceito"/>
+<meta name="twitter:description" content="Abaixo você encontra uma pesquisa que fiz onde mostro, na prática, como mesclar código de um projeto puramente Assembly (feito com avrasm2 e que gera apenas um arquivo Intel Hex) com um projeto Moderno C (feito com avr-gcc) que pode fazer uso de conceitos mais avançados como realocação de código, tabela de símbolos, link-edição e outros.
+A pesquisa é dividia em 4 posts, onde avanço gradualmente resolvendo os problemas que encontrei pelo caminho."/>
+
+<meta property="og:title" content="Misturando código do avrasm2 com código do avr-gcc: Uma prova de conceito" />
+<meta property="og:description" content="Abaixo você encontra uma pesquisa que fiz onde mostro, na prática, como mesclar código de um projeto puramente Assembly (feito com avrasm2 e que gera apenas um arquivo Intel Hex) com um projeto Moderno C (feito com avr-gcc) que pode fazer uso de conceitos mais avançados como realocação de código, tabela de símbolos, link-edição e outros.
+A pesquisa é dividia em 4 posts, onde avanço gradualmente resolvendo os problemas que encontrei pelo caminho." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://daltonmatos.com/avr/" />
+
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+
+
+<link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
+
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i|Roboto+Mono:300,300i,400,400i" rel="stylesheet">
+<style>
+html {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 300;
+}
+
+</style>
+
+</head>
+
+
+    <body class="theme-base-08 ">
+    
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      <span class="site__title">
+        <a href="https://daltonmatos.com/"></a>
+      </span>
+      
+        
+        
+        
+        <div class="author-image">
+          <img src="https://daltonmatos.com/daltonmatos.jpeg" alt="Author Image" class="img--circle img--headshot element--center">
+        </div>
+        
+      
+      
+      <p class="site__description">
+         Dalton Barreto 
+      </p>
+    </div>
+    <div class="collapsible-menu">
+      <input type="checkbox" id="menuToggle">
+      <label for="menuToggle"></label>
+      <div class="menu-content">
+        <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/">
+						<span>Home</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/posts">
+						<span>Posts Antigos</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/avr">
+						<span>AVR</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/gpg/">
+						<span>GPG Public Key</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/talks/">
+						<span>Palestras</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/about/">
+						<span>About</span>
+					</a>
+				</li>
+			 
+		
+	</ul>
+</div>
+
+        <section class="social">
+	
+	<a href="https://twitter.com/daltonmatos" rel="me"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</section>
+
+      </div>
+    </div>
+    
+
+
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <div class="post">
+        <h1>Misturando código do avrasm2 com código do avr-gcc: Uma prova de conceito</h1>
+        <p>Abaixo você encontra uma pesquisa que fiz onde mostro, na prática, como mesclar código de um projeto puramente Assembly (feito com <code>avrasm2</code> e que gera apenas um arquivo <a href="https://en.wikipedia.org/wiki/Intel_HEX">Intel Hex</a>) com um projeto Moderno C (feito com <code>avr-gcc</code>) que pode fazer uso de conceitos mais avançados como <a href="https://en.wikipedia.org/wiki/Relocation_(computing)">realocação de código</a>, <a href="https://en.wikipedia.org/wiki/Symbol_table">tabela de símbolos</a>, <a href="https://en.wikipedia.org/wiki/Linker_(computing)">link-edição</a> e outros.</p>
+<p>A pesquisa é dividia em 4 posts, onde avanço gradualmente resolvendo os problemas que encontrei pelo caminho. Todos os códigos mostrados nos posts foram testados na prática e são funcionais. Os testes foram feitos em um Arduino Nano (ATMega328p) e em uma <a href="https://hobbyking.com/pt_pt/hobbyking-kk2-1-5-multi-rotor-lcd-flight-control-board-with-6050mpu-and-atmel-644pa.html">placa controladora de quadcópteros KK2</a> (ATMega644p). A placa que usei está atualmente descontinuada, a versão seguinte <a href="https://hobbyking.com/pt_pt/hobbykingtm-kk2-1hc-multi-rotor-hard-case-flight-control-board.html">está aqui</a>.</p>
+<p>Abaixo estão os links e uma breve explicação dos quatro posts:</p>
+<ol>
+<li><a href="https://daltonmatos.com/2015/04/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/">Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc)</a></li>
+</ol>
+<p>O primeiro mostra que é possível chamar código assembly apenas alterando o endereço de símbolos no arquivo elf gerado pelo <code>avr-gcc</code> (a partir de um <code>main.c</code>). A abordagem desse post deixa de funcionar assim que começamos a escrever códigos Assembly mais complexos, por exemplo, contendo instruções de desvio (<code>jmp</code>, <code>rjmp</code>, <code>call</code>, etc).</p>
+<ol start="2">
+<li><a href="https://daltonmatos.com/2015/05/convertendo-intel-hex-para-elf32-avr-criando-tabela-de-simbolos-e-tabela-de-realocacao/">Convertendo Intel HEX para ELF32-avr criando tabela de símbolos e tabela de realocação</a></li>
+</ol>
+<p>O segundo resolve o problema do post anterior, em relação ao uso de instruções de desvio no código assembly. Nesse post manipulamos a tabela de realocação do elf que geramos a partir do nosso código assembly, fazendo assim com que o <code>avr-gcc</code> altere os endereços das instruções de desvio, gerando um binário final correto.</p>
+<ol start="3">
+<li><a href="https://daltonmatos.com/2015/07/chamando-codigo-novo-c-avr-gcc-a-partir-de-codigo-legado-assembly-avrasm2/">Chamando código novo C (avr-gcc) a partir de código legado Assembly (avrasm2)</a></li>
+</ol>
+<p>O terceiro evolui a técnica usada no post anterior. Nesse post adicionamos o conceito de símbolo externo (já tínhamos usado símbolos internos antes). Desta forma podemos adicionar um símbolo externo ao elf gerado a apartir do código Assembly, podendo assim declarar rotinas no Assembly que terão suas implementações substituídas, durante a link-edição, por implementações em C.</p>
+<ol start="4">
+<li><a href="https://daltonmatos.com/2015/09/lidando-com-dados-gravados-na-memoria-flash-eeprom-e-sram/">Lidando com dados gravados na memória flash, EEPROM e SRAM</a></li>
+</ol>
+<p>O quarto e último post lida com constantes que são salvas na memória de código do chip. Lidamos específicamente com as instruções <code>LPM</code> e <code>SPM</code>, que nos chips AVR trabalham de uma forma peculiar e por isso demandam ajuste de endereços ainda durante a compilação.</p>
+<h2 id="cdigos-usados-durante-a-pesquisa">Códigos usados durante a pesquisa</h2>
+<p>Abaixo você encontra o link do repositório onde existem os códigos que foram usados durante essa pesquisa. São códigos que fiz como prova de conceito para validar as hipóteses criadas durante a pesquisa, portando não espere encontrar nada bonito. =D</p>
+<ul>
+<li><a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2">https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2</a></li>
+</ul>
+
+  </div>
+
+        </div>
+        
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.60.1" />
+
+    
+    
+    
+
+<title>Chamando código novo C (avr-gcc) a partir de código legado Assembly (avrasm2) • </title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Chamando código novo C (avr-gcc) a partir de código legado Assembly (avrasm2)"/>
+<meta name="twitter:description" content="Esse post faz parte de uma série de posts sobre mistura de código C (avr-gcc) com código Assembly (avrasm2). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.
+Contexto Uma parte muito importante quando estamos trabalhando com projetos de código misto, nesse caso C e Assembly, é poder chamar livremente códigos das duas linguagens. Temos que poder chamar uma rotina Assemlty a partir do C e temos também que poder chamar código C a partir do Assembly."/>
+
+<meta property="og:title" content="Chamando código novo C (avr-gcc) a partir de código legado Assembly (avrasm2)" />
+<meta property="og:description" content="Esse post faz parte de uma série de posts sobre mistura de código C (avr-gcc) com código Assembly (avrasm2). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.
+Contexto Uma parte muito importante quando estamos trabalhando com projetos de código misto, nesse caso C e Assembly, é poder chamar livremente códigos das duas linguagens. Temos que poder chamar uma rotina Assemlty a partir do C e temos também que poder chamar código C a partir do Assembly." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://daltonmatos.com/2015/07/chamando-codigo-novo-c-avr-gcc-a-partir-de-codigo-legado-assembly-avrasm2/" />
+<meta property="article:published_time" content="2015-07-30T00:00:00+00:00" />
+<meta property="article:modified_time" content="2015-07-30T00:00:00+00:00" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+
+
+<link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
+
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i|Roboto+Mono:300,300i,400,400i" rel="stylesheet">
+<style>
+html {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 300;
+}
+
+</style>
+
+</head>
+
+
+    <body class="theme-base-08 ">
+    
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      <span class="site__title">
+        <a href="https://daltonmatos.com/"></a>
+      </span>
+      
+        
+        
+        
+        <div class="author-image">
+          <img src="https://daltonmatos.com/daltonmatos.jpeg" alt="Author Image" class="img--circle img--headshot element--center">
+        </div>
+        
+      
+      
+      <p class="site__description">
+         Dalton Barreto 
+      </p>
+    </div>
+    <div class="collapsible-menu">
+      <input type="checkbox" id="menuToggle">
+      <label for="menuToggle"></label>
+      <div class="menu-content">
+        <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/">
+						<span>Home</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/posts">
+						<span>Posts Antigos</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/avr">
+						<span>AVR</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/gpg/">
+						<span>GPG Public Key</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/talks/">
+						<span>Palestras</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/about/">
+						<span>About</span>
+					</a>
+				</li>
+			 
+		
+	</ul>
+</div>
+
+        <section class="social">
+	
+	<a href="https://twitter.com/daltonmatos" rel="me"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</section>
+
+      </div>
+    </div>
+    
+
+
+  </div>
+</div>
+
+        <div class="content container">
+            
+    
+<article>
+  <header>
+    <h1>Chamando código novo C (avr-gcc) a partir de código legado Assembly (avrasm2)</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Jul 30, 2015
+    
+    
+    
+    
+    
+      
+      
+          <br/>
+           <i class="fas fa-tags"></i>
+          
+          <a class="badge badge-tag" href="/tags/avr">avr</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/microcontrollers">microcontrollers</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/avr-c">avr-c</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/avr-assembly">avr-assembly</a>
+          
+      
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 10 min read
+</div>
+
+
+  </header>
+  
+  
+  <div class="post">
+    <p>Esse post faz parte de uma <a href="https://daltonmatos.com/avr/">série de posts</a> sobre mistura de código C (avr-gcc) com código Assembly (<code>avrasm2</code>). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.</p>
+<h1 id="contexto">Contexto</h1>
+<p>Uma parte muito importante quando estamos trabalhando com projetos de código misto, nesse caso C e Assembly, é poder chamar livremente códigos das duas linguagens. Temos que poder chamar uma rotina Assemlty a partir do C e temos também que poder chamar código C a partir do Assembly. Até agora, nos posts anteriores, vimos apenas a primeira opção. Nesse post vamos ver como chamar código C a partir de código Assembly.</p>
+<h1 id="entendendo-um-smbolo-externo">Entendendo um símbolo externo</h1>
+<p>Toda rotina que o código precisa chamar se transforma em um símbolo, que será usado pelo link-editor no momento de gerar o binário final. Vimos isso <a href="https://daltonmatos.com/2015/05/convertendo-intel-hex-para-elf32-avr-criando-tabela-de-simbolos-e-tabela-de-realocacao/">no post sobre tabela de símbolos</a>, onde o próprio avr-gcc cuidava disso pra nós, já que estávamos lidando com um símbolo externo ao código C. Dessa vez teremos um símbolo externo ao código Assembly e por isso precisaremos novamente adicionar esse símbolo de forma manual na tabela de símbolos.</p>
+<p>A forma como declaramos, no C, um símbolo externo é essa:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">asm_main</span>();
+</code></pre></div><p>Olhando a tabela de símbolos criada pelo <code>avr-gcc</code> temos o seguinte:</p>
+<pre><code>
+  Section Headers:
+  [  Nr ] Type              Addr     Size     ES Flg Lk Inf Al Name
+  [    0] NULL              00000000 00000000 00     00 000 00
+  [    1] PROGBITS          00000000 00000000 00 AX  00 000 01 .text
+  [    2] PROGBITS          00000000 00000000 00 WA  00 000 01 .data
+  [    3] NOBITS            00000000 00000000 00 WA  00 000 01 .bss
+  [    4] PROGBITS          00000000 0000003e 00 AX  00 000 01 .text.startup
+  [    5] RELA              00000000 00000078 0c     08 004 04 .rela.text.startup
+  [    6] PROGBITS          00000000 00000028 01     00 000 01 .comment
+  [    7] STRTAB            00000000 00000048 00     00 000 01 .shstrtab
+  [    8] SYMTAB            00000000 000000e0 10     09 00c 04 .symtab
+  [    9] STRTAB            00000000 0000004a 00     00 000 01 .strtab
+  Key to Flags: W (write), A (alloc), X (execute)
+
+
+  Symbol table (.symtab)
+  [  Nr ] Value    Size     Type    Bind      Sect Name
+  [    0] 00000000 00000000 NOTYPE  LOCAL        0
+  [    1] 00000000 00000000 FILE    LOCAL    65521 main.c
+  [    2] 00000000 00000000 SECTION LOCAL        1
+  [    3] 00000000 00000000 SECTION LOCAL        2
+  [    4] 00000000 00000000 SECTION LOCAL        3
+  [    5] 0000003e 00000000 NOTYPE  LOCAL    65521 __SP_H__
+  [    6] 0000003d 00000000 NOTYPE  LOCAL    65521 __SP_L__
+  [    7] 0000003f 00000000 NOTYPE  LOCAL    65521 __SREG__
+  [    8] 00000000 00000000 NOTYPE  LOCAL    65521 __tmp_reg__
+  [    9] 00000001 00000000 NOTYPE  LOCAL    65521 __zero_reg__
+  [   10] 00000000 00000000 SECTION LOCAL        4
+  [   11] 00000000 00000000 SECTION LOCAL        6
+  [   12] 00000000 0000003e FUNC    GLOBAL       4 main
+  [   13] 00000000 00000000 NOTYPE  GLOBAL       0 asm_main
+</code></pre><p>Esse output foi gerado com a ferramenta <a href="http://elfio.sourceforge.net/">ELFIO</a>, que já vem com um exemplo de implementação chamado <code>elfdump</code>.</p>
+<p>Olhando a tabela, vemos que o símbolo <code>asm_main</code> pertence a um tipo de seção especial <code>NULL</code>. Sabemos isso olhando a coluna <code>Sect</code>, que nesse caso tem o valor <code>0</code>. E na primeira tabela, <code>Section Headers:</code>, a section de índice <code>0</code> é a <code>NULL</code>. O que precisamos fazer é adicionar nossos símbolos externos também pertencendo a essa seção e esperar que o avr-gcc consiga fazer a link-edição quando estiver gerando o binário final.</p>
+<h1 id="lidando-com-a-impossibilidade-de-declarar-smbolos-no-intel-hex">Lidando com a impossibilidade de declarar símbolos no Intel Hex</h1>
+<p>Essa instrução <code>extern</code>, que usamos no <code>avr-gcc</code>, simplesmente não existe quando estamos escrevendo código Assembly com o <code>avrasm2</code>. Isso contece porque o <code>avrasm2</code> gera apenas um Intel Hex no final de tudo e não existe uma fase de link-edição durante o processo de compilação. Tudo se torna ainda mais complicado pois o código Assembly é compilado de forma totalmente separada do código C e ele &ldquo;não sabe&rdquo; que um (ou mais) de seus símbolos, na verdade, tem sua implementação no código C.</p>
+<p>Vejamos um exemplo de código assembly onde teremos um símbolo externo.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">
+  <span style="color:#a6e22e">.org</span> <span style="color:#ae81ff">0x0000</span>
+
+  other_routine:
+    <span style="color:#a6e22e">ret</span>
+
+  <span style="color:#75715e">; This funcions is just a stub. Its implementation will be in C
+</span><span style="color:#75715e"></span>  call_me_maybe:
+    <span style="color:#a6e22e">nop</span>
+
+  internal_to_asm:
+    <span style="color:#a6e22e">ret</span>
+
+  asm_main:
+    <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">internal_to_asm</span>
+    <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">call_me_maybe</span>
+    <span style="color:#a6e22e">ret</span>
+</code></pre></div><p>Nesse código a rotina <code>call_me_maybe</code> será implementada em C. O problema é que ela <strong>precisa existir</strong> no código assembly, caso contrário o <code>avrasm2</code> não será capaz de compilar o codigo e gerar o Intel Hex. Então o que fazemos é compilar o código normalmente, mas podemos remover todo o código da rotina externa, ou até mesmo, posicionar o label em questão em qualquer lugar do código. Por enquanto vamos deixá-lo apenas com uma instrução <code>nop</code>.</p>
+<p>Fazemos o processo normal de compilação e <a href="https://daltonmatos.com/2015/05/convertendo-intel-hex-para-elf32-avr-criando-tabela-de-simbolos-e-tabela-de-realocacao/">conversão de Intel Hex para avr-elf32</a>, o que muda é que agora precisamos reconstruir a tabela de símbolos com dois tipos de símbolos: interno e externo. Nesse caso o único símbolo externo será o <code>call_me_maybe</code>.</p>
+<p>Usaremos as mesmas ferrametas do <a href="https://daltonmatos.com/2015/05/convertendo-intel-hex-para-elf32-avr-criando-tabela-de-simbolos-e-tabela-de-realocacao/">último post</a>, apenas com algumas pequenas mudanças para dar suporte à diferenciação de símbolos internos e externos. Para facilitar, coloquei o nome de todos os símbolos externos direto no código da ferramenta <a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/extract-symbols-metadata.py"><code>extract-symbols-metadata.py</code></a>. O formato da saída dessa ferramenta também precisou mudar, pois agora temos símbolos internos e externos. O formato ficou assim:</p>
+<pre><code>  &lt;symbol_name&gt; &lt;symbol_type&gt; &lt;symbol_address&gt; &lt;instruction_addresses&gt;
+</code></pre><p>Ou seja, agora temos a indicação se o símbolo é interno ou externo (campo <code>&lt;symbol_type&gt;</code>). Assim, quando passamos esse conteúdo para a outra ferramenta, <a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/elf-add-symbol.cpp"><code>elf-add-symbol</code></a>, ela consegue adicionar corretamente os símbolos que são externos, ou seja, que precisam pertencer à seção <code>NULL</code> que vimos no início desse post.</p>
+<p>Nesse ponto compilamos o código da mesma forma que já fizemos antes. Olhando a tabela de símbolos, depois de já ter convertido de Intel HEX para <code>avr-elf32</code>, temos o seguinte:</p>
+<pre><code>
+  Section Headers:
+  [  Nr ] Type              Addr     Size     ES Flg Lk Inf Al Name
+  [    0] NULL              00000000 00000000 00     00 000 00
+  [    1] PROGBITS          00000000 00000010 00 AX  00 000 01 .text
+  [    2] STRTAB            00000000 0000002b 00     00 000 01 .shstrtab
+  [    3] SYMTAB            00000000 00000060 10     04 002 04 .symtab
+  [    4] STRTAB            00000000 00000036 00     00 000 01 .strtab
+  [    5] REL               00000000 00000010 08     03 001 04 .rel.text
+  Key to Flags: W (write), A (alloc), X (execute)
+
+
+  Symbol table (.symtab)
+  [  Nr ] Value    Size     Type    Bind      Sect Name
+  [    0] 00000000 00000000 NOTYPE  LOCAL        0
+  [    1] 00000000 00000000 SECTION LOCAL        1
+  [    2] 00000000 00000000 NOTYPE  GLOBAL       1 other_routine
+  [    3] 00000006 00000000 NOTYPE  GLOBAL       1 asm_main
+  [    4] 00000000 00000000 NOTYPE  GLOBAL       0 call_me_maybe
+  [    5] 00000004 00000000 NOTYPE  GLOBAL       1 internal_to_asm
+</code></pre><p>Perceba que da mesma forma que observamos o símbolo <code>asm_main</code> no início desse post, agora vemos que o símbolo <code>call_me_maybe</code> também está associado à seção <code>NULL</code>.</p>
+<p>Vamos ver como está o disassembly do código, antes de fazer a link-edição final.</p>
+<pre><code>
+  Disassembly of section .text:
+
+  00000000 &lt;other_routine&gt;:
+     0:   08 95           ret
+          ...
+
+  00000004 &lt;internal_to_asm&gt;:
+     4:   08 95           ret
+
+  00000006 &lt;asm_main&gt;:
+     6:   0e 94 02 00     call    0x4     ; 0x4 &lt;internal_to_asm&gt;
+     a:   0e 94 01 00     call    0x2     ; 0x2 &lt;other_routine+0x2&gt;
+     e:   08 95           ret
+</code></pre><p>Olhando a instrução no endereço <code>0xa</code>, que é a linha do código em que a rotina <code>call_me_maybe</code> é chamada, vemos que a chamda está sendo feita para um endereço incorreto (<code>0x2</code>). Mas olhando a tabela de realoção (abaixo), vemos que essa instrução está marcada para ser editada no momento da link-edição. Podemos perceber também que o disassembly acima nem mostra onde está o símbolo <code>call_me_maybe</code>, já que ele é um símbolo externo.</p>
+<pre><code>  RELOCATION RECORDS FOR [.text]:
+  OFFSET   TYPE              VALUE
+  0000000a R_AVR_CALL        call_me_maybe
+  00000006 R_AVR_CALL        internal_to_asm
+</code></pre><p>O que essa tabela de realocação diz é que quando o <code>avr-gcc</code> estiver juntando todos os códigos (C e Assembly) ele sabe que essas duas instruções deverão ser editadas e recebrão o endereço final dos símbolos <code>call_me_maybe</code> e <code>internal_to_asm</code>, respectivamente. Agora vejamos o código C e como ele fica depois de compilado para <code>avr-elf32</code>.</p>
+<p>Código C que usaremos nesse exemplo:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+  <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+
+
+  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">call_me_maybe</span>(){
+    a <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">if</span> (a <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">3</span>){
+      <span style="color:#66d9ef">return</span>;
+    }
+    <span style="color:#66d9ef">return</span>;
+  }
+
+  <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">asm_main</span>();
+
+  <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(){
+
+    asm_main();
+
+    DDRB <span style="color:#f92672">=</span> DDRB <span style="color:#f92672">|</span> _BV(PB5); <span style="color:#75715e">// PIN13 (internal led) as output
+</span><span style="color:#75715e"></span>    PORTB <span style="color:#f92672">=</span> PORTB <span style="color:#f92672">|</span> _BV(PB5); <span style="color:#75715e">// HIGH
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+  }
+</code></pre></div><p>Olhando a tabela de símbolos temos:</p>
+<pre><code>  Section Headers:
+  [  Nr ] Type              Addr     Size     ES Flg Lk Inf Al Name
+  [    0] NULL              00000000 00000000 00     00 000 00
+  [    1] PROGBITS          00000000 00000014 00 AX  00 000 01 .text       &lt;-----
+  [    2] RELA              00000000 00000030 0c     09 001 04 .rela.text
+  [    3] PROGBITS          00000000 00000002 00 WA  00 000 01 .data
+  [    4] NOBITS            00000000 00000000 00 WA  00 000 01 .bss
+  [    5] PROGBITS          00000000 0000000e 00 AX  00 000 01 .text.startup
+  [    6] RELA              00000000 0000000c 0c     09 005 04 .rela.text.startup
+  [    7] PROGBITS          00000000 00000028 01     00 000 01 .comment
+  [    8] STRTAB            00000000 0000004d 00     00 000 01 .shstrtab
+  [    9] SYMTAB            00000000 00000110 10     0a 00d 04 .symtab
+  [   10] STRTAB            00000000 00000069 00     00 000 01 .strtab
+  Key to Flags: W (write), A (alloc), X (execute)
+
+
+  Symbol table (.symtab)
+  [  Nr ] Value    Size     Type    Bind      Sect Name
+  [    0] 00000000 00000000 NOTYPE  LOCAL        0
+  [    1] 00000000 00000000 FILE    LOCAL    65521 main.c
+  [    2] 00000000 00000000 SECTION LOCAL        1
+  [    3] 00000000 00000000 SECTION LOCAL        3
+  [    4] 00000000 00000000 SECTION LOCAL        4
+  [    5] 0000003e 00000000 NOTYPE  LOCAL    65521 __SP_H__
+  [    6] 0000003d 00000000 NOTYPE  LOCAL    65521 __SP_L__
+  [    7] 0000003f 00000000 NOTYPE  LOCAL    65521 __SREG__
+  [    8] 00000000 00000000 NOTYPE  LOCAL    65521 __tmp_reg__
+  [    9] 00000001 00000000 NOTYPE  LOCAL    65521 __zero_reg__
+  [   10] 00000000 00000002 OBJECT  LOCAL        3 a
+  [   11] 00000000 00000000 SECTION LOCAL        5
+  [   12] 00000000 00000000 SECTION LOCAL        7
+  [   13] 00000000 00000014 FUNC    GLOBAL       1 call_me_maybe     &lt;-----
+  [   14] 00000000 0000000e FUNC    GLOBAL       5 main
+  [   15] 00000000 00000000 NOTYPE  GLOBAL       0 asm_main
+  [   16] 00000000 00000000 NOTYPE  GLOBAL       0 __do_copy_data
+</code></pre><p>Vemos que ele declara o simbolo <code>call_me_maybe</code> como sendo pretencente à seção <code>.text</code>, que é o correto pois para o código C esse símbolo é um símbolo interno.</p>
+<p>Vale notar que esse código C também possui símbolos externos, como por exemplo o símbolo <code>asm_main</code>. Pelo fato de estarmos com o &ldquo;main&rdquo; feito em C e estarmos testanto a chamada Assembly-&gt;C precisamos, de alguma forma, fazer com que o código C chame nosso código Assembly e é isso que fazemos quando o código C faz <code>asm_main()</code>. Nesse exemplo que estamos fazendo estamos testando os dois caminhos de chamada, tanto C-&gt;Assembly quando Assembly-&gt;C.</p>
+<h1 id="juntando-tudo-em-um-binrio-final">Juntando tudo em um binário final</h1>
+<p>Agora que já temos nossos dois <code>avr-elf32</code> preparados e com suas tabelas de símbolos e realocação criadas, precisamos pedir ao compilador que junte tudo em um único binário, que poderemos gravar na memória do micro-controlador para ser executado.</p>
+<p>Esse paso, a link-edição (junto com a compilação), é feita normalmente com o <code>avr-gcc</code>, com uma linha de comando semelhante a essa:</p>
+<pre><code>  avr-gcc -mmcu=atmega328p -F_CPU=100000 -o final_elf.elf main.c elf_from_asm_code.elf
+</code></pre><p>Onde o <code>main.c</code> é nosso código C e <code>elf_from_asm_code.elf</code> é nosso código assembly que foi compilado pelo <code>avrasm2</code>, convertido para <code>avr-elf32</code> e teve suas tabelas de símbolo e realocação reconstruídas. Juntando esses dois binários teremos no final o arquivo <code>final_elf.elf</code>, já com todos os símbolos resolvidos e endereços de instruções editados pelo compilador.</p>
+<p>Vejamos então como fica o desassembly desse binário final:</p>
+<pre><code>
+  00000096 &lt;call_me_maybe&gt;:
+    96:   80 91 00 01     lds     r24, 0x0100
+    9a:   90 91 01 01     lds     r25, 0x0101
+    9e:   01 96           adiw    r24, 0x01       ; 1
+    a0:   90 93 01 01     sts     0x0101, r25
+    a4:   80 93 00 01     sts     0x0100, r24
+    a8:   08 95           ret
+
+  000000aa &lt;_other_routines&gt;:
+    aa:   00 00           nop
+          ...
+
+  000000ae &lt;internal_to_asm&gt;:
+    ae:   08 95           ret
+
+  000000b0 &lt;asm_main&gt;:
+    b0:   0e 94 57 00     call    0xae    ; 0xae &lt;internal_to_asm&gt;
+    b4:   0e 94 4b 00     call    0x96    ; 0x96 &lt;call_me_maybe&gt;
+    b8:   08 95           ret
+
+  000000ba &lt;main&gt;:
+    ba:   0e 94 58 00     call    0xb0    ; 0xb0 &lt;asm_main&gt;
+    be:   25 9a           sbi     0x04, 5 ; 4
+    c0:   2d 9a           sbi     0x05, 5 ; 5
+    c2:   80 e0           ldi     r24, 0x00       ; 0
+    c4:   90 e0           ldi     r25, 0x00       ; 0
+    c6:   08 95           ret
+</code></pre><p>Podemos perceber aqui que o código pertencente à rotina <code>cal_me_maybe</code> (com posição final no endereço <code>0x00000096</code>) é de fato o código que está no <code>main.c</code> e não o simples <code>nop</code> que deixamos no código assembly orignal. Ou seja, conseguimos sobrescrever a rotina feita em assembly por um código implementado em C.</p>
+<p>Podemos observar também que as chamadas estão corretas. O compilador corrigiu todos os endereços que apontavam para a rotina <code>cal_me_maybe</code>. Lembram do <code>call 0x2</code> que tínhamos no elf que veio do assembly? Ele foi corretamente editado e agora aponta para o enreço <code>0x96</code>, que é exatamente o endereço da rotina <code>call_me_maybe</code>.</p>
+<p>Agora o que temos que fazer é gravar esse código final na memória do micro-controlador. E o melhor de tudo é que ele funciona!!</p>
+
+  </div>
+  
+
+<div class="navigation navigation-single">
+    
+    <a href="/2015/05/convertendo-intel-hex-para-elf32-avr-criando-tabela-de-simbolos-e-tabela-de-realocacao/" class="navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">Convertendo Intel HEX para ELF32-avr criando tabela de símbolos e tabela de realocação</span>
+    </a>
+    
+    
+    <a href="/2015/09/lidando-com-dados-gravados-na-memoria-flash-eeprom-e-sram/" class="navigation-next">
+      <span class="navigation-tittle">Lidando com dados gravados na memória flash, EEPROM e SRAM</span>
+      <i aria-hidden="true" class="fa fa-chevron-right"></i>
+    </a>
+    
+</div>
+
+
+  
+
+
+<div class="post__related">
+    
+    <h2>Related Articles</h2>
+    <ul class="related-posts">
+        
+
+
+<h4>2015</h4>
+
+<li>
+  <span class="list__title--small">
+    <a href="/2015/05/convertendo-intel-hex-para-elf32-avr-criando-tabela-de-simbolos-e-tabela-de-realocacao/" >Convertendo Intel HEX para ELF32-avr criando tabela de símbolos e tabela de realocação</a>
+      
+      <time class="pull-right hidden-tablet">May 03 &#39;15</time>
+      
+  </span>
+</li>
+
+<li>
+  <span class="list__title--small">
+    <a href="/2015/04/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/" >Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc)</a>
+      
+      <time class="pull-right hidden-tablet">Apr 12 &#39;15</time>
+      
+  </span>
+</li>
+
+
+
+    </ul>
+</div>
+
+
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+
+    
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+        
+    
+    <script type="text/javascript">
+        
+        hljs.initHighlightingOnLoad();
+    </script>
+    
+
+
+
+
+    
+
+
+
+    </body>
+</html>

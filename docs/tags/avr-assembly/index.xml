@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>avr-assembly on </title>
+    <link>https://daltonmatos.com/tags/avr-assembly/</link>
+    <description>Recent content in avr-assembly on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>pt-br</language>
+    <lastBuildDate>Sun, 27 Sep 2015 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://daltonmatos.com/tags/avr-assembly/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Lidando com dados gravados na memória flash, EEPROM e SRAM</title>
+      <link>https://daltonmatos.com/2015/09/lidando-com-dados-gravados-na-memoria-flash-eeprom-e-sram/</link>
+      <pubDate>Sun, 27 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2015/09/lidando-com-dados-gravados-na-memoria-flash-eeprom-e-sram/</guid>
+      <description>Esse post faz parte de uma série de posts sobre mistura de código C (avr-gcc) com código Assembly (avrasm2). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.
+Contexto Até agora, nos posts anteriores vimos apenas como fazer chamadas de função de uma linguagem para outra, mas uma parte muito importante de qualquer projeto com micro-controladores é a possibilidade de gravar dados na área de memória do chip (memória flash, por exemplo).</description>
+    </item>
+    
+    <item>
+      <title>Chamando código novo C (avr-gcc) a partir de código legado Assembly (avrasm2)</title>
+      <link>https://daltonmatos.com/2015/07/chamando-codigo-novo-c-avr-gcc-a-partir-de-codigo-legado-assembly-avrasm2/</link>
+      <pubDate>Thu, 30 Jul 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2015/07/chamando-codigo-novo-c-avr-gcc-a-partir-de-codigo-legado-assembly-avrasm2/</guid>
+      <description>Esse post faz parte de uma série de posts sobre mistura de código C (avr-gcc) com código Assembly (avrasm2). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.
+Contexto Uma parte muito importante quando estamos trabalhando com projetos de código misto, nesse caso C e Assembly, é poder chamar livremente códigos das duas linguagens. Temos que poder chamar uma rotina Assemlty a partir do C e temos também que poder chamar código C a partir do Assembly.</description>
+    </item>
+    
+    <item>
+      <title>Convertendo Intel HEX para ELF32-avr criando tabela de símbolos e tabela de realocação</title>
+      <link>https://daltonmatos.com/2015/05/convertendo-intel-hex-para-elf32-avr-criando-tabela-de-simbolos-e-tabela-de-realocacao/</link>
+      <pubDate>Sun, 03 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2015/05/convertendo-intel-hex-para-elf32-avr-criando-tabela-de-simbolos-e-tabela-de-realocacao/</guid>
+      <description>Esse post faz parte de uma série de posts sobre mistura de código C (avr-gcc) com código Assembly (AVRASM2). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.
+Contexto No post anterior vimos que é possível chamar código assembly (feito com AVRASM2) a partir de codigo C (avr-gcc). Vimos também que existem algumas limitaçoes na estratégia usada, tivemos que ajustar a instrução .org e isso significa que tínhamos que ajustar o código assembly toda vez que adicionávamos mais código C.</description>
+    </item>
+    
+    <item>
+      <title>Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc)</title>
+      <link>https://daltonmatos.com/2015/04/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/</link>
+      <pubDate>Sun, 12 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2015/04/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/</guid>
+      <description>Contexto Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando avr-gcc. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Isso significa que o código assembly deve estar na sintaxe que o avr-as (GNU Assembler) espera encontrar. Quando me refiro a &amp;ldquo;código legado&amp;rdquo; estou falando de Assembly feito no AVR Studio, usando o AVRASM2 como Assembler.</description>
+    </item>
+    
+  </channel>
+</rss>

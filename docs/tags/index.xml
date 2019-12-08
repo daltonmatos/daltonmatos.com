@@ -326,5 +326,41 @@
       <description></description>
     </item>
     
+    <item>
+      <title>avr</title>
+      <link>https://daltonmatos.com/tags/avr/</link>
+      <pubDate>Sun, 27 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/avr/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>avr-assembly</title>
+      <link>https://daltonmatos.com/tags/avr-assembly/</link>
+      <pubDate>Sun, 27 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/avr-assembly/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>avr-c</title>
+      <link>https://daltonmatos.com/tags/avr-c/</link>
+      <pubDate>Sun, 27 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/avr-c/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>microcontrollers</title>
+      <link>https://daltonmatos.com/tags/microcontrollers/</link>
+      <pubDate>Sun, 27 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/microcontrollers/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
