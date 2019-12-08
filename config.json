@@ -27,10 +27,16 @@
         "name": "Home",
         "url": "/",
         "weight": -10
-      },{
+      },
+      {
         "name": "Posts Antigos",
         "url": "/posts",
         "weight": -10
+      },
+{
+        "name": "AVR",
+        "url": "/avr",
+        "weight": 10
       }
     ]
   },

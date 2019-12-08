@@ -3,9 +3,7 @@
 title: "Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc)"
 author: "Dalton Barreto"
 date: 2015-04-12
-lang: "pt"
 tags: [avr, microcontrollers, avr-C, avr-assembly]
-status: published
 
 ---
 
@@ -13,19 +11,19 @@ status: published
 
 Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando `avr-gcc`. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Isso significa que o código assembly deve estar na sintaxe que o ``avr-as`` (GNU Assembler) espera encontrar. Quando me refiro a "código legado" estou falando de Assembly feito no AVR Studio, usando o AVRASM2 como Assembler. A sintaxe do Assembly que o ``AVRASM2`` espera é incompatível com a que o ``avr-as`` espera, então não podemos simplesmente pegar o código e compilar com ``avr-as``.
 
-Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades. O desafio desse post é conseguir juntar dois projetos que foram feitos usando ferramentas diferentes (``avr-gcc`` e ``AVR Studio``) que, a princípio, são incompatíveis.
+Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades. O desafio desse post é conseguir juntar dois projetos que foram feitos usando ferramentas diferentes (``avr-gcc`` e ``AVR Studio``) e que, a princípio, são incompatíveis.
 
 Muitos desses projetos ASM (todos?) feitos há muito tempo atrás provavelmente foram feitos com assemblers que não tinham em mente a junção com código C e portanto geram binários que não possuem suporte à link-edição e outras coisas necessárias para que possamos juntar as duas linguagens. Esse é o caso do ``AVR Studio`` (quando usando ``AVRASM2`` como Assembler), ele gera no final do build um arquivo no formato [Intel Hex][intel-hex], que não possui, dentre outras coisas, suporte à link-edição.
 
 
 # Preparação dos arquivos
 
-Antes de podermos começar precisamos ter todos os nossos arquivos em um mesmo formato, para que possamos usar o ``avr-gcc`` para gerar nosso binário final. Isso significa que teremos que converter todos os arquivos para um formato que o ``avr-gcc`` entenda. 
+Antes de podermos começar precisamos ter todos os nossos arquivos em um mesmo formato, para que possamos usar o ``avr-gcc`` para gerar nosso binário final. Isso significa que teremos que converter todos os arquivos para um formato que o ``avr-gcc`` entenda.
 
-Como o AVRASM2 gera Intel Hex (HEX) temos que converter esse conteúdo para elf32-avr (ELF), assim poderemos juntar esse código com nosso código compilado pelo ``avr-gcc``. Não existe uma conversão direta de HEX pra ELF, o que podemos fazer é converter de HEX para flat binary e depois para ELF. A conversão é feita com ``avr-objcopy``.
+Como o AVRASM2 gera Intel Hex (HEX) temos que converter esse conteúdo para elf32-avr ([ELF](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)), assim poderemos juntar esse código com nosso código compilado pelo ``avr-gcc``. Não existe uma conversão direta de HEX pra ELF, o que podemos fazer é converter de HEX para flat binary e depois para ELF. A conversão é feita com ``avr-objcopy``.
 
 
-# Exemplo de código AVRASM2 
+# Exemplo de código AVRASM2
 
 Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer o processo completo.
 
@@ -39,7 +37,7 @@ _blinks:
   add r24, r23
   clr r1
   clr r25
-  ret 
+  ret
 ```
 
 Esse código apenas soma o valor 10 ao parametro que ele receber. A linha do ``.include`` é necessária pois é nela que existem as definiçoes de resgitradores e etc para o micro controlador que estivermos usando. Nesse caso estamos usando um ATmega328P, mas poderia ser qualquer outro AVR. Importante notar a instrução ``.org 0x0000``, isso faz com que nosso código seja posicionado no endereço de memória ``0``. Precisaremos saber disso mais adiante.
@@ -48,36 +46,36 @@ O HEX gerado pelo AVRASM2 (AVRStudio 4, por exemplo) possui apenas um seção ch
 
 ```
 
-      $ avr-objdump -h blinks.hex
+$ avr-objdump -h blinks.hex
 
-      blinks.hex:     file format ihex
+blinks.hex:     file format ihex
 
-      Sections:
-      Idx Name          Size      VMA       LMA       File off  Algn
-        0 .sec1         0000000a  00000000  00000000  00000011  2**0
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .sec1         0000000a  00000000  00000000  00000011  2**0
                         CONTENTS, ALLOC, LOAD
 ```
 
 Copiando essa seção para o flat binary:
 
 ```
-      $ avr-objcopy -j .sec1 -I ihex -O binary blinks.hex blinks.bin
+$ avr-objcopy -j .sec1 -I ihex -O binary blinks.hex blinks.bin
 ```
 
 Agora precisamos converter para ELF:
 
 ```
-      $ avr-objcopy  --rename-section .data=.progmem.data,contents,alloc,load,readonly,data -I binary -O elf32-avr blinks.bin blinks.elf
+$ avr-objcopy  --rename-section .data=.progmem.data,contents,alloc,load,readonly,data -I binary -O elf32-avr blinks.bin blinks.elf
 ```
 
-Nesse momento temos um código asembly já pronto para ser link-editado com qualquer outro código gerado pelo avr-gcc. Mas ainda temos alguns problemas. 
+Nesse momento temos um código asembly já pronto para ser link-editado com qualquer outro código gerado pelo avr-gcc. Mas ainda temos alguns problemas.
 Olhando o arquivo ELF de perto, vemos que o símbolo ``_blinks`` não está na tabela de símbolos e precisamos saber onde nossa rotina começa para podermos referenciá-la no código C.
 
 ```
 
-  $ avr-objdump -x blink_simple.asm.elf
+  $ avr-objdump -x blinks.elf
 
-  blink_simple.asm.elf:     file format elf32-avr
+  blinks.elf:     file format elf32-avr
 
   SYMBOL TABLE:
   00000000 l    d  .progmem.data	00000000 .progmem.data
@@ -86,11 +84,11 @@ Olhando o arquivo ELF de perto, vemos que o símbolo ``_blinks`` não está na t
   0000000a g       *ABS*	        00000000 _binary_blinks_bin_size
 ```
 
-Os três símobolos ``_binary_*`` foram criados pelo ``avr-objcopy`` e marcam, respectivamente, o início, fim e tamanho total do nosso código, depois de compilado. Mesmo não tendo o símbolo ``_blinks`` podemos deduzir onde ele está. Se voltarmos no código assembly veremos que a instrução ``.org 0x0000`` está lá e sabemos que ela força o posicionamento do ínício do nosso código no endereço ``0``. Então podemos usar o símbolo ``_binary_blinks_bin_start`` como sendo nosso ponto de entrada no código assembly.
+Os três símobolos ``_binary_*`` foram criados pelo ``avr-objcopy`` e marcam, respectivamente, o início, fim e tamanho total do nosso código, depois de compilado. Mesmo não tendo o símbolo ``_blinks`` podemos deduzir onde ele está. Se voltarmos no código assembly veremos que a instrução ``.org 0x0000`` está lá e sabemos que ela força o posicionamento do ínício do nosso código no endereço ``0``. Então podemos usar o símbolo ``_binary_blinks_bin_start`` (que está posicionado no endereço `0`) como sendo nosso ponto de entrada no código assembly.
 
 # Analisando o código em C
 
-Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina escrita em Assembly. O código é bem simples, tudo que ele faz é piscar o LED que está ligado na porta D13. Como esse código foi testando em um Arduino Nano, a porta D13 é, na verdade, o bit 5 da [PORTB][port-registers].
+Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina escrita em Assembly. O código é bem simples, tudo que ele faz é piscar o LED que está ligado na porta `D13`. Como esse código foi testando em um Arduino Nano, a porta `D13` é, na verdade, o bit 5 da [PORTB][port-registers].
 
 
 ```c
@@ -107,7 +105,7 @@ Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina 
     uint8_t total_blinks =  ASM_SYM(5);
     DDRB = DDRB | _BV(PB5); // PIN13 (internal led) as output
 
-    PORTB = PORTB | _BV(PB5); // HIGH 
+    PORTB = PORTB | _BV(PB5); // HIGH
     for (;;){
       uint8_t i;
       for (i = 0; i < total_blinks; i++){
@@ -123,9 +121,9 @@ Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina 
     return 0;
   }
 ```
-        
 
-Como vamos usar esse mesmo código para linkar com vários códigos ASM diferentes, deixamos o nome da função como uma constante (``ASM_SYM``) e vamos passar um valor para essa constante para o ``avr-gcc``, no momento de compilar esse código.
+
+Como vamos usar esse mesmo código para linkar com vários códigos ASM diferentes, deixamos o nome da função como uma constante (``ASM_SYM``) e vamos passar um valor dessa constante para o ``avr-gcc`` (via flag `-D`) no momento de compilar esse código.
 
 Compilando tudo e juntando em um mesmo binário
 ==============================================
@@ -135,6 +133,8 @@ A compilação do código em C é simples, nada demais em relação aqualquer ou
 ```
   $ avr-gcc -mmcu=atmega328p -Os -DF_CPU=16000000 -DASM_SYM=_binary_blinks_bin_start -o main.elf main.c blinks.elf
 ```
+
+Perceba que aqui estamos passando o parametro `-DASM_SYM=_binary_blinks_bin_start` para o `avr-gcc`. Isso faz com que ele use esse símbolo na chamada `uint8_t total_blinks = ASM_SYM(5)`. Isso significa que é como se o código fosse escrito assim: `uint8_t total_blinks = _binary_blinks_bin_start(5);`
 
 Podemos olhar o ELF gerado para saber se o código parece correto:
 
@@ -203,7 +203,7 @@ Agora vamos fazer o mesmo procedimento mas usando um código Assembly que faz us
     clr r25
     ldi r23, 0xa
     add r24, r23
-    ret 
+    ret
 ```
 
 O código é basicamente o mesmo, mas forçamos um ``jmp`` apenas para ilustrar nosso problema. Depois que compilamos com o AVRASM2 e geramos o elf temos o seguinte:
@@ -303,7 +303,7 @@ Agora sim temos o ``jmp`` para o endereço correto! Não sei ao certo porque iss
     rjmp _add
   _ret:
     ret
-   
+
   _add:
     call _ldi
   _add1:
@@ -315,10 +315,10 @@ Agora sim temos o ``jmp`` para o endereço correto! Não sei ao certo porque iss
     clr r1
     clr r25
     ret
-    
+
   _ldi:
     ldi r23, 0x5
-    jmp _add1 
+    jmp _add1
 ```
 
 Diassembly do ELF final:
@@ -356,7 +356,7 @@ Ainda tenho muita pesquisa para fazer e algumas hipóteses para confirmar, mas i
 
 Obrigado pela leitura e fique ligado em posts futuros sobre esse assunto. Ainda tenho muita pesquisa para fazer sobre isso.
 
-Próximo post: `Convertendo Intel HEX para ELF32-avr criando tabela de símbolos e tabela de realocação <{filename}convertendo-ihex-para-elf-preservando-as-labels-originais-como-simbolos.rst>`_.
+Próximo post: [Convertendo Intel HEX para ELF32-avr criando tabela de símbolos e tabela de realocação]({{<ref "/posts/convertendo-ihex-para-elf-preservando-as-labels-originais-como-simbolos.md">}})
 
 
 [intel-hex]: http://en.wikipedia.org/wiki/Intel_HEX
