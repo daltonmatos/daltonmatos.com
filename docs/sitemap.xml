@@ -4,7 +4,47 @@
   
   <url>
     <loc>https://daltonmatos.com/</loc>
-    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
+    <lastmod>2020-01-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/async/</loc>
+    <lastmod>2020-01-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/asyncworker/</loc>
+    <lastmod>2020-01-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/2020/01/asyncworker-handler-http-recebendo-mais-do-que-request/</loc>
+    <lastmod>2020-01-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/posts/</loc>
+    <lastmod>2020-01-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/python/</loc>
+    <lastmod>2020-01-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/</loc>
+    <lastmod>2020-01-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/tags/typehint/</loc>
+    <lastmod>2020-01-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://daltonmatos.com/2020/01/chamando-funcoes-python-com-assinatura-dinamica-baseada-em-typehint/</loc>
+    <lastmod>2020-01-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -28,42 +68,12 @@
   </url>
   
   <url>
-    <loc>https://daltonmatos.com/posts/</loc>
-    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://daltonmatos.com/tags/</loc>
-    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://daltonmatos.com/tags/yubikey/</loc>
     <lastmod>2019-11-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://daltonmatos.com/tags/async/</loc>
-    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://daltonmatos.com/tags/dev/</loc>
-    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://daltonmatos.com/2019/03/escrevendo-workers-assincronos-em-python-com-asyncowrker/</loc>
-    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://daltonmatos.com/tags/python/</loc>
-    <lastmod>2019-03-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://daltonmatos.com/tags/worker/</loc>
     <lastmod>2019-03-21T00:00:00+00:00</lastmod>
   </url>
   

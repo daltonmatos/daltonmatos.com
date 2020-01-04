@@ -6,10 +6,46 @@
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Tue, 05 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 04 Jan 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>async</title>
+      <link>https://daltonmatos.com/tags/async/</link>
+      <pubDate>Sat, 04 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/async/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>asyncworker</title>
+      <link>https://daltonmatos.com/tags/asyncworker/</link>
+      <pubDate>Sat, 04 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/asyncworker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://daltonmatos.com/tags/python/</link>
+      <pubDate>Sat, 04 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>typehint</title>
+      <link>https://daltonmatos.com/tags/typehint/</link>
+      <pubDate>Sat, 04 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/tags/typehint/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>crypt</title>
@@ -44,42 +80,6 @@
       <pubDate>Tue, 05 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/tags/yubikey/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>async</title>
-      <link>https://daltonmatos.com/tags/async/</link>
-      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/async/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>dev</title>
-      <link>https://daltonmatos.com/tags/dev/</link>
-      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/dev/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>python</title>
-      <link>https://daltonmatos.com/tags/python/</link>
-      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>worker</title>
-      <link>https://daltonmatos.com/tags/worker/</link>
-      <pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://daltonmatos.com/tags/worker/</guid>
       <description></description>
     </item>
     

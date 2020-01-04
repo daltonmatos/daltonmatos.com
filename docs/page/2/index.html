@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.60.1" />
+<meta name="generator" content="Hugo 0.62.0" />
 
     
 
@@ -23,7 +23,7 @@
 <meta property="og:description" content="Dalton Barreto" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://daltonmatos.com/" />
-<meta property="og:updated_time" content="2019-11-05T00:00:00+00:00" />
+<meta property="og:updated_time" content="2020-01-04T00:00:00+00:00" />
 
 
     
@@ -189,13 +189,13 @@ html {
 
 <article>
   <header>
-    <h1>Multi Factor Authentication na linha de comando</h1>
+    <h1>Uso da Yubikey no Android</h1>
     
     
 <div class="post__meta">
     
     
-      <i class="fas fa-calendar-alt"></i> Sep 15, 2018
+      <i class="fas fa-calendar-alt"></i> Sep 29, 2018
     
     
     
@@ -206,25 +206,19 @@ html {
           <br/>
            <i class="fas fa-tags"></i>
           
-          <a class="badge badge-tag" href="/tags/totp">totp</a>
-           
-      
-          <a class="badge badge-tag" href="/tags/mfa">mfa</a>
-           
-      
-          <a class="badge badge-tag" href="/tags/otp">otp</a>
+          <a class="badge badge-tag" href="/tags/yubikey">yubikey</a>
            
       
           <a class="badge badge-tag" href="/tags/pass">pass</a>
            
       
-          <a class="badge badge-tag" href="/tags/2fa">2fa</a>
+          <a class="badge badge-tag" href="/tags/gpg">gpg</a>
           
       
     
     
     <br/>
-    <i class="fas fa-clock"></i> 4 min read
+    <i class="fas fa-clock"></i> 3 min read
 </div>
 
 
@@ -232,59 +226,40 @@ html {
   
   
   <div class="post">
-    <p>Acredito que a forma mais comum de MFA atualmente é o uso de &ldquo;Authenticator Apps&rdquo;. Usei por muito tempo o Google Authenticator até que percebi que, se perdesse meu celular, estaria preso pra fora de todas as contas onde tinha MFA configurado.</p>
-<p>Quando percebi isso, descobri o <a href="https://authy.com/">Authy</a>, que faz backup dos seus MFAs pra você e pode sincronizar entre múltiplos dispositivos. Isso já é muito bom, pois você não fica totalmente dependente do celular.</p>
-<p>O problema começa quando você precisa recuperar o controle da sua conta Authy. Se você perde o celular sem ter o Authy sincronizado em nenhum outro dispositivo, só resta a você passar por um processo de comprovação de identidade exigido pelo Authy para poder ter novamente em mãos seus tokens MFA (Esse processo pode ser desconsiderado se você mantiver o mesmo número de telefone).</p>
-<p>Esse processo, segundo a documentação deles, leva alguns dias. Isso nem é tão ruim assim considerando que depois disso (e dando tudo certo!) você terá de volta todos os seus tokens e isso significa que não precisará passar pelo processo de recuperação de conta de <strong>todos</strong> os lugares onde você tem MFA habilitado.</p>
-<p>Pensando em facilitar minha vida nesse sentido, pensei em eu mesmo ter uma cópia de todos os meus tokens MFA. Minha primeira tentativa foi pedir o meu próprio backup para o suporte do Authy, o que me foi negado.</p>
-<p>A opção que restou então foi re-gerar todos os meus MFAs e desa vez, guardar uma cópia de cada um deles.</p>
-<p>Já que vou tê-los nas mãos, comecei então a pesquisar como funcionava o algoritmo que gera os tokens que ficam sendo renovados no Authenticator App, afinal, descobrindo isso poderia gerar esses tokens eu mesmo, até mesmo fora de um app de celular.</p>
-<h1 id="o-protocolo">O Protocolo</h1>
-<p>Acontece que o protocolo usado pelos apps e obviamente também usados pelas suas contas que requerem MFA é conhecido e pode ser implementado por qualquer um.</p>
-<p>O protocolo é o TOTP (Time-Based One Time Password). Como a intenção desse texto não é estudar o algoritmo e si, deixo aqui um link com uma explicação mais detalhada. <a href="https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm">TOTP na Wikipédia</a></p>
-<h1 id="totp-na-linha-de-comando">TOTP na linha de comando</h1>
-<p>Existe um comando já disponível e que implementa esse algoritmo, é o <code>oathtool</code>.</p>
-<p>O que você precisa para usá-lo é a chave privada gerada pelo seu provider, ou seja, o provedor da conta onde você está habilitando MFA.</p>
-<p>Já reparou que, além do QRcode que geralmente é mostrado, sempre tem um link dizendo algo nessa linha: &ldquo;Não consegue scanear o código acima?” ou, &ldquo;Digite manualmente&rdquo;, etc.</p>
-<p>Esse é o link que vai te dar o <strong>conteúdo</strong> da chave privada que está codificada no QRcode. De posse desse conteúdo, basta passá-lo para o <code>oathtool</code>:</p>
-<p><strong>Nota</strong>: Acabei de descobrir que o Mercado Livre não permite que você veja essa informação. Eles, de alguma forma, mandam os dados direto pro aplicativo, no caso deles é o Authy.</p>
-<p>Veja um exemplo de como é na AWS, no momento em que você está ativando MFA para uma conta qualquer:</p>
-<p><a href="/static/19a55b06/mfa-aws.png"><img src="/static/19a55b06/mfa-aws.png" alt="Ativação de MFA na AWS"></a></p>
-<p>Nesse caso, a chave é <code>YOPZKAL6OQSQM6FTM6TI4OHHDIWUOS5U5IAP7OEQZTGMPMFDFT7JT6RR4R4HEE2J</code>. É esse valor que precisamos passar para a ferramenta e é ele que vamos usar de exemplo nesse texto.</p>
-<pre><code>$ oathtool -b YOPZKAL6OQSQM6FTM6TI4OHHDIWUOS5U5IAP7OEQZTGMPMFDFT7JT6RR4R4HEE2J
-038301
-</code></pre><p>Dessa forma ele vai gerar <strong>exatamente</strong> os mesmos tokens que o celular geraria, caso tivesse escaneado o QRcode correspondente.</p>
-<p>A partir de agora podemos gerar nossos tokens na linha de comando, sempre que formos perguntados pelo segundo fator, no momento do login.</p>
-<p><strong>Nota</strong>: Já tentou scanear esse QRcode sem usar o aplicativo de Autenticação? Dá uma olhada e vai ver que a chave privada está lá, em algum lugar.</p>
-<h1 id="plugin-otp-para-o-pass">Plugin OTP para o pass</h1>
-<p>Minha <a href="/2018/09/so-long-lastpass-and-thank-you-for-all-the-fish/">migração do LastPass para o pass</a> ficou ainda melhor quando descobri que existe um plugin para o <code>pass</code> que é capaz de gerar esses tokens MFA.</p>
-<p>O que precisamos fazer é apenas ter em mãos a chave privada de cada um dos MFAs e passar isso para o plugin, dessa forma:</p>
-<pre><code>$ pass otp append -s -i &lt;provider&gt; &lt;pass-name&gt;
-</code></pre><p>Onde <code>&lt;provider&gt;</code> é um identificador <strong>qualquer</strong> apenas para te dizer de qual conta é esse MFA e <code>&lt;pass-name&gt;</code> é uma entrada no seu <a href="https://www.passwordstore.org/">password-store</a>.
-A partir desse ponto podemos fazer isso:</p>
-<pre><code>$ pass otp &lt;pass-name&gt;
-645398
-</code></pre><p>E ele vai gerar um token MFA <strong>válido</strong> pra nós referente ao MFA da entrada <code>&lt;pass-name&gt;</code>.</p>
-<h1 id="registrando-esse-mesmo-mfa-no-celular">Registrando esse mesmo MFA no celular</h1>
-<p>Se você preferir ou até mesmo quiser esse esse MFA no PC <strong>e</strong> no celular, basta re-gerar o qrcode original, usando esse mesmo plugin do <code>pass</code>, assim:</p>
-<pre><code>$ pass otp uri -q &lt;pass-name&gt;
-</code></pre><p>Onde <code>&lt;pass-name&gt;</code> é a entrada onde o MFA está gravado. Nesse momento o <code>pass</code> vai te mostrar um QRcode que você pode escanear no celular e usar normalmente.</p>
-<p>Essa é uma forma de você ter <strong>total</strong> controle de todos os seus tokens MFA. Tendo as chaves privadas de cada um deles, não importa mais se você perdeu o celular ou não, pois você não depende mais <strong>exclusivamente</strong> do celular para gerar os tokens.</p>
-<p>Mas também cabe a você guardar esses tokens de forma segura.</p>
+    <p>O último ponto que faltava na minha migração para um novo password manager era poder acessar meus dados usando o celular.</p>
+<p>Aqui vou mostrar cada um dos apps que uso para poder ter o celular como uma ferramenta completa para poder usar meu smartcard.</p>
+<h1 id="suporte--yubikey">Suporte à yubikey</h1>
+<p>Os smartcards da <a href="https://www.yubico.com/products/yubikey-hardware/">Yubico</a> já são naturalmente suportados pelo Android. Os <a href="https://www.yubico.com/products/yubikey-for-mobile/">smartcards que possuem NFC</a> têm suporte ainda melhor, pois basta aproximar o telefone do smartcard para que eles se comuniquem.</p>
+<p>No meu caso tenho uma <a href="https://www.yubico.com/product/yubikey-4-series/#yubikey-4-nano">Yubikey USB-A</a>, então uso um adaptador USB-A &gt; USB-C para poder usá-la no celular. Funciona muito bem.</p>
+<p><strong>Nota</strong>: Acredito que para funcionar plugado na USB do celular o aparelho precisa ter suporte a <a href="https://en.wikipedia.org/wiki/USB_On-The-Go">USB OTG</a>, que é o meu caso.</p>
+<h1 id="open-keychain">Open Keychain</h1>
+<p>O <a href="https://www.openkeychain.org/">OpenKeyChain</a> é o responsável por suportar o smartcard. Pense nele como uma espécie de &ldquo;driver&rdquo;. Além de implementar suporte genérico ao uso de um smartcard, ele também implementa o necessário para que você consiga usar as funcionalidades relacionadas à chave GPG, ou seja, ele é capaz de assinar conteúdos, encriptar/decriptar dados usando a chave privada que está no smartcard.</p>
+<p>Como o nome já diz ele é uma Keychain, isso significa que você pode importar chaves públicas de outras pessoas e isso te dá a possibilidade de trocar conteúdo encriptado com elas.</p>
+<p>Além disso ele expõe uma API pública, dessa forma outros apps podem usar essa API e por isso podem também dar suporte ao uso de smartcards. É o caso do TermBot, que veremos a seguir.</p>
+<h1 id="termbot">TermBot</h1>
+<p>Como tenho minha <a href="/2018/08/usando-seu-keyring-gpg-para-guardar-sua-chave-ssh/">chave SSH dentro do smartcard</a> seria ideal poder ter um cliente SSH que fosse capaz de usar essa chave.</p>
+<p>Existe um app que faz isso e é o <a href="https://play.google.com/store/apps/details?id=org.sufficientlysecure.termbot">TermBot</a>. O que ele faz, na verdade, é falar com a API do OpenKeyChain. Dessa forma tenho como fazer SSH para máquinas remotas usando a mesma chave que está dentro do smartcard.</p>
+<h1 id="password-store">Password Store</h1>
+<p>O App <a href="https://github.com/zeapo/Android-Password-Store">PasswordStore</a> é quem sabe ler os dados gravados <a href="/2018/09/so-long-lastpass-and-thank-you-for-all-the-fish/">no password manager que uso</a>, o <a href="https://passwordstore.org">pass</a>.</p>
+<p>Com esse App consigo sincronizar todos os dados de senhas, assim não preciso sempre do PC para pegar uma senha caso precise me logar em algum dos sites usando o celular.</p>
+<p>Diferente do <code>pass</code>, esse app não possui suporte a plugins o que significa que não posso, através dele, <a href="/2018/09/multi-factor-authentication-na-linha-de-comando/">gerar os tokens MFA que consigo gerar na linha de comando</a> e no <a href="https://github.com/browserpass/browserpass">browser</a>.</p>
+<p>Isso significa que, nesses casos onde preciso de um token MFA tenho então que usar um Authentication App, o que torna tudo muito curioso pois agora só preciso do App que gera o token quando estou logando em uma conta <strong>usando o próprio celular</strong>.</p>
+<p>O que eu estava acostumado a fazer era sempre pegar o celular quando estava logando em uma conta <strong>usando o PC</strong>. Agora consigo fazer todo o fluxo (desde preencher usuário/senha até preencher o token MFA) usando apenas o PC, o que é de certa forma libertador pois não dependo mais do celular. Inclusive posso eventualmente perdê-lo sem <strong>nenhum prejuízo</strong> para o meu fluxo do dia-a-dia.</p>
+<p>Com esses apps que citei acima consigo, no celular: Assinar conteúdos, encriptar, decriptar, autenticar em servidores SSH e ler todas as minhas senhas do meu password manager. Tudo isso usando a chave privada que está dentro do smartcard.</p>
 
   </div>
   
 
 <div class="navigation navigation-single">
     
-    <a href="/2018/09/so-long-lastpass-and-thank-you-for-all-the-fish/" class="navigation-prev">
+    <a href="/2018/09/o-que-acontece-se-minha-yubikey-parar-de-funcionar/" class="navigation-prev">
       <i aria-hidden="true" class="fa fa-chevron-left"></i>
-      <span class="navigation-tittle">So long LastPass and thank you for all the fish</span>
+      <span class="navigation-tittle">O que acontece se minha Yubikey parar de funcionar?</span>
     </a>
     
     
-    <a href="/2018/09/o-que-acontece-se-minha-yubikey-parar-de-funcionar/" class="navigation-next">
-      <span class="navigation-tittle">O que acontece se minha Yubikey parar de funcionar?</span>
+    <a href="/2018/10/como-armazeno-de-forma-segura-meus-dados-sensiveis-de-acessos-a-contas-online/" class="navigation-next">
+      <span class="navigation-tittle">Como armazeno de forma segura meus dados sensíveis de acessos a contas online</span>
       <i aria-hidden="true" class="fa fa-chevron-right"></i>
     </a>
     
@@ -305,9 +280,18 @@ A partir desse ponto podemos fazer isso:</p>
 
 <li>
   <span class="list__title--small">
-    <a href="/2018/09/so-long-lastpass-and-thank-you-for-all-the-fish/" >So long LastPass and thank you for all the fish</a>
+    <a href="/2018/09/o-que-acontece-se-minha-yubikey-parar-de-funcionar/" >O que acontece se minha Yubikey parar de funcionar?</a>
       
-      <time class="pull-right hidden-tablet">Sep 14 &#39;18</time>
+      <time class="pull-right hidden-tablet">Sep 20 &#39;18</time>
+      
+  </span>
+</li>
+
+<li>
+  <span class="list__title--small">
+    <a href="/2018/09/multi-factor-authentication-na-linha-de-comando/" >Multi Factor Authentication na linha de comando</a>
+      
+      <time class="pull-right hidden-tablet">Sep 15 &#39;18</time>
       
   </span>
 </li>
@@ -317,6 +301,24 @@ A partir desse ponto podemos fazer isso:</p>
     <a href="/2018/09/modelos-de-seguranca-para-uso-de-smartcards/" >Modelos de segurança para uso de smartcards</a>
       
       <time class="pull-right hidden-tablet">Sep 06 &#39;18</time>
+      
+  </span>
+</li>
+
+<li>
+  <span class="list__title--small">
+    <a href="/2018/08/usando-seu-keyring-gpg-para-guardar-sua-chave-ssh/" >Usando seu keyring GPG para guardar sua chave SSH</a>
+      
+      <time class="pull-right hidden-tablet">Aug 12 &#39;18</time>
+      
+  </span>
+</li>
+
+<li>
+  <span class="list__title--small">
+    <a href="/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/" >Preparando uma Yubikey 4 Nano para uso diário</a>
+      
+      <time class="pull-right hidden-tablet">Jul 30 &#39;18</time>
       
   </span>
 </li>

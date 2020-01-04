@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.60.1" />
+<meta name="generator" content="Hugo 0.62.0" />
 
     
     
@@ -212,16 +212,13 @@ html {
           <br/>
            <i class="fas fa-tags"></i>
           
-          <a class="badge badge-tag" href="/tags/dev">dev</a>
-           
-      
           <a class="badge badge-tag" href="/tags/python">python</a>
            
       
           <a class="badge badge-tag" href="/tags/async">async</a>
            
       
-          <a class="badge badge-tag" href="/tags/worker">worker</a>
+          <a class="badge badge-tag" href="/tags/asyncworker">asyncworker</a>
           
       
     
@@ -260,7 +257,7 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">myhandl
     <span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span></code></pre></div>
 <p>O que estamos vendo aqui?</p>
 <p>Primeiro construímos nossa <code>App</code>. Esse é o ponto central do seu código. Ali estará registrado tudo que é necessário para que seus handlers possam trabalhar e fazer, cada um, o seu papel.</p>
-<p>Depois vem a definição propriamente dita do handler. Ele é decorado com <a href="mailto:%60@app.route">`@app.route</a>()`e é aqui que a mágica acontece.</p>
+<p>Depois vem a definição propriamente dita do handler. Ele é decorado com <code>@app.route()</code>e é aqui que a mágica acontece.</p>
 <p>É nesse momento que escolhemos de qual tipo esse handler vai ser, ou seja, de onde virão os estímulos que farão esse handler ser executado.</p>
 <p>Isso é o mínimo necessário para se escrever um handler que fará alguma coisa.</p>
 <p>Nesse post veremos como usar o backend RabbitMQ para escrever um handler assíncrono.</p>
@@ -311,7 +308,7 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">check</
 app<span style="color:#f92672">.</span>run()</code></pre></div>
 <p>Vamos analisar os parâmetros que estamos passando aqui.</p>
 <p>Na linha de construção da <code>App()</code> passamos as credenciais de acesso ao RabbitMQ. Passamos também o parâmetro de <code>prefetch</code>, que diz quantas mensagens o RabbitMQ poderá entregar a esse consumer mesmo sem ele pedir.</p>
-<p>Agora vamos analisar a linha do <a href="mailto:%60@app.route">`@app.route</a>()`. O primeiro parâmetro é uma lista de nomes de filas que fornecerão mensagens para esse handler. Perceba que, como esse parâmetro é uma lista, podemos usar um mesmo handler para consumir de múltiplas filas diferentes.</p>
+<p>Agora vamos analisar a linha do <code>@app.route()</code>. O primeiro parâmetro é uma lista de nomes de filas que fornecerão mensagens para esse handler. Perceba que, como esse parâmetro é uma lista, podemos usar um mesmo handler para consumir de múltiplas filas diferentes.</p>
 <p>O <code>type=RouteTypes.AMQP_RABBITMQ</code> é auto explicativo. Estamos selecionando qual o tipo de backend fornecerá dados a esse handler.</p>
 <p>Agora a parte do <code>options=</code>. Essa opção serve para passarmos quaisquer tipos de opções adicionais para cada tipo de backend. Aqui estamos usando a opção <code>BULK_SIZE</code>. Essa opção permite que o asyncworker entregue as mensagens para o handler em &ldquo;lotes&rdquo; com tamanho de no máximo <code>BULK_SIZE</code> itens. Aqui temos uma observação importante: O valor final escolhido para o tamanho do lote é <code>min(prefetch, BULK_SIZE)</code>.</p>
 <p>Pensa em um handler que precisa processar muitas mensagens e gravar dados dessas mensagens em um storage. Em casos onde esse storage aceita operações em lote (como ElasticSearch e MongoDB, por exemplo) o handler pode se aproveitar disso e mandar os dados para o storage também em lote.</p>

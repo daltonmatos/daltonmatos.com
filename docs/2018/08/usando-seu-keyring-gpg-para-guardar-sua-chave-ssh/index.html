@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.60.1" />
+<meta name="generator" content="Hugo 0.62.0" />
 
     
     
@@ -281,9 +281,9 @@ What keysize do you want? (2048) 4096
 Key is valid for? (0)
 </code></pre><p>Confirme os próximos menus e o GnuPG começará a criar sua chave. Depois que estiver de volta ao prompt principal do GnuPG, digite <code>q</code> e confirme caso seja perguntado se quer salvar as alterações.</p>
 <p>Nesse momento temos uma chave capaz de autenticar e que pode ser usada em sessões SSH.</p>
-<h1 id="sshagent">ssh-agent</h1>
+<h1 id="ssh-agent">ssh-agent</h1>
 <p>O <code>ssh-agent</code> é um programa adicional que consegue gerenciar suas chaves privadas e cachear suas passphrases (se configurado pra isso). O grande lance aqui é que o comando <code>ssh</code> passa a não se importar mais de onde a chave privada está vindo, o que ele faz é apenas &ldquo;conversar&rdquo; com o agent pedindo que o acesso seja feito e o agent é quem lida com a chave para que o acesso aconteça.</p>
-<h2 id="configurando-gnupg-como-sshagent">Configurando GnuPG como ssh-agent</h2>
+<h2 id="configurando-gnupg-como-ssh-agent">Configurando GnuPG como ssh-agent</h2>
 <p>Essa configuração é feita em dois lugares. Um é o <code>gpg-agent.conf</code> (esse arquivo fica na home do GnuPG, que está em <code>~/.gnupg/</code>) onde vamos apenas adicionar uma linha, assim:</p>
 <pre><code>enable-ssh-support
 </code></pre><p>A segunda parte é indicar ao <code>ssh</code> onde está o socket do &ldquo;ssh-agent&rdquo;, nesse caso, o gpg-agent se fazendo passar por ssh-agent.</p>
@@ -295,7 +295,7 @@ if [ -z &quot;${SSH_TTY}&quot; ]; then
   export SSH_AUTH_SOCK=&quot;$(gpgconf --list-dirs agent-ssh-socket)&quot;
 fi
 </code></pre><p>O <code>if</code> serve apenas para você não ativar o <code>gpg-agent</code> caso já esteja em uma sessão remota, dessa forma você pode usar esse mesmo &ldquo;shellrc&rdquo; em um servidor remoto, se quiser.</p>
-<h2 id="habilitando-sua-nova-chave-para-ser-usada-pelo-gpgagent">Habilitando sua nova chave para ser usada pelo gpg-agent</h2>
+<h2 id="habilitando-sua-nova-chave-para-ser-usada-pelo-gpg-agent">Habilitando sua nova chave para ser usada pelo gpg-agent</h2>
 <p>As chaves que o gpg-agent oferece na conexões SSH ficam listadas no arquivo <code>~/.gnupg/sshcontrol</code>. Precisamos colocar ali, um por linha, o keygrip de cada uma das chaves que queremos usar.</p>
 <p>Para pegar o keygrip da sua chave GPG, faça assim:</p>
 <pre><code>$ gpg -K --with-keygrip

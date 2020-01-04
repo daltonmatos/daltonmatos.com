@@ -6,10 +6,29 @@
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Tue, 05 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 04 Jan 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://daltonmatos.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Asyncworker: Handler HTTP recebendo mais do que Request</title>
+      <link>https://daltonmatos.com/2020/01/asyncworker-handler-http-recebendo-mais-do-que-request/</link>
+      <pubDate>Sat, 04 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2020/01/asyncworker-handler-http-recebendo-mais-do-que-request/</guid>
+      <description>Contexto Uma implementação recente no asyncworker (doc) permitiu que um handler http pudesse receber parâmetros mais complexos do que simplesmente Request, que é o que normalmente um handler http recebe. Essa implementação permite que possíveis valores possam ser acumulados ao longo da execução do código e no momento que o handler for chamado para atender o Request atual, esses valores seriam consultados para saber se o handler está interessado em receber algum deles.</description>
+    </item>
+    
+    <item>
+      <title>Chamando funções Python com assinatura dinâmica Baseada em Typehint</title>
+      <link>https://daltonmatos.com/2020/01/chamando-funcoes-python-com-assinatura-dinamica-baseada-em-typehint/</link>
+      <pubDate>Fri, 03 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2020/01/chamando-funcoes-python-com-assinatura-dinamica-baseada-em-typehint/</guid>
+      <description>Contexto Com a possibilidade de declarar tipos em códigos python vem uma possibilidade interessante: Poder deduzir quais parâmetros uma função (ou método) quer receber e fazer essa chamada dinamicamente.
+Isso te dá a possibilidade de eventualmente mudar a assinatura de um método e ainda assim não mudar a chamada a esse método, isso porque os parâmetros são &amp;ldquo;resolvidos&amp;rdquo; no momento da chamada e não mais no momento da escrita do código.</description>
+    </item>
     
     <item>
       <title>Guia definitivo sobre como guardo minhas senhas e outras informações sensíveis</title>

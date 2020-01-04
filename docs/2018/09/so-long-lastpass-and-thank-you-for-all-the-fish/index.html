@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.60.1" />
+<meta name="generator" content="Hugo 0.62.0" />
 
     
     
@@ -247,7 +247,7 @@ html {
 <h1 id="pass-principais-conceitos">Pass: Principais conceitos</h1>
 <p>O projeto é formato por apenas um comando: <code>pass</code>. Através dele você consegue manipular todas as entradas que tiverem sido criadas.</p>
 <p>Por padrão, as senhas estão gravadas em <code>~/.password-store</code> e essa pasta é um repositório Git. Isso já é a primeira vantagem pois permite que você tenha esses dados em múltiplos dispositivos. Eu, por exemplo, tenho no meu computador pessoal, no computador do trabalho e no celular.</p>
-<h1 id="estrutura-do-passwordstore">Estrutura do ~/.password-store</h1>
+<h1 id="estrutura-do-password-store">Estrutura do ~/.password-store</h1>
 <p>A estrutura é simples. Você pode criar quantos níveis de pasta você quiser, mas a última pasta da árvore representa o site e as entradas dentro dessa pasta representam os múltiplos logins que você tem nesse site, vejamos um exemplo:</p>
 <pre><code>$ pass social/
 social
@@ -274,7 +274,7 @@ Backup Codes:
 <p>Se quisermos compartilhar essa senha com mais alguém, poderíamos fazer:</p>
 <pre><code>$ pass init -p coding/github.com/ GPGID1 GPGID2 ...
 </code></pre><p>Fazendo isso, o <code>pass</code> iria re-encriptar todas as senhas dentro de <code>coding/github.com/</code> com as chaves GPG (<code>GPGID1 GPGID2 ...</code>) passadas na linha de comando.</p>
-<h2 id="plugin-passotp">Plugin: pass-otp</h2>
+<h2 id="plugin-pass-otp">Plugin: pass-otp</h2>
 <p>Esse plugin é uma implementação possível para termos <a href="/2018/09/multi-factor-authentication-na-linha-de-comando/">MFA na linha de comando</a>. Com ele podemos gerar os mesmos tokens que tínhamos no celular, só que sem precisar pegar o celular toda hora que formos fazer login nas contas.</p>
 <p>Para inserir uma configuração OTP em uma entrada qualquer faça o seguinte:</p>
 <pre><code>$ pass otp append -s -i &lt;TOTPKEY&gt; &lt;pass-name&gt;

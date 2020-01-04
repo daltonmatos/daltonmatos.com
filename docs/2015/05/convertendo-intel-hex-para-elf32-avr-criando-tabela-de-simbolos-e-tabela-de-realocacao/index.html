@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.60.1" />
+<meta name="generator" content="Hugo 0.62.0" />
 
     
     
@@ -446,7 +446,7 @@ html {
 </code></pre><p>Agora o que precisamos fazer é transformar essa saída em uma tabela de realocação, dentro o ELF. Para isso usamos a ferramenta <a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/elf-add-symbol.cpp"><code>elf-add-symbol</code></a>. Assumindo que gravamos esse conteudo em <code>blink_call.asm.symtab</code> podemos fazer o seguinte:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">cat blink_call.asm.symtab | ./elf-add-symbol blink_call.asm.elf
 </code></pre></div><p>Essa chamada modifica o arquivo <code>blink_call.asm.elf</code> adicionando a tabela de símbolos e a tabela de realocação! E então estamos prontos para link-editar nosso ELF com nosso código C.</p>
-<h2 id="engenharia-reversa-para-descobrir-o-valor-do-ravrcall">Engenharia reversa para descobrir o valor do R_AVR_CALL</h2>
+<h2 id="engenharia-reversa-para-descobrir-o-valor-do-r-avr-call">Engenharia reversa para descobrir o valor do R_AVR_CALL</h2>
 <p>A tabela de realocação tem a uma <a href="http://wiki.osdev.org/ELF_Tutorial#Relocation_Sections">estrutura espefícia</a>. Um dos campos dessa estrutura é o <code>r_info</code>. Esse campo diz duas coisas: Qual o símbolo está sendo realocado (8 bits mais significativos) e qual o tipo de realocação será feita (8 bits menos significativos). Quando escrevi o <a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/elf-add-symbol.cpp"><code>elf-add-symbol</code></a>, na biblioteca que usei (<a href="http://elfio.sourceforge.net/">ELFIO</a>) só existiam constantes para os tipos de realocação do ELF32 para arquitetura x86 então, de alguma forma, eu precisava descobrir qual o valor eu deveria colocar nesse campo para a realocação de símbolos para AVR.</p>
 <p>O que fiz foi compilar um arquivo assembly com o <code>avr-gcc</code> e usando a ferramenta <code>avr-readelf</code> consegui ver o seguinte:</p>
 <pre><code>

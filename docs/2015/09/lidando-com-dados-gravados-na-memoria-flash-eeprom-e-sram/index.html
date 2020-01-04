@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.60.1" />
+<meta name="generator" content="Hugo 0.62.0" />
 
     
     
@@ -285,7 +285,7 @@ html {
 </code></pre></div><p>Depois que você já tiver modificado seu código original para fazer uso dessa macro, fica bem mais fácil corrigir os valores que são carregados no registrador <code>Z</code>, pois poderemos mexer apenas nessa macro, e não no código inteiro. Esse é um exemplo de uso dessa macro:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">  <span style="color:#a6e22e">ldz</span> <span style="color:#66d9ef">data</span>*<span style="color:#ae81ff">2</span>
 </code></pre></div><p>O que precisamos agora é descobrir o quanto nosso código Assembly se deslocou depois que foi linkado ao código C. Devemos então adicionar esse &ldquo;offset&rdquo; ao código da nossa macro <code>ldz</code>, assim todos os endereços serão corrigidos. Isso só funciona pois nosso código assembly original é composto por um grande arquivo binário. Se tivéssemos múltiplos arquivos Assembly, convertidos para <code>avr-elf32</code> e depois entregues para o <code>avr-gcc</code> para link-edição, provavelmente teríamos deslocamentos diferentes para as labels do código original. Por isso é importante manter seu código Assembly Legado como um binário único, convertido de Intel Hex para <code>avr-elf32</code> e entregue ao <code>avr-gcc</code>.</p>
-<h1 id="preparando-a-macro-ldz-para-considerar-o-deslocamento-aplicado-pelo-avrgcc">Preparando a macro ldz para considerar o deslocamento aplicado pelo avr-gcc</h1>
+<h1 id="preparando-a-macro-ldz-para-considerar-o-deslocamento-aplicado-pelo-avr-gcc">Preparando a macro ldz para considerar o deslocamento aplicado pelo avr-gcc</h1>
 <p>Como sabemos que todas as nossas labels serão deslocadas após o processo de link-edição, precisamos preparar nossa macro ldz para considerar esse offset e poder corrigir todos os endereços carregados no registrador <code>Z</code>. Vejamos um exemplo simples:</p>
 <p>Vamos considerar nossa label de exemplo <code>data:</code>, localizada no endereço <code>0x6e9</code>. Se formos rodar o código Assembly sozinho, a chamada à macro <code>ldz</code> ficaria assim (vamos substituir o nome da label pelo seu endereço para ficar mais claro):</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"> <span style="color:#a6e22e">ldz</span> <span style="color:#ae81ff">0x6e9</span>*<span style="color:#ae81ff">2</span>

@@ -8,7 +8,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.60.1" />
+<meta name="generator" content="Hugo 0.62.0" />
 
     
 
@@ -23,7 +23,7 @@
 <meta property="og:description" content="Dalton Barreto" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://daltonmatos.com/" />
-<meta property="og:updated_time" content="2019-11-05T00:00:00+00:00" />
+<meta property="og:updated_time" content="2020-01-04T00:00:00+00:00" />
 
 
     
@@ -189,13 +189,13 @@ html {
 
 <article>
   <header>
-    <h1>Lidando com dados gravados na memória flash, EEPROM e SRAM</h1>
+    <h1>(Arch) Linux Com Full Disk Encryption</h1>
     
     
 <div class="post__meta">
     
     
-      <i class="fas fa-calendar-alt"></i> Sep 27, 2015
+      <i class="fas fa-calendar-alt"></i> Aug 02, 2018
     
     
     
@@ -206,22 +206,19 @@ html {
           <br/>
            <i class="fas fa-tags"></i>
           
-          <a class="badge badge-tag" href="/tags/avr">avr</a>
+          <a class="badge badge-tag" href="/tags/linux">linux</a>
            
       
-          <a class="badge badge-tag" href="/tags/microcontrollers">microcontrollers</a>
+          <a class="badge badge-tag" href="/tags/crypt">crypt</a>
            
       
-          <a class="badge badge-tag" href="/tags/avr-c">avr-c</a>
-           
-      
-          <a class="badge badge-tag" href="/tags/avr-assembly">avr-assembly</a>
+          <a class="badge badge-tag" href="/tags/luks">luks</a>
           
       
     
     
     <br/>
-    <i class="fas fa-clock"></i> 14 min read
+    <i class="fas fa-clock"></i> 5 min read
 </div>
 
 
@@ -229,261 +226,83 @@ html {
   
   
   <div class="post">
-    <p>Esse post faz parte de uma <a href="https://daltonmatos.com/avr/">série de posts</a> sobre mistura de código C (avr-gcc) com código Assembly (<code>avrasm2</code>). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.</p>
-<h1 id="contexto">Contexto</h1>
-<p>Até agora, nos posts anteriores vimos apenas como fazer chamadas de função de uma linguagem para outra, mas uma parte muito importante de qualquer projeto com micro-controladores é a possibilidade de gravar dados na área de memória do chip (memória flash, por exemplo). É bem comum usar essa memória para gravar valores que serão usados pelo código. O mais comum é vermos strings sendo guardadas para uso futuro, mas é perfeitamente possível guardarmos outros valores como constantes, números e até mesmo definição de fontes, no caso de estarmos lidando com displays de LCD.</p>
-<p>Além da memória flash, temos duas outras memórias dispońiveis para usar dessa mesma forma. A memória <a href="https://en.wikipedia.org/wiki/Static_random-access_memory">SRAM</a> e a <a href="https://en.wikipedia.org/wiki/EEPROM">EEPROM</a>. Vamos ver logo abaixo como gravamos/lemos dados dessas três memórias disponíveis nos micro-controladores AVR (pelo menos na maioria deles).</p>
-<h1 id="lendogravando-dados-na-memria-sram-e-eeprom">Lendo/Gravando dados na memória SRAM e EEPROM</h1>
-<p>Tanto a memória SRAM quanto a EEPROM possuem posicionamentos fixos em cada chip AVR, isso significa que, independente da lingagem usada, o endereço de leitura/escrita será sempre o mesmo. Isso significa que não precisamos nos preocupar com nenhum tipo de deslocamento de código quando fizermos a link-edição com algum código C. Tanto o <code>avr-gcc</code> quanto o <code>avrasm2</code> vão inicializar corretamente os valores iniciais e finais dos endereços dessas duas memórias e o código poderá referenciar esses endereços livremente.</p>
-<h1 id="lendogravando-dados-na-memria-flash">Lendo/Gravando dados na memória Flash</h1>
-<p>O problema começa quando precisamos ler/gravar dados na memória flash. Isso acontece pois as duas instruções que devemos usar para isso (<code>LPM</code> e <code>SPM</code>) trabalham de uma forma peculiar, que explico a seguir:</p>
-<p>Quando usamos quaisquer uma dessas duas instruções, temos que usar o registrador <code>Z</code> para dizer onde queremos ler/gravar nosso dado. Então, dando um exemplo simples poderíamos pensar no seguinte código:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">
-  main:
-
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">zl</span>, <span style="color:#66d9ef">low</span>(<span style="color:#66d9ef">data</span>)
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">zh</span>, <span style="color:#66d9ef">high</span>(<span style="color:#66d9ef">data</span>)
-    <span style="color:#a6e22e">lpm</span> <span style="color:#66d9ef">R0</span>, <span style="color:#66d9ef">Z</span>
-
-  data:
-    <span style="color:#a6e22e">.db</span> <span style="color:#ae81ff">02</span>, <span style="color:#ae81ff">03</span>
-</code></pre></div><p>Olhando esse exemplo poderíamos pensar que, ao fim da execução do código, o valor <code>02</code> estará gravado no registrador <code>R0</code>, mas infelizmente não é tão simples assim. O problema é que a memória flash é orientada a páginas e não a bytes e cada página possui dois bytes. Isso significa que em um atmega328p, por exemplo, que possui 32Kbytes de memória flash, temos na verdade 16K páginas que podem ser usadas com a instrução <code>LPM</code>. Sabendo que cada página possui dois bytes, temos que ter uma forma de escolher qual desses dois bytes queremos ler/escrever.</p>
-<p>Diferentes dos registradores de uso geral do AVR, que possuem 8 bits, o registrador <code>Z</code> possui 16 bits. Na verdade, o registrador <code>Z</code> é a junção dos registradores de 8 bits de uso geral: <code>r31</code> (<code>ZH</code>) e <code>r30</code> (<code>ZL</code>). A forma de escolher qual byte de uma página vamos ler/escrever é usando o bit menos significativo do registrador <code>Z</code>.</p>
-<p>O bit menos significativo com valor <code>0</code> indica que queremos mexer no primeiro byte da página e esse bit com valor <code>1</code> significa que queremos mexer no segundo byte da página. Os bits restantes (1 até 15) servem para indicar o endereço da página da memória flash que queremos mexer. Sabendo disso já podemos entender porque o exemplo de código acima não funciona.</p>
-<p>No exemplo acima, o endereço da página (que tem como referência o label <code>data:</code>) está ocupando o bit menos significativo. Isso aconteceu pois carregamos o endereço do label <code>data:</code> diretamente no registrador <code>Z</code>. Vejamos um exemplo:</p>
-<p>Se nosso label <code>data:</code> está posicionado no endereço <code>0x6e9</code>, o exemplo acima deixou o registrador <code>Z</code> com o seguinte valor:</p>
-<pre><code>        ZH        ZL
-    00000110  11101001
-</code></pre><p>E o que isso significa? Segundo o datasheet, significa que queremos ler o segundo byte da página (pois o bit menos signiicativo tem valor <code>1</code>) e queremos esse byte da página com endereço <code>000001101110100</code>, ou seja, <code>0x374</code>. Isso definitivamente não é o que queríamos no início! Esse código de exemplo, está, na verdade, lendo a página de endereço <code>0x374</code> e não a página que queremos. Então como fazemos para ler a página correta? O que precisamos fazer é carregar o endereço de nossa página a partir do segundo bit menos significativo do registrador <code>Z</code>, assim liberamos o primeiro bit para podermos indicar qual byte queremos ler. Existe uma forma muito simples de fazer isso: Basta multiplicar por <code>2</code> o endereço da página, antes de mover para o registrador <code>Z</code>. Vejamos o mesmo exemplo acima, mas agora escrito da forma correta.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">
-  main:
-
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">zl</span>, <span style="color:#66d9ef">low</span>(<span style="color:#66d9ef">data</span>*<span style="color:#ae81ff">2</span>)
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">zh</span>, <span style="color:#66d9ef">high</span>(<span style="color:#66d9ef">data</span>*<span style="color:#ae81ff">2</span>)
-    <span style="color:#a6e22e">lpm</span> <span style="color:#66d9ef">r0</span>, <span style="color:#66d9ef">Z</span>
-
-  data:
-    <span style="color:#a6e22e">.db</span> <span style="color:#ae81ff">02</span>, <span style="color:#ae81ff">03</span>
-</code></pre></div><p>Vamos considerar nossa label <code>data:</code> estando na mesma posição: <code>0x6e9</code>. Quando rodamos esse código, o valor que é efetivamente carregado no registrador <code>Z</code> é <code>0x6e9 * 2</code>, que é <code>0xdd2</code> e o registrador fica assim:</p>
-<pre><code>        ZH        ZL
-    00001101  11010010
-</code></pre><p>Se fizermos a &ldquo;decodificação&rdquo; desse valor, segundo o que diz no datasheet, ou seja, pegando o bit menos significativo pra indicar o byte da página e o restante dos bits para indicar o endereço da página temos o seguinte: O bit menos significativo possui agora valor <code>0</code>, o que significa que o primeiro byte da página será lido. E o restante dos bits (1 ao 15) possuem o segunte valor: <code>000011011101001</code> que é exatamente <code>0x6e9</code>! Agora sim a leitura ficará correta e o código efetivamente gravará o valor <code>02</code> no registrador <code>r0</code>.</p>
-<p>E o que isso tudo tem a ver com nossa mistura de código C com código Assembly Legado? O problema é que esses endereços são calculados em tempo <strong>de compilação</strong>, ou seja, antes da fase de link-edição. Isso significa que quando o <code>avr-gcc</code> for juntar os dois códigos, todas as labels vão mudar de lugar (como já vimos nos posts anteriores) e isso significa que <strong>todas</strong> as leituras de dados da memória flash ficarão incorretas.</p>
-<p>Nos posts anteriores, para resolver esse mesmo tipo de problema, ou seja, o deslocamento de código após a link-edição fizemos o parsing do dissasembly procurando por instruções de desvio (<code>jmp</code>, <code>rjmp</code>, etc.), pegamos o endereço que essas instruções estavam referenciando, fizemos uma busca reversa em todos os labels encontrados no código original e adicionamos uma entrada na tabela de realocação. Isso era feito em conjunto pelas duas ferramentas que escrevi: <a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/extract-symbols-metadata.py"><code>extract-symbols-metadata</code></a> e <a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/elf-add-symbol.cpp"><code>elf-add-symbol</code></a>.</p>
-<p>Mas agora não podemos fazer isso pois uma operação de carga no registrador <code>Z</code> acaba se transformando em duas instruções no assembly final, dessa forma:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">
-  <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">r30</span>, <span style="color:#ae81ff">0xE6</span>
-  <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">r31</span>, <span style="color:#ae81ff">0x0D</span>
-</code></pre></div><p>Seria insano procurar por esse &ldquo;padrão&rdquo; por todo o disassembly pra depois tentar de alguma forma &ldquo;editar&rdquo; a instrução no binário final. Por causa disso essa é a única &ldquo;preparação&rdquo; que você precisa fazer no seu código Assembly legado pra que seja possível juntá-lo com um código C moderno. Em todo o seu código original, quando você fizer uso da instrução <code>LPM</code> ou <code>SPM</code> você precisa levar em consideração o deslocamento que seu código Assembly vai sofrer após ser linkado com um código C. Uma forma simples de fazer isso é, por exemplo, sempre carregar valores no registrador <code>Z</code> usando uma macro, como essa:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">
-  <span style="color:#a6e22e">.macro</span> <span style="color:#66d9ef">ldz</span>
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">zl</span>, <span style="color:#66d9ef">low</span>(<span style="color:#960050;background-color:#1e0010">@</span><span style="color:#ae81ff">0</span>)
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">zh</span>, <span style="color:#66d9ef">high</span>(<span style="color:#960050;background-color:#1e0010">@</span><span style="color:#ae81ff">0</span>)
-  <span style="color:#a6e22e">.endmacro</span>
-</code></pre></div><p>Depois que você já tiver modificado seu código original para fazer uso dessa macro, fica bem mais fácil corrigir os valores que são carregados no registrador <code>Z</code>, pois poderemos mexer apenas nessa macro, e não no código inteiro. Esse é um exemplo de uso dessa macro:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">  <span style="color:#a6e22e">ldz</span> <span style="color:#66d9ef">data</span>*<span style="color:#ae81ff">2</span>
-</code></pre></div><p>O que precisamos agora é descobrir o quanto nosso código Assembly se deslocou depois que foi linkado ao código C. Devemos então adicionar esse &ldquo;offset&rdquo; ao código da nossa macro <code>ldz</code>, assim todos os endereços serão corrigidos. Isso só funciona pois nosso código assembly original é composto por um grande arquivo binário. Se tivéssemos múltiplos arquivos Assembly, convertidos para <code>avr-elf32</code> e depois entregues para o <code>avr-gcc</code> para link-edição, provavelmente teríamos deslocamentos diferentes para as labels do código original. Por isso é importante manter seu código Assembly Legado como um binário único, convertido de Intel Hex para <code>avr-elf32</code> e entregue ao <code>avr-gcc</code>.</p>
-<h1 id="preparando-a-macro-ldz-para-considerar-o-deslocamento-aplicado-pelo-avrgcc">Preparando a macro ldz para considerar o deslocamento aplicado pelo avr-gcc</h1>
-<p>Como sabemos que todas as nossas labels serão deslocadas após o processo de link-edição, precisamos preparar nossa macro ldz para considerar esse offset e poder corrigir todos os endereços carregados no registrador <code>Z</code>. Vejamos um exemplo simples:</p>
-<p>Vamos considerar nossa label de exemplo <code>data:</code>, localizada no endereço <code>0x6e9</code>. Se formos rodar o código Assembly sozinho, a chamada à macro <code>ldz</code> ficaria assim (vamos substituir o nome da label pelo seu endereço para ficar mais claro):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"> <span style="color:#a6e22e">ldz</span> <span style="color:#ae81ff">0x6e9</span>*<span style="color:#ae81ff">2</span>
-</code></pre></div><p>Se considerarmos um deslocamento de <code>0x80</code> após uma link-edição com um código C, nossa chamada à macro deveria ficar assim:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"> <span style="color:#a6e22e">ldz</span> <span style="color:#ae81ff">0x769</span>*<span style="color:#ae81ff">2</span>
-</code></pre></div><p>isso porque <code>0x6e9 + 0x80 = 0x769</code>. Isso significa que podemos reescrever nossa macro dessa forma:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">  <span style="color:#a6e22e">.macro</span> <span style="color:#66d9ef">ldz</span>
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">zl</span>, <span style="color:#66d9ef">low</span>(<span style="color:#960050;background-color:#1e0010">@</span><span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">+</span> <span style="color:#66d9ef">offset</span>)
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">zh</span>, <span style="color:#66d9ef">high</span>(<span style="color:#960050;background-color:#1e0010">@</span><span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">+</span> <span style="color:#66d9ef">offset</span>)
-  <span style="color:#a6e22e">.endmacro</span>
-</code></pre></div><p><strong>Nota importante</strong>: Entenderemos mais adiante porque não precisamos adicionar <code>offset*2</code>, já que o valor <code>@0</code> já chega dentro da macro multiplicado.</p>
-<p>Podemos definir a constante <code>offset</code> no início do nosso código Assembly, dessa forma:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"> <span style="color:#a6e22e">.equ</span> <span style="color:#66d9ef">offset</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#ae81ff">0x80</span>
-</code></pre></div><p>A única forma que encontrei de descobrir esse deslocamento foi compilar o código inteiro e depois olhar no disassembly onde o código Assembly legado acabou sendo posicionado no binário final. Isso é chato (apesar de ser possível de automatizar) e passível de erro mas foi o que consegui fazer. Depois de descobrir o deslocamento, volto no código Assembly e adiciono esse offset ao código da macro <code>ldz</code>.</p>
-<h1 id="o-jeito-simples-de-conferir-se-o-offset-escolhido-est-correto">O jeito simples de conferir se o offset escolhido está correto</h1>
-<p>Podemos colocar um código simples bem no início do nosso código assembly para nos ajudar a conferir se o <code>offset</code> escolhido está correto.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">  _offset_check:
-    <span style="color:#a6e22e">ldz</span> <span style="color:#66d9ef">_offset_check_data</span>*<span style="color:#ae81ff">2</span>
-  _offset_check_data:
-    <span style="color:#a6e22e">.db</span> <span style="color:#ae81ff">01</span>, <span style="color:#ae81ff">02</span>
-</code></pre></div><p>O que esse código faz é apenas carregar o endereço de uma label no registrador <code>Z</code>. Ninguém vai chamar esse código, mas ele estará bem no início do nosso código Assembly e por isso aparecerá também no início do disassembly do binário final e poderemos conferir se as duas instruções <code>ldi</code> estarão carregando o endereço correto nos regisradores <code>r31:r30</code> (<code>Z</code>).</p>
-<p>Vejamos como essa checagem funciona. Vamos link-editar um código assembly com essa checagem com um código C qualquer e vamos ver como fica o disassembly.</p>
-<p>Esse será nosso código C:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-
-  <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">hello_main</span>();
-
-  <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">f</span>(){
-    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
-  }
-
-  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(){
-
-    f();
-    hello_main();
-
-  }
-</code></pre></div><p>Desse código, temos a função <code>hello_main</code>, que estará implementada em Assembly.</p>
-<p>Esse será nosso código Assembly:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">  <span style="color:#a6e22e">.org</span> <span style="color:#ae81ff">0x0000</span>
-
-  <span style="color:#a6e22e">.equ</span> <span style="color:#66d9ef">offset</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#ae81ff">0x00</span>
-
-  <span style="color:#a6e22e">.macro</span> <span style="color:#66d9ef">my_ldz</span>
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">zl</span>, <span style="color:#66d9ef">low</span>(<span style="color:#960050;background-color:#1e0010">@</span><span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">+</span> (<span style="color:#66d9ef">offset</span>))
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">zh</span>, <span style="color:#66d9ef">high</span>(<span style="color:#960050;background-color:#1e0010">@</span><span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">+</span> (<span style="color:#66d9ef">offset</span>))
-  <span style="color:#a6e22e">.endmacro</span>
-
-  _offset_check:
-      <span style="color:#a6e22e">my_ldz</span> <span style="color:#66d9ef">_offset_data</span>*<span style="color:#ae81ff">2</span>
-
-  _offset_data:
-    <span style="color:#a6e22e">.db</span> <span style="color:#ae81ff">01</span>, <span style="color:#ae81ff">02</span>
-
-  hello_main:
-    <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">asm_routine_1</span>
-    <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">asm_routine_2</span>
-    <span style="color:#a6e22e">...</span>
-    <span style="color:#a6e22e">...</span>
-</code></pre></div><p>Perceba que o valor da constante <code>offset</code> ainda está com valor <code>0x00</code>, pois não sabemos onde nosso código Assembly será posicionado no binário final. Vejamos como fica o disassebly de uma primeira compilação:</p>
-<pre><code>
-  build/main_hello.asm.elf:     file format elf32-avr
-
-
-  Disassembly of section .text:
-
-  00000000 &lt;__vectors&gt;:
-     0:	0c 94 34 00 	jmp	0x68	; 0x68 &lt;__ctors_end&gt;
-     4:	0c 94 3e 00 	jmp	0x7c	; 0x7c &lt;__bad_interrupt&gt;
-     ...
-     ...
-     ...
-
-  00000080 &lt;f&gt;:
-    80:	80 e0       	ldi	r24, 0x00	; 0
-    82:	90 e0       	ldi	r25, 0x00	; 0
-    84:	08 95       	ret
-
-  0000008a &lt;_offset_check&gt;:
-    8a:	e4 e0       	ldi	r30, 0x04	; 4
-    8c:	f0 e0       	ldi	r31, 0x00	; 0
-
-  0000008e &lt;_offset_data&gt;:
-    8e:	01 02       	muls	r16, r17
-
-  00000090 &lt;hello_main&gt;:
-    ...
-
-  00000092 &lt;main&gt;:
-    92:	0e 94 40 00 	call	0x80	; 0x80 &lt;f&gt;
-    96:	0e 94 48 00 	call	0x90	; 0x90 &lt;hello_main&gt;
-</code></pre><p>O que temos que notar nesse disassembly é o ponto em que nosso código Assembly foi posicionado. Podemos ver que ele foi posicionado logo após a função <code>f()</code> (escrita em C). Nosso código Assembly começa no endereço <code>0x008a</code>. Podemos observar também que o <code>offset</code> atual, com valor <code>0</code> está incorreto. Vejamos porque.</p>
-<pre><code>
-  0000008a &lt;_offset_check&gt;:
-    8a:	e4 e0       	ldi	r30, 0x04	; 4
-    8c:	f0 e0       	ldi	r31, 0x00	; 0
-
-  0000008e &lt;_offset_data&gt;:
-    8e:	01 02       	muls	r16, r17
-</code></pre><p>Aqui podemos ver que as duas instruções <code>ldi</code>, que são responsáveis por carregar o endereço da label <code>_offset_data</code> no registrador <code>Z</code> (<code>r31:r30</code>), estão passando um endereço incorreto. Nossa label está localizada no endereço <code>0x008e</code>, mas o que está sendo carregado nos registradores <code>r31:r30</code> é <code>0x0004</code>, o que está claramente errado.</p>
-<p>Agora vejamos como fica o disassembly quando adicionamos o offset correto, nesse caso <code>0x008a</code>, que é exatamente o ponto onde nosso código Assembly foi posicionado no binário final.</p>
-<p>Como não adicionamos nenhum código C novo, vamos olhar apenas para a parte do disassembly que realmente mudou.</p>
-<pre><code>  0000008a &lt;_offset_check&gt;:
-    8a:	ee e8       	ldi	r30, 0x8E	; 142
-    8c:	f0 e0       	ldi	r31, 0x00	; 0
-
-  0000008e &lt;_offset_data&gt;:
-    8e:	01 02       	muls	r16, r17
-</code></pre><p>Olhando agora para as instruções <code>ldi</code> vemos que ela carrega o endereço correto, que é <code>0x008e</code>. Esse é exatamente o endereço na nossa label <code>_offset_data</code>. Note que os valores já estão multiplicados por 2, isso porque estamos analisando o disassembly já do arquivo <code>avr-elf32</code> onde os novos endereços são o dobro dos endereços originais, que encontramos no arquivo <code>.map</code> produzido pelo <code>avrasm2</code>. É por isso que não precisamos adicionar o valor de <code>offset*2</code>, pois o offset que vemos no disassembly, nesse caso <code>0x008a</code>, já está multiplicado.</p>
-<p>Com esse ajuste de offset, seu código assembly consegue rodar junto com o código C e ainda fazer uso livre da memória flash para ler/gravar dados.</p>
-<h1 id="bnus">Bônus</h1>
-<p>Agora que já podemos chamar código das duas linguagens e usar a memória flash livremente para ler/gravar dados seria interessante poder declarar novas constantes no código C e poder passá-las para o código Assembly. Pensando em uma possível migração de Assembly para C, é importante poder ir transferindo aos poucos, e isso inclui definições de constantes. Abaixo veremos como fazer as duas coisas: Declarar no C um valor que é salvo na memória flash e passá-lo para o código Assembly como parâmetro de função e declarar no Assembly um valor que é salvo na memória flash e passá-lo para o código C.</p>
-<h1 id="declarando-o-valor-no-c-e-passando-para-o-assembly">Declarando o valor no C e passando para o assembly</h1>
-<p>Esse será nosso código C onde declaramos uma string que será salva na memória flash.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-  <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> p[] PROGMEM <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Hello from C.</span><span style="color:#e6db74">&#34;</span>};
-
-  <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">hello_main</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> []);
-
-  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(){
-    hello_main(p);
-  }
-</code></pre></div><p>Quando fazemos a chamada à rotina Assembly <code>hello_main()</code>, o endereço de <code>p</code> é passado nos registradores <code>r25:r24</code>. vejamos o disassembly:</p>
-<pre><code>
-  00000dce &lt;main&gt;:
-   dce:   8c e7           ldi     r24, 0x7C       ; 124
-   dd0:   90 e0           ldi     r25, 0x00       ; 0
-   dd2:   0e 94 a2 06     call    0xd44   ; 0xd44 &lt;hello_main&gt;
-   ddc:   08 95           ret
-</code></pre><p>Vemos nesse caso que o valor que é passado é <code>0x007c</code>. A boa notícia é que esse valor já está pronto para ser usado com a instrução <code>LPM</code>, ou seja, já está multiplicado por 2. No código Assembly basta mover esse valor para o registrador <code>Z</code> e usar normalmente. Vejamos o código Assembly que receberá esse valor:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">  hello_main:
-    <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">zl</span>, <span style="color:#66d9ef">r24</span>
-    <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">zh</span>, <span style="color:#66d9ef">r25</span>
-    <span style="color:#a6e22e">lpm</span> <span style="color:#66d9ef">r0</span>, <span style="color:#66d9ef">Z</span>
-</code></pre></div><h1 id="definindo-o-valor-no-assembly-e-passando-para-o-c">Definindo o valor no Assembly e passando para o C</h1>
-<p>Agora faremos o mesmo, mas tendo definido a constante no Assembly. Vejamos o código C que receberá o endereço da memória flash onde o dado estára gravado.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>  <span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;avr/pgmspace.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-  <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> p[] PROGMEM <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Hello from C.</span><span style="color:#e6db74">&#34;</span>};
-
-  <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">hello_main</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> []);
-
-  <span style="color:#66d9ef">char</span> <span style="color:#a6e22e">c_read_flashbyte</span>(<span style="color:#66d9ef">char</span> p[]){
-    <span style="color:#66d9ef">return</span> pgm_read_byte_near(p);
-  }
-
-  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(){
-    hello_main(p);
-  }
-</code></pre></div><p>Nesse código chamamos a rotina <code>hello_main</code>, que está escrita em Assembly. Essa rotina chama de volta o código C através da função <code>c_read_flashbyte()</code>, dessa vez passando como parametro o endereço onde o dado está gravado. Fazemos então a leitura desse dado com a função <code>pgm_read_byte_near()</code> e retornamos o valor lido para o Assembly. Vejamos o código assembly:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">  hello_main:
-
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">r25</span>, <span style="color:#66d9ef">high</span>(<span style="color:#66d9ef">flash_byte_from_asm</span>*<span style="color:#ae81ff">2</span> <span style="color:#960050;background-color:#1e0010">+</span> <span style="color:#66d9ef">offset</span>)
-    <span style="color:#a6e22e">ldi</span> <span style="color:#66d9ef">r24</span>, <span style="color:#66d9ef">low</span>(<span style="color:#66d9ef">flash_byte_from_asm</span>*<span style="color:#ae81ff">2</span> <span style="color:#960050;background-color:#1e0010">+</span> <span style="color:#66d9ef">offset</span>)
-    <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">c_read_flashbyte</span>
-
-  flash_byte_from_asm:  <span style="color:#a6e22e">.db</span> <span style="color:#e6db74">&#34;X&#34;</span>, <span style="color:#ae81ff">0</span>
-</code></pre></div><p>Vejamos como fica o disassembly disso tudo:</p>
-<pre><code>
-  ...
-  ...
-
-  00000d56 &lt;hello_main&gt;:
-   dbe:	9d e0       	ldi	r25, 0x0D	; 13
-   dc0:	80 ef       	ldi	r24, 0xF0	; 240
-   dc2:	0e 94 56 00 	call	0xac	; 0xac &lt;c_read_flashbyte&gt;
-   ...
-   ...
-   ...
-   ...
-
-  00000df0 &lt;flash_byte_from_asm&gt;:
-   df0:	58 00       	.word	0x0058	; ????
-
-  ...
-  ...
-
-  000000ac &lt;c_read_flashbyte&gt;:
-    ac:	fc 01       	movw	r30, r24
-    ae:	84 91       	lpm	r24, Z
-    b0:	08 95       	ret
-</code></pre><p>Passamos o endereço pelos registradores <code>r25:r24</code>. Note que estamos passando o endereço correto, <code>0x0DF0</code>. A função <code>c_read_flashbyte</code> move o conteúdo dos registradores <code>r25:r24</code> para o registrador <code>Z</code> (<code>r31:r30</code>) e faz a leitura do dado com a instrução <code>LPM</code>, guardando o resultado em <code>r24</code>. E esse é exatamenteo o registrador onde estará, nesse caso, o valor <code>'X'</code>.</p>
-<p>Então para passarmos endereços da memória flash declarados no Assembly precisamos sempre considerar o offset que esse código sofreu quando foi posicionado no binário final.</p>
+    <p>Atualmente é tão simples e transparente ter o disco encriptado que não faz sentido não ter. Se você pensar na
+possível perda de performance (pelo fato do seu disco estar sendo encriptado/decriptado em tempo de execução)
+vai perceber que, a não ser que você faça um uso <strong>muito específico</strong> do seu PC, essa &ldquo;perda de performance&rdquo;
+não fará nenhuma diferença.</p>
+<p>Sempre que me perguntam se a performance de um disco encriptado é boa ou ruim, eu respondo que não sei pois nunca
+tive um laptop onde o disco não estava encriptado.</p>
+<h1 id="quando--simples-instalar-linux-com-disco-encriptado">Quando é simples instalar Linux com disco encriptado?</h1>
+<p>Qualquer distro onde você precise fazer um <code>chroot</code> como parte da instalação é trivial ter o disco completamente
+encriptado. Isso porque para o processo de instalação, pouco importa se o disco montado está encriptado ou não, basta que
+ele esteja montado no lugar certo, geralmente <code>/mnt/</code>.</p>
+<p>A instalação da sua distribuição acontece <strong>normalmente</strong>, mudando apenas em 3 pontos, que vou mostrar seguir:</p>
+<ul>
+<li>Preparação do disco;</li>
+<li>Configuração do initrd;</li>
+<li>Configuração do GRUB.</li>
+</ul>
+<h1 id="particionando-o-disco">Particionando o disco</h1>
+<p>O particionamento é idêntico, só estou escrevendo especificamente sobre ele pois vamos usar um tipo diferente de tabela de partição. Por muito tempo usamos o particionamento <code>msdos</code>, há algum tempo surgiu um novo tipo de particionamento, o <a href="https://en.wikipedia.org/wiki/GUID_Partition_Table">GPT</a> e vamos usá-lo.</p>
+<p>O <code>fdisk</code> é capaz de gerar partições <code>GPT</code> então poderemos usá-lo para essa preparação.</p>
+<p><strong>Atenção</strong>: O que vamos fazer agora destruirá <strong>todos os dados do seu disco</strong>.</p>
+<pre><code>$ sudo fdisk /dev/sdb
+</code></pre><p>Aqui, <code>/dev/sdb</code> deve ser o disco onde você está instalando sua distribuição Linux.</p>
+<p>Depois pressione <code>g</code> e isso fará com que todas as partições sejam removidas e uma nova tabela de partição <code>GPT</code> seja criada.</p>
+<p>Agora vamos criar as partições. Vamos criar duas partições: Uma para o GRUB e outra para nossos dados. A do GRUB pode ter 64MB (pode até sem <strong>bem</strong> menor se você quiser, afinal aqui ficarão apenas os binários do próprio GRUB) e deve ser do tipo <code>04 Boot</code>. A outra pode ser do tipo default (<code>20 Linux Partition</code>) e deve ocupar todo o restante do disco.</p>
+<p>O particionamento está pronto. Até aqui nada de diferente a não ser o <code>GPT</code>, e isso nem tem relação com a escolha de usar encriptação.</p>
+<p>Rodando um <code>fdisk -l /dev/sdb</code> temos:</p>
+<pre><code>Device      Start      End  Sectors  Size Type
+/dev/sdb1    2048   133119   131072   64M BIOS boot
+/dev/sdb2  133120 15974366 15841247  7,6G Linux filesystem
+</code></pre><h1 id="preparando-o-disco-para-a-instalao">Preparando o disco para a instalação</h1>
+<p>A preparação do disco acontece quase que igualmente à preparação original, a diferença é que antes de rodar o <code>mke2fs</code> você precisa rodar dois comandos para encriptar:</p>
+<p>Antes tínhamos essa preparação:</p>
+<pre><code>$ mke2fs -t ext4 /dev/sdb2
+$ mount /dev/sdb2 /mnt
+</code></pre><p>Agora temos:</p>
+<pre><code>$ cryptsetup luksFormat /dev/sdb2
+$ cryptsetup luksOpen /dev/sdb2 crypt
+$ mke2fs -t ext4 /dev/mapper/crypt
+$ mount /dev/mapper/crypt /mnt
+</code></pre><p>Nesse ponto você vai ter escolhido a senha de encriptação do seu disco. Essa é a senha que você usará para destravá-lo durante o boot. Esquecer essa senha significa perder tudo que está no seu disco, para sempre. Lembre-se disso.</p>
+<p>Pronto. Agora estamos exatamente no mesmo ponto da instalação da sua distribuição quando temos que fazer o chroot.</p>
+<h1 id="configurando-o-initrd">Configurando o initrd</h1>
+<p>Como estamos agora com um disco encriptado, precisamos dizer ao kernel como destravar esse disco para que ele possa fazer o processo normal de boot. Para isso vamos editar o arquivo <code>/etc/mkinitcpio.conf</code>. Esse é o arquivo de configuração para o <code>mkinitcpio</code>, que é o comando responsável por gerar nosso initrd.</p>
+<p>Só precisamos alterar uma linha. Ache a linha <code>HOOKS=&quot;....&quot;</code> e adicione a essa linha o hook <code>encrypt</code>. Certifique-se que esse Hook apareça <strong>antes</strong> do Hook <code>filesystems</code>.</p>
+<p>Geralmente a linha, depois de ser alterada, fica assim:</p>
+<pre><code>HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)
+</code></pre><h1 id="configurando-o-grub">Configurando o GRUB</h1>
+<p>Para o GRUB precisamos editar duas linhas no <code>/etc/default/grub</code>, são elas:</p>
+<pre><code>GRUB_ENABLE_CRYPTODISK=y
+GRUB_CMDLINE_LINUX=&quot;cryptdevice=UUID=&lt;UUID&gt;:crypt&quot;
+</code></pre><p>Onde <code>&lt;UUID&gt;</code> é o valor do UUID da partção que encriptamos, no nosso caso aqui <code>/dev/sdb2</code>. Para oncseguir o UUID de uma partição, use o comando <code>blkid</code>.</p>
+<pre><code>$ sudo blkid
+/dev/sdb2: UUID=&quot;d0eb2665-291f-4010-abf1-da46304a592e&quot; PARTUUID=&quot;d939470b-3425-1745-9b8c-503d2be1c2f3&quot;
+</code></pre><p>Então nesse caso, nossa linha ficaria assim:</p>
+<pre><code>GRUB_CMDLINE_LINUX=&quot;cryptdevice=UUID=d0eb2665-291f-4010-abf1-da46304a592e:crypt&quot;
+</code></pre><p>Instale o GRUB normalmente, termine e instalação da sua distribuição e dê boot.</p>
+<p>Bem no início do boot, antes mesmo do menu do GRUB aparecer, o próprio GRUB vai pedir a senha para destravar o disco.</p>
+<h1 id="consideraes-finais">Considerações finais</h1>
+<p>Percebeu que apesar de chamarmos de &ldquo;Full disk encryption&rdquo; a partição onde ficam os binários do GRUB ainda está desencriptada? Pois é, e sim esse é um possível vetor de ataque para seu setup. Se alguém com acesso físico à sua máquina conseguir implantar um GRUB &ldquo;infectado&rdquo;, não tem muito o que você possa fazer, afinal o boot acontecerá normalmente e você não perceberá a diferença.</p>
+<p>O GRUB permite que você apresente pra ele um chave pública GPG e ele usará essa chave para conferir a assinatura digital de todos o binários que ele carregar durante o boot (<a href="https://www.gnu.org/software/grub/manual/grub/grub.html#Using-digital-signatures">doc aqui</a>). Isso diminui bastante o vetor de ataque mas ainda sobra um pedaço. Esse pedaço é o que o próprio GRUB chama de <code>core.img</code>. o <code>core.img</code> é a parte do GRUB que O SEU HARDWARE carrega.</p>
+<p>Então para proteger seu boot de ponta a ponta, você teria que assinar o <code>core.img</code> com uma chave privada que só você tem acesso e apresentar uma chave pública para O
+SEU HARDWARE, assim o hardware pode conferir a assinatura e recusar o boot caso alguém tenha alterado um bit sequer dos binários do GRUB (nesse caso o <code>core.img</code>).</p>
+<p>Para isso existe o <a href="https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-secure-boot">Secure Boot</a>, mas isso é assunto pra outra hora.</p>
 
   </div>
   
 
 <div class="navigation navigation-single">
     
-    <a href="/2015/07/chamando-codigo-novo-c-avr-gcc-a-partir-de-codigo-legado-assembly-avrasm2/" class="navigation-prev">
+    <a href="/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/" class="navigation-prev">
       <i aria-hidden="true" class="fa fa-chevron-left"></i>
-      <span class="navigation-tittle">Chamando código novo C (avr-gcc) a partir de código legado Assembly (avrasm2)</span>
+      <span class="navigation-tittle">Preparando uma Yubikey 4 Nano para uso diário</span>
     </a>
     
     
-    <a href="/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/" class="navigation-next">
-      <span class="navigation-tittle">Preparando uma Yubikey 4 Nano para uso diário</span>
+    <a href="/2018/08/curl-de-guerrilha/" class="navigation-next">
+      <span class="navigation-tittle">Curl de Guerrilha</span>
       <i aria-hidden="true" class="fa fa-chevron-right"></i>
     </a>
     
@@ -500,31 +319,13 @@ html {
         
 
 
-<h4>2015</h4>
+<h4>2018</h4>
 
 <li>
   <span class="list__title--small">
-    <a href="/2015/07/chamando-codigo-novo-c-avr-gcc-a-partir-de-codigo-legado-assembly-avrasm2/" >Chamando código novo C (avr-gcc) a partir de código legado Assembly (avrasm2)</a>
+    <a href="/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/" >Preparando uma Yubikey 4 Nano para uso diário</a>
       
-      <time class="pull-right hidden-tablet">Jul 30 &#39;15</time>
-      
-  </span>
-</li>
-
-<li>
-  <span class="list__title--small">
-    <a href="/2015/05/convertendo-intel-hex-para-elf32-avr-criando-tabela-de-simbolos-e-tabela-de-realocacao/" >Convertendo Intel HEX para ELF32-avr criando tabela de símbolos e tabela de realocação</a>
-      
-      <time class="pull-right hidden-tablet">May 03 &#39;15</time>
-      
-  </span>
-</li>
-
-<li>
-  <span class="list__title--small">
-    <a href="/2015/04/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/" >Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc)</a>
-      
-      <time class="pull-right hidden-tablet">Apr 12 &#39;15</time>
+      <time class="pull-right hidden-tablet">Jul 30 &#39;18</time>
       
   </span>
 </li>

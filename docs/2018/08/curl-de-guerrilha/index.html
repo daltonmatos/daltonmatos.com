@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.60.1" />
+<meta name="generator" content="Hugo 0.62.0" />
 
     
     
@@ -230,7 +230,7 @@ html {
   <div class="post">
     <p>Vou escrever aqui algumas das opções que mais uso no dia a dia quando preciso do comando <code>curl</code>. Muitas vezes o curl é usado apenas para &ldquo;baixar arquivos&rdquo; e pelo fato dele usar por padrão o <code>stdout</code> muitas vezes as pessoas preferem até mesmo usar o <code>wget</code>, que por padrão salva o output em um arquivo.</p>
 <p>O <code>curl</code> é <strong>muito mais</strong> do que um &ldquo;baixador de arquivos&rdquo; e diria até que o propósito principal dele nem é esse, apesar dele conseguir fazer isso também.</p>
-<h1 id="curl-i">curl -i</h1>
+<h1 id="curl--i">curl -i</h1>
 <p>O <code>-i</code> é útil pois ele mostra os headers da resposta que foi recebida. Isso muitas vezes é o que a gente precisa para fazer um debug para conferir o comportamento de algum recurso remoto.</p>
 <pre><code>$ curl -i https://httpbin.org/ip
 HTTP/1.1 200 OK
@@ -246,7 +246,7 @@ Via: 1.1 vegur
 {
   &quot;origin&quot;: &quot;216.58.202.206&quot;
 }
-</code></pre><h1 id="curl-i1">curl -I</h1>
+</code></pre><h1 id="curl--i-1">curl -I</h1>
 <p>O <code>-I</code> é semelhante ao <code>-i</code> mas com a diferença que o método HTTP usado é <code>HEAD</code> em vez de <code>GET</code>. Se o servidor funcionar corretamente ele vai responder apenas com os headers, sem um response body. Então essa opção é útil quando queremos ver <strong>apenas</strong> os headers da resposta.</p>
 <pre><code>$ curl -I https://httpbin.org/ip
 HTTP/1.1 200 OK
@@ -258,7 +258,7 @@ Content-Length: 33
 Access-Control-Allow-Origin: *
 Access-Control-Allow-Credentials: true
 Via: 1.1 vegur
-</code></pre><h1 id="curl-h">curl -H</h1>
+</code></pre><h1 id="curl--h">curl -H</h1>
 <p>O <code>-H</code> serve para passar headers adicionais no request que será feito. Muito útil para quando você precisa enviar credenciais de autenticação que não são padrão (tipo BasicAuth, etc). Com essa opção você pode enviar qualquer header.</p>
 <pre><code>$ curl -H &quot;X-Meu-Header: Meu Valor&quot; https://httpbin.org/headers
 {
@@ -271,9 +271,9 @@ Via: 1.1 vegur
   }
 }
 </code></pre><p>A opção <code>-H</code> também pode ser usada com a sintaxe <code>-H@file</code>, onde <code>file</code> é um arquivo ontendo os headers que serão adicionados ao request, muito útil quando são muitos headers e você não quer passar uma opção <code>-H</code> para cada header.</p>
-<h1 id="curl-u">curl -u</h1>
+<h1 id="curl--u">curl -u</h1>
 <p>Falando em BasicAuth, podemos fazer esse Auth usando a opção <code>-u</code>. Quando usamos essa opção podemos fazer de duas formas: <code>-u &lt;user&gt;</code> e aí nesse caso o curl vai pedir a senha via <code>stdin</code>. Ou <code>-u &lt;user&gt;:&lt;passwd&gt;</code> nesse caso já estamos passando o usuário e a senha separados por <code>:</code>. Essa última é muito útil se a chamada ao <code>curl</code> estiver dentro de um script, por exemplo.</p>
-<h1 id="curl-socks5">curl &ndash;socks5</h1>
+<h1 id="curl---socks5">curl &ndash;socks5</h1>
 <p>O <code>--socks5</code> permite usar um proxy como intermediário. Isso é <strong>muito</strong> útil e vou explicar porque. Acho até que é a opção que mais uso no dia a dia.</p>
 <p>As máquinas que eu mantenho rodando como parte do meu trabalho estão em uma rede interna, lá no cloud provider que usamos. <strong>Nenhuma</strong> máquina de produção possui IP público, então como conectar (via HTTP/HTTPS, por exemplo) nessas máquinas?</p>
 <p>O que fazemos é: Temos apenas <strong>uma</strong> máquina pública, que roda <strong>apenas</strong> SSH e só aceita logins via par de chaves. Esse é o primeiro ponto. Essa máquina pública possui conectividade com as máquinas privadas. Então como usá-la como &ldquo;ponte&rdquo; para chegar nas máquinas privadas? <code>--socks5</code> com uma ajudinha do seu ssh-client. Aliás SSH é assunto para um posto inteiro.</p>
@@ -286,7 +286,7 @@ Via: 1.1 vegur
 <p>Nota: Para isso funcionar desse jeito que mostrei o nome <code>api.myservice</code> deve estar em um DNS público. Se esse não for o caso, podemos acessar essa mesma API dessa forma:</p>
 <pre><code>$ curl --socks5 127.0.0.1:10010 -H &quot;Host: api.myservice&quot; http://10.10.0.45
 </code></pre><p>Aqui, assumi que <code>10.0.0.45</code> é o IP  do servidor onde a API está rodando ou pelo menos é o IP do Proxy reverso que está na frente dessa API.</p>
-<h1 id="curl-resolve">curl &ndash;resolve</h1>
+<h1 id="curl---resolve">curl &ndash;resolve</h1>
 <p>O <code>--resolve</code> é útil quando você precisa usar um nome DNS que ainda não existe ou que você não consegue resolver facilmente (oportuno, não?).</p>
 <p>Pegando o exemplo acima e considerando que o DNS não é público, poderemos fazer <strong>o mesmo</strong> acesso assim:</p>
 <pre><code>$ curl --socks5 127.0.0.1:10010 --resolve api.myservice:80:10.0.0.45 http://api.myservice
@@ -305,11 +305,11 @@ referrer-policy: no-referrer
 content-length: 1561
 date: Fri, 03 Aug 2018 12:24:28 GMT
 alt-svc: quic=&quot;:443&quot;; ma=2592000; v=&quot;44,43,39,35&quot;
-</code></pre><h1 id="curl-d">curl -d@-</h1>
+</code></pre><h1 id="curl--d-">curl -d@-</h1>
 <p>A opção <code>-d</code> serve para passar dados no corpo de um request, geralmente um request POST. A variação <code>-d@</code> te permite especificar um arquivo, cujo o conteúdo será o corpo do request. A combinação <code>-d@-</code> permite que o <code>curl</code> leia esse conteúdo da entrada padrão. Então podemos fazer um request POST usando como corpo do request a saída de um script, por exemplo. Assim:</p>
 <pre><code>$ meu-script.sh | curl -d@- https://api.myservice/new
 </code></pre><p>Usar <code>-d</code> implica em trocar o método HTTP para <code>POST</code>.</p>
-<h1 id="curl-x">curl -X</h1>
+<h1 id="curl--x">curl -X</h1>
 <p>A opção <code>-X</code> permite escolher qual será o método HTTP usado. Por exemplo: <code>-X POST</code>, <code>-X DELETE</code>, <code>-X PATCH</code> ou quaisquer outras possibilidades. Só é permitido passar <strong>uma</strong> opção <code>-X</code> por chamada do <code>curl</code>.</p>
 <h1 id="outras-opes">Outras opções</h1>
 <p>Existem outras opções também muito úteis mas que ficaram de fora desse post, exemplo:</p>

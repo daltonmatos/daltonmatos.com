@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.60.1" />
+<meta name="generator" content="Hugo 0.62.0" />
 
     
     
@@ -235,10 +235,10 @@ html {
   <div class="post">
     <p>O que o let's encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.</p>
 <p>Gerar um certificado é tão simples quanto rodar <strong>um comando</strong>. O única coisa que você precisa ter em me te é como comprovar que você controla o domínio para o qual você está gerando um certificado.</p>
-<h1 id="challenge-http01">Challenge http-01</h1>
+<h1 id="challenge-http-01">Challenge http-01</h1>
 <p>Um dos challenges mais comuns é usar um server http para comprovar que você controla o domínio. Esse tipo de challenge é útil quando você está gerando um certificado para uma máquina que é pública, ou seja, os servidores do let's encrypt vão conseguir acessá-la para comprovar que você tem o controle do domínio.</p>
 <p>Mas e quando você precisa gerar certificados que serão usados em máquinas privadas?</p>
-<h1 id="challenge-dns01">Challenge dns-01</h1>
+<h1 id="challenge-dns-01">Challenge dns-01</h1>
 <p>Esse tipo de challenge é super útil para podermos gerar certificados a partir de máquinas privadas. Isso porque a confirmação do controle do domínio é feita via registro DNS.</p>
 <p>Para esse challenge funcionar o DNS deve ser possível de resolver publicamente. Se você está gerando um certificado para uma zona <strong>privada</strong> esse challenge não servirá.</p>
 <h1 id="traefik">Traefik</h1>
@@ -252,7 +252,7 @@ html {
 <p>Geralmente você envia um <code>HUP</code> (kill -HUP <code>&lt;pid&gt;</code>) para o processo e ele recarrega todas as suas configurações. Mas o traefik não tem isso implementado então essa não é uma opção válida.</p>
 <p>Resta então a opção de pedir ao traefik para vigiar um determinado arquivo de configuração e sempre que esse arquivo sofrer quaisquer mudanças, o traefik vai reler esse arquivo e reaplicar essas configurações.</p>
 <p>Aqui problema do certbot manter sempre um caminho fixo (que é um symlink que aponta para o certificado correto) começa a atrapalhar, isso pois como o caminho não muda o Traefik acha que você ainda está usando os mesmos certificados e não recarrega nada.</p>
-<h1 id="certbot-deployhook">certbot deploy-hook</h1>
+<h1 id="certbot-deploy-hook">certbot deploy-hook</h1>
 <p>E é aqui que entra o principal desse post: Um deploy-hook que escrevi para resolver esse problema.</p>
 <p>O que esse deploy hook faz é gerar um trecho de configuração que aponta para os certificados corretos, mas em vez de usar o symlink gerado pelo certbot ele segue esse symlink e usa o path final do arquivo do certificado, dessa forma a cada novo certificado gerado um novo arquivo de configuração será criado. Isso faz o traefik perceber a mudança e recarregar o certificado.</p>
 <p>Vejamos no detalhe como funciona:</p>
@@ -293,7 +293,7 @@ watch = true
       keyFile = &quot;/etc/letsencrypt/live/app.daltonmatos.com/privkey.pem&quot;
 </code></pre><p>Esse path, na verdade, aponta para <code>/etc/letsencrypt/archive/app.daltonmatos.com/privkey1.pem</code>. À medida que vamos renovando esse certificado o certbot vai gerando novos arquivo na pasta <code>/etc/letsencrypt/archive/app.daltonmatos.com/</code> com nomes <code>privkey2.pem</code>, <code>privkey3.pem</code> e assim por diante.</p>
 <p>E aqui entera o deploy-hook que escrevi para podermos gerar os techos de configuração sempre usando os paths da pasta <code>archive/</code> e não da pasta <code>live/</code>.</p>
-<h1 id="implementao-do-certbot-deployhook">Implementação do certbot deploy-hook</h1>
+<h1 id="implementao-do-certbot-deploy-hook">Implementação do certbot deploy-hook</h1>
 <p>O <a href="https://certbot.eff.org/docs/using.html#renewing-certificates">deploy-hook</a> é uma forma de pedir ao certbot que chame um comando escolhido por você sempre que um certificado for renovado <strong>com sucesso</strong>.</p>
 <p>O que nosso deploy-hook faz é descobrir o path final do certificado. Esse é o código:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> os

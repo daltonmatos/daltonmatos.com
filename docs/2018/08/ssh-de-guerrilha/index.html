@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.60.1" />
+<meta name="generator" content="Hugo 0.62.0" />
 
     
     
@@ -329,7 +329,7 @@ Hostname public.server.com.br
 <p>Você pode também encadear quantos &ldquo;saltos&rdquo; você quiser. Cada bloco de configuração (<code>Host</code>) pode ter seu próprio <code>ProxyCommand</code>.</p>
 <p>Como exemplo, para eu acessar minha estação de trabalho eu faço 2 &ldquo;saltos&rdquo;. O caminho é mais ou menos esse: Minha casa -&gt; AWS -&gt; Datacenter on-premise -&gt; Minha estação de trabalho.</p>
 <p>Isso funciona porque a máquina da aws é pública, essa conta da aws tem VPN com o datacenter on-premise e esse datacenter tem VPN com o escritório. Tudo isso é feito com <code>ProxyCommand</code> e ainda assim digito apenas <code>ssh minha-maquina</code> para cair já dentro da minha estação de trabalho.</p>
-<h2 id="localforward-ou-l">LocalForward ou -L</h2>
+<h2 id="localforward-ou--l">LocalForward ou -L</h2>
 <p>O <code>LocalForward</code> é útil quando você quer se conectar a alguma porta de uma máquina remota, novamente estamos falando de máquinas privadas que nem sequer possuem IP público.</p>
 <pre><code>Host myhost
 Hostname 10.234.33.77
@@ -357,7 +357,7 @@ debug1: Local forwarding listening on 127.0.0.1 port 3306.
 </code></pre><p>Esse trecho acima indica que o redirecionamento da porta está feito.</p>
 <p>A sintaxe dessa diretiva é: <code>LocalForward [bind_address]:port host:hostport</code>. Se <code>bind_address</code> for omitido, será usado <code>127.0.0.1</code>. Podemos também usar <code>*</code> no parâmetro <code>bind_address</code>, nesse caso todas as interfcaes locais estarão com a porta aberta.</p>
 <p>Essa funcionalidade também está disponível como uma command line flag, <code>-L</code>. A sintaxe é quase a mesma. A diferença é que em vez se separar os argumentos por espaço, separamos com <code>:</code>, assim: <code>-L 127.0.0.1:3306:127.0.0.1:3306</code>.</p>
-<h2 id="dynamicforward-ou-d">DynamicForward ou -D</h2>
+<h2 id="dynamicforward-ou--d">DynamicForward ou -D</h2>
 <p>O <code>DynamicForward</code> é uma opção especialmente útil quando queremos acessar portas de servidores remotos mas sem precisar nos preocupar em ficar criando redirecionamentos (<code>-L</code>).</p>
 <p>O que essa opção faz é ligar localmente um Proxy <code>SOCKS5</code> que usa a conexão SSH como &ldquo;meio de transporte&rdquo;.</p>
 <p>Vamos pegar o mesmo cenário de antes, um servidor privado com alguns sistemas rodando, por exemplo uma app <code>HTTP</code> rodando nas portas <code>80</code> e <code>8080</code>. O que podemos fazer é acessar uma máquina que tenha conectividade com essa (onde está rodando a app) e usar um Proxy <code>SOCKS5</code> para &ldquo;tunelar&rdquo; nosso acesso até a máquina destino, vejamos o config:</p>
@@ -379,7 +379,7 @@ debug1: Local forwarding listening on 127.0.0.1 port 10010.
 <p>Todos os browsers modernos possuem opções para usar um Proxy <code>SOCKS5</code>, então essa opção torna-se especialmente útil por outro motivo: Poder burlar regras de saída de firewalls.</p>
 <p>Se você está em um ambiente controlado (não por você) e essa rede impõe limites de acesso, essa opção pode ser útil para driblar esses limites. Para isso basta que essa rede permita acesso remoto via SSH. Se isso estiver permitido, basta tunelar todo o seu tráfego e você poderá acessar <strong>qualquer</strong> destino, mesmo os explicitamente bloqueados pela rede onde você está.</p>
 <p>Mesmo se a rede bloquear a porta <code>22</code> (padrão do SSH) ainda pode existir uma saída: Rodar SSH na porta <code>443</code>. A porta <code>443</code> é a padrão para HTTPS e <em>geralmente</em> essa porta é liberada mesmo em ambientes <strong>bem</strong> controlados.</p>
-<h2 id="forwardagent-ou-a">ForwardAgent ou -A</h2>
+<h2 id="forwardagent-ou--a">ForwardAgent ou -A</h2>
 <p>Essa opção é útil para que possamos fazer <code>ssh</code> a partir da máquina remota, mas usando as mesmas credenciais locais. Imagina você se logando em um server remoto e a partir dessa máquina fazendo um <code>git pull</code> (ou <code>git clone</code>) de um repositório privado. Veja um exemplo:</p>
 <pre><code>$ ssh meu-host
 daltonmatos@meu-host $&gt; ssh git@github.com
@@ -396,7 +396,7 @@ Connection to github.com closed.
 <pre><code>Host meu-host
 Hostname 10.234.55.69
 ForwardAgent yes
-</code></pre><h2 id="n">-N</h2>
+</code></pre><h2 id="-n">-N</h2>
 <p>A opção <code>-N</code> é útil quando você quer dar a oportunidade de alguém conectar em um servidor via SSH, mas ao mesmo tempo não quer que essa pessoa tenha acesso ao Shell desse servidor, ou seja, que não seja possível para essa pessoa rodar comandos arbitrários, mas que ainda assim ela possa usar as outras opções mostradas aqui, como Proxy (<code>-D</code>) e redirecionamento de porta (<code>-L</code>).</p>
 <p>Útil quando você não quer dar shell no server remoto mas mesmo assim quer permitir Port forwarding.</p>
 <h1 id="adicionando-redirecionamento-de-portas-depois-da-conexo-j-estar-feita">Adicionando redirecionamento de portas depois da conexão já estar feita</h1>
