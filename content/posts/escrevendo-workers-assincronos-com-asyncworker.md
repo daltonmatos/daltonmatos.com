@@ -2,7 +2,7 @@
 title: Escrevendo workers assíncronos em python com asyncowrker
 author: Dalton Barreto
 date: 2019-03-21
-tags: [dev, python, async, worker]
+tags: [python, async, asyncworker]
 ---
 
 Olhando o histórico de commits, o primeiro data de 19/Jan/2017. Essa talvez seja a data oficial do início do que chamamos de [`asyncworker`](https://github.com/B2W-BIT/async-worker).
