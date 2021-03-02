@@ -5,6 +5,7 @@
   "theme": "hyde-hyde",
   "publishDir": "docs/",
   "RemovePathAccents": true,
+
   "params": {
     "mainSections": ["posts"],
     "highlightjs": true,
