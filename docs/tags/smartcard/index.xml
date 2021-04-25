@@ -6,11 +6,7 @@
     <description>Recent content in smartcard on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Sun, 12 Aug 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://daltonmatos.com/tags/smartcard/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 12 Aug 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://daltonmatos.com/tags/smartcard/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Usando seu keyring GPG para guardar sua chave SSH</title>
       <link>https://daltonmatos.com/2018/08/usando-seu-keyring-gpg-para-guardar-sua-chave-ssh/</link>

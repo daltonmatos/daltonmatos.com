@@ -6,12 +6,14 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
+    
+    <link rel="canonical" href="https://daltonmatos.com/2018/10/criando-sua-keyring-gpg-de-forma-facil/">
+    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.62.0" />
+<meta name="generator" content="Hugo 0.82.0" />
 
     
     
@@ -29,9 +31,10 @@ Estrutura da keyring O que vamos fazer é criar 3 chaves, um para cada finalidad
 <meta property="og:description" content="Nesse texto preparei um forma fácil e semi-automatizada para que você possa criar sua keyring GPG. Em vez de criar tudo usando o prompt interavido do GnuPG vamos usar uma funcionalidade que ele tem e que permite que chaves sejam criadas a partir de arquivos de configuração. É o que ele mesmo chama de Unattended GPG key generation.
 Estrutura da keyring O que vamos fazer é criar 3 chaves, um para cada finalidade:" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daltonmatos.com/2018/10/criando-sua-keyring-gpg-de-forma-facil/" />
-<meta property="article:published_time" content="2018-10-14T00:00:00+00:00" />
-<meta property="article:modified_time" content="2018-10-14T00:00:00+00:00" />
+<meta property="og:url" content="https://daltonmatos.com/2018/10/criando-sua-keyring-gpg-de-forma-facil/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-10-14T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2018-10-14T00:00:00&#43;00:00" />
+
 
 
     
@@ -46,7 +49,7 @@ Estrutura da keyring O que vamos fazer é criar 3 chaves, um para cada finalidad
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -80,7 +83,11 @@ html {
   <div class="container ">
     <div class="sidebar-about">
       <span class="site__title">
-        <a href="https://daltonmatos.com/"></a>
+        <a href="https://daltonmatos.com/">
+        
+          
+        
+        </a>
       </span>
       
         
@@ -161,7 +168,13 @@ html {
 	
 	
 	
+	
 	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
 	
 	
 	
@@ -331,21 +344,21 @@ ssb   rsa4096 2018-10-14 [A] [expires: 2019-04-12]
 </code></pre><p>E agora temos nossa keyring pronta para ser usada, com uma chave para cada responsabilidade: Encriptação, Assinatura e Autenticação.</p>
 <p>Fazendo dessa forma podemos expirar e rotacionar as chaves de forma independente.</p>
 <p>A partir daqui é hora de fazer um backup da sua keyring e <a href="/2018/09/modelos-de-seguranca-para-uso-de-smartcards/">guardá-lo de forma segura</a>.</p>
-<h1 id="configuraes-mnimas-para-o-gnupg">Configurações mínimas para o gnupg</h1>
+<h1 id="configurações-mínimas-para-o-gnupg">Configurações mínimas para o gnupg</h1>
 <p>Uma configuração essencial para que possamos usar o gpg de uma forma agradável é adicionar algumas opções em seu arquivo <code>~/.gnupg/gpg.conf</code>. Essas opções são:</p>
 <pre><code>keyid-format long
 armor
 </code></pre><p>Especialmente o <code>armor</code> que serve para gerar outputs &ldquo;ASCII-Friendly&rdquo; na linha de comando. Sem essa opção os outputs são todos binários, o que torna inviável de copiar/colar.</p>
-<h1 id="exportando-suas-chaves-pblicas">Exportando suas chaves públicas</h1>
+<h1 id="exportando-suas-chaves-públicas">Exportando suas chaves públicas</h1>
 <p>Depois de ter sua keyring pronta é hora de exportar sua chave pública e começar a distrubí-la para que pessoas possam te enviar conteúdo encriptado, certificar as assinaturas digitais feitas por você e também te dar acesso remoto a servidores.</p>
-<h2 id="chave-pblica-gpg">Chave pública GPG</h2>
+<h2 id="chave-pública-gpg">Chave pública GPG</h2>
 <p>Para exportar sua chave rode:</p>
 <pre><code>$ gpg --export &lt;email&gt;
 </code></pre><p>nesse nosso caso:</p>
 <pre><code>$ gpg --export --armor daltonmatos@gmail.com &gt; chave.pub
 </code></pre><p><strong>Nota</strong>: Caso já tenha configurado seu <code>gpg.conf</code>, pode remover o <code>--armor</code> desse comando (e de todos os outros no futuro).</p>
 <p>Aqui o arquivo <code>chave.pub</code> conterá sua chave pública GPG. Como exemplo <a href="/gpg/">aqui está a minha</a>.</p>
-<h2 id="exportando-sua-chave-pblica-no-formato-openssh">Exportando sua chave pública no formato openssh</h2>
+<h2 id="exportando-sua-chave-pública-no-formato-openssh">Exportando sua chave pública no formato openssh</h2>
 <p>Para exportar sua chave em um formato que pode ser diretamento usado com ssh server, rode:</p>
 <pre><code>$ gpg --export-ssh-key daltonmatos@gmail.com                                  
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCaejFQzR+ezk8Dz1MecJBmnMn2xrSmhcR5WhS/29+R0drc4ttc2Bq0b9VNM1WKEyH7dB0LZ6LbogXJT+h/yrsAl0v5cmgsQBt3kRmVE7Ig6s601gnZMvNLQA2Rq5CI/+q2AcxmJ/BnJMt42Tg3gx+hNZTnl8a8tyl9/HV5B5hEPH9Vc3ERW7eZDJ424pnr5+1O3bQdRGHX3kJMQozWOFeUZ7YPar5Qi/MlcY1Rqja1JEp+ddfCIIQkm72xLeIj07eUk8tYoegUREpcBZgdZGVxQuuVvTo2ThNtHc6o51VmjeoYeH2Pnn4W7EhU75q6gv7XfBME00sl8hKzaxeoN/WTbag7kO90ey3W0B7zVkX12hYeeV17nFVZ9mfhKSqA9kkhrs76QBNSuuPgOFrt6jn1osI3W2MYfEj0wxkmdGHXBPrkMh1hlMGwWCe2PvNBkyIC86bq/V6ynCJUiXJBc01aAFQNE10tp92oouKzDvw6CpRke+MvSxk0Z3fTBjPIUYdW+hoLhCAsYwmRV8V+N+46NHzZO5VMYgRW0tjbrpaf0rDz45oa8rD5q6R8ctg2e21wamyCfgKwPFQLoulUD8lz3sO0bZdNX4UAF6xLlprGl38CJz3IxPafiONz8Ok0eQLNUG5Rwbpr0RTL8LGsNk5PXlNEgqFK1YuXNSkCpvPPgw== openpgp:0xFB41DA06
@@ -450,20 +463,17 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCaejFQzR+ezk8Dz1MecJBmnMn2xrSmhcR5WhS/29+R
         
     
 
-<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" integrity="sha384-ZbbbT1gw3joYkKRqh0kWyRp32UAvdqkpbLedQJSlnI8iLQcFVxaGyrOgOJiDQTTR" crossorigin="anonymous"></script>
 
 
     
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
         
-    
     <script type="text/javascript">
         
         hljs.initHighlightingOnLoad();
     </script>
     
-
 
 
 

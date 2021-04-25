@@ -6,12 +6,14 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
+    
+    <link rel="canonical" href="https://daltonmatos.com/2018/08/mantendo-variaveis-de-ambiente-encriptadas/">
+    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.62.0" />
+<meta name="generator" content="Hugo 0.82.0" />
 
     
     
@@ -29,9 +31,10 @@ Variáveis de ambiente Variáveis de ambiente, ou apenas ENVs são muito comuns 
 <meta property="og:description" content="Desde que me interessei mais sobre encriptação, chaves GPG e afins comecei a tentar montar um workflow que fosse ao mesmo tempo agradável e seguro (para os padrões que escolhi). Depois de ter começado a usar um smartcard para armazenar minhas chaves ([1] e [2]) comecei a usá-lo em vários pontos do meu dia a dia que achei que deveriam/poderiam ser mais seguros.
 Variáveis de ambiente Variáveis de ambiente, ou apenas ENVs são muito comuns no dia a dia de quem lida com desenvolvimento." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daltonmatos.com/2018/08/mantendo-variaveis-de-ambiente-encriptadas/" />
-<meta property="article:published_time" content="2018-08-16T00:00:00+00:00" />
-<meta property="article:modified_time" content="2018-08-16T00:00:00+00:00" />
+<meta property="og:url" content="https://daltonmatos.com/2018/08/mantendo-variaveis-de-ambiente-encriptadas/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-08-16T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2018-08-16T00:00:00&#43;00:00" />
+
 
 
     
@@ -46,7 +49,7 @@ Variáveis de ambiente Variáveis de ambiente, ou apenas ENVs são muito comuns 
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -80,7 +83,11 @@ html {
   <div class="container ">
     <div class="sidebar-about">
       <span class="site__title">
-        <a href="https://daltonmatos.com/"></a>
+        <a href="https://daltonmatos.com/">
+        
+          
+        
+        </a>
       </span>
       
         
@@ -161,7 +168,13 @@ html {
 	
 	
 	
+	
 	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
 	
 	
 	
@@ -233,11 +246,11 @@ html {
   <div class="post">
     <p>Desde que me interessei mais sobre encriptação, chaves GPG e afins comecei a tentar montar um workflow que fosse ao mesmo tempo agradável e seguro (para os padrões que escolhi).
 Depois de ter começado a usar um <a href="/tags/yubikey">smartcard</a> para armazenar minhas chaves (<a href="/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/">[1]</a> e <a href="/2018/08/usando-seu-keyring-gpg-para-guardar-sua-chave-ssh/">[2]</a>) comecei a usá-lo em vários pontos do meu dia a dia que achei que deveriam/poderiam ser mais seguros.</p>
-<h1 id="variveis-de-ambiente">Variáveis de ambiente</h1>
+<h1 id="variáveis-de-ambiente">Variáveis de ambiente</h1>
 <p>Variáveis de ambiente, ou apenas <code>ENVs</code> são muito comuns no dia a dia de quem lida com desenvolvimento. Seja para passar parametros para o seu código ou para configurar seu shell, elas estão lá muitas vezes até mesmo sem a gente se dar conta.</p>
 <p>Por muito tempo guardei credenciais de acesso em <code>ENVs</code>, por pura praticidade. Afinal, não precisaria decorar nenhum daqueles valores e poderia, com um comando, resgatá-los e usar quando necessário.  Mas o problema é que esses valores ficam guardados em texto plano. Isso é análogo a anotarmos a senha do nosso cartão do banco em uma arquivo <code>txt</code> dentro do nosso computador, e não fazemos isso né?</p>
 <p>Por isso faz um tempo que pensei em qual seria o custo de manter todas as minhas <code>ENVs</code> encriptadas e mais, queria continuar dependendo apenas de um comando para recuperar seus valores e usá-los.</p>
-<h1 id="encriptando-suas-variveis-de-ambiente">Encriptando suas Variáveis de ambiente</h1>
+<h1 id="encriptando-suas-variáveis-de-ambiente">Encriptando suas Variáveis de ambiente</h1>
 <p>A encriptação não sem nenhum mistério, é passar um valor para o <code>gnupg</code> e guardar o resultado na <code>ENV</code> desejada. Como o resultado da encriptação é um valor multi-linha, precisamos manter esse &ldquo;formato&rdquo;. Aqui está um exemplo de como gerar uma variável dessas.</p>
 <p>Aqui vamos apenas chamar o comando mostrado, colar o conteúdo a ser encriptado e dar um <code>Enter</code>.</p>
 <p>Depois pressione <code>^D</code> (<code>Ctrl+d</code>). Precisamos disso porque o <code>gnupg</code> está lendo do <code>stdin</code> e o <code>^D</code> é o sinal de que a entrada terminou.</p>
@@ -257,7 +270,7 @@ WbNODvKL2Q3FABECsOAtmPtYLn3kLrqcuz5RKacCs0jfxS5N6p7b6VI6ZpX39Z+3
 3y33+bJL4ezLPWXCUtLvu4n0Krl2UYVJZJuy9rVaGguP/MYKjFp5pfCy8XjYUE0v
 U4QzWxVe9RNAmhe0fW0ivjuMNtzlS7BqAwTqMugzBeWw8/uXoT4tCtCqAJF4eMTS
 QgFVR9Ybw5m1IANObGBPKBdwAMkd4wsYNvjPGNgu5S01YGbt+qjt/P9JhZzAvSxO
-pPWRurxuZxJmRsUJy1gzQrUbcA<span style="color:#f92672">=</span><span style="color:#f92672">=</span>
+pPWRurxuZxJmRsUJy1gzQrUbcA<span style="color:#f92672">==</span>
 <span style="color:#f92672">=</span>lCiu
 -----END PGP MESSAGE-----</code></pre></div>
 <p>Agora salvamos isso em algum arquivo que será importado pelo nosso shell. Eu tenho essas (e outras) coisas em um arquivo <code>~/.shell-extras</code>, mas pode ser em qualquer lugar, desde que seja importado pelo seu shell.</p>
@@ -286,9 +299,9 @@ gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
       <span style="color:#e6db74">&#34;Dalton Barreto &lt;daltonmatos@gmail.com&gt;&#34;</span>
 AQUI VAI O CONTEÚDO SENSÍVEL</code></pre></div>
 <p>Isso vai nos dar o resultado original. Essa é a confirmação de que tudo está correto e já podemos usar esse valor em quaisquer comandos em nosso shell prompt (ou script!).</p>
-<h1 id="usando-uma-varivel-em-um-comando-qualquer">Usando uma variável em um comando qualquer</h1>
+<h1 id="usando-uma-variável-em-um-comando-qualquer">Usando uma variável em um comando qualquer</h1>
 <p>O uso na linha de comando é bem simples, na verdade o que temos que fazer é encaixar esse <code>printnev</code> que fizemos aí em cima no meio da linha de comando onde precisamos usar o valor sensível. Algo assim:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">curl -H <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">X-Secret: </span><span style="color:#66d9ef">$(</span>printenv CRYPT_API_AUTH_TOKEN| gpg -d<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> https://httpbin.org/headers            
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">curl -H <span style="color:#e6db74">&#34;X-Secret: </span><span style="color:#66d9ef">$(</span>printenv CRYPT_API_AUTH_TOKEN| gpg -d<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> https://httpbin.org/headers            
 gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
       <span style="color:#e6db74">&#34;Dalton Barreto &lt;daltonmatos@gmail.com&gt;&#34;</span>
 <span style="color:#f92672">{</span>
@@ -304,14 +317,14 @@ gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
 <h2 id="facilitando-o-uso-desses-valores-em-nossos-comandos">Facilitando o uso desses valores em nossos comandos</h2>
 <p>Para não precisar digitar todo esse comando do <code>printenv</code> sempre que precisar usar alguma <code>ENV</code>, escrevi uma shell function que facilita esse uso. Chamei essa function de <code>decrypt_env</code>. O que ela recebe como parametro é apenas o nome da env e retorna seu valor, decriptado.</p>
 <p>Para poder diferenciar, pelo nome, envs que são encriptadas sempre uso o prefixo <code>CRYPT_</code> em todas as <code>ENVs</code> que possuem conteúdo encriptado. Essa shell function é bem simples:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">decrypt_env<span style="color:#f92672">(</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">decrypt_env<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
   local env_name_sufix<span style="color:#f92672">=</span>$1
   local env_name<span style="color:#f92672">=</span>CRYPT_<span style="color:#e6db74">${</span>env_name_sufix<span style="color:#e6db74">}</span>
   gpg -d <span style="color:#f92672">&lt;&lt;&lt;</span><span style="color:#e6db74">${</span>(P)env_name<span style="color:#e6db74">}</span> 2&gt;/dev/null
 <span style="color:#f92672">}</span></code></pre></div>
 <p>Esse código está no meu <a href="https://github.com/daltonmatos/dotfiles/blob/master/zsh/zshrc#L194-L198">dotfiles</a>.</p>
 <p>De posse dessa função, nossa linha de comando de exemplo ficaria assim:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">curl -H <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">X-Secret: </span><span style="color:#66d9ef">$(</span>decrypt_env API_AUTH_TOKEN<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> https://httpbin.org/headers           
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">curl -H <span style="color:#e6db74">&#34;X-Secret: </span><span style="color:#66d9ef">$(</span>decrypt_env API_AUTH_TOKEN<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> https://httpbin.org/headers           
 <span style="color:#f92672">{</span>
   <span style="color:#e6db74">&#34;headers&#34;</span>: <span style="color:#f92672">{</span>
     <span style="color:#e6db74">&#34;Accept&#34;</span>: <span style="color:#e6db74">&#34;*/*&#34;</span>, 
@@ -323,7 +336,7 @@ gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
 <span style="color:#f92672">}</span></code></pre></div>
 <p>Perceba que passamos apenas o &ldquo;nome&rdquo; da env, sem mencionar o prefixo <code>CRYPT_</code>. Outra coisa que a function faz é suprimir o que o <code>gnupg</code> imprime no <code>stderr</code>, apenas para não termos eventuais problemas, já que estáriamos alterando o <code>stderr</code> do shell e essa function deveria ser totalmente transparente.</p>
 <p><strong>Nota</strong>: Confesso que tentei, em algum momento, escrever um auto-complete para o zsh, mas falhei. Talvez eu volte nisso algum dia. =)</p>
-<h1 id="histrico-do-shell">Histórico do shell</h1>
+<h1 id="histórico-do-shell">Histórico do shell</h1>
 <p>Uma vantagem colateral dessa abordagem é que os valores sensíveis que estão nessas <code>ENVs</code> <strong>não ficam</strong> no histórico do seu shell, afinal lá só estará o comando com a chamada à função <code>decrypt_env()</code>. Nesse caso não temos nenhum vazamento de informações sobre seus valores sensíveis.</p>
 <p>Atualmente todas as minhas <code>ENVs</code> sensíveis estão encriptadas e isso me faz sentir mais seguro em relação ao que pode ser lido em um eventual acesso à minha estação de trabalho ou computador pessoal.</p>
 
@@ -412,20 +425,17 @@ gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
         
     
 
-<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" integrity="sha384-ZbbbT1gw3joYkKRqh0kWyRp32UAvdqkpbLedQJSlnI8iLQcFVxaGyrOgOJiDQTTR" crossorigin="anonymous"></script>
 
 
     
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
         
-    
     <script type="text/javascript">
         
         hljs.initHighlightingOnLoad();
     </script>
     
-
 
 
 

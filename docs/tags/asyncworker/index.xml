@@ -6,10 +6,17 @@
     <description>Recent content in asyncworker on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Sat, 04 Jan 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://daltonmatos.com/tags/asyncworker/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Sun, 25 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://daltonmatos.com/tags/asyncworker/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Asyncworker: Recebendo parametros do Path do Request através de typehints</title>
+      <link>https://daltonmatos.com/2021/04/asyncworker-recebendo-parametros-do-path-do-request-atraves-de-typehints/</link>
+      <pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://daltonmatos.com/2021/04/asyncworker-recebendo-parametros-do-path-do-request-atraves-de-typehints/</guid>
+      <description>No último post exploramos algumas possibilidades de um handler http receber mais do que Request quando for chamado. Naquele post fizemos uso de um decorator para exemplificar o pasring do body do request.
+Nesse post vamos ver o que o asyncworker trouxe de novo para que essa funcionalidade seja mais simples e fácil de usar.
+A versão 0.19.1 do asyncworker traz um novo typehint que permite receber parametros do path do request: PathParam[T].</description>
+    </item>
     
     <item>
       <title>Asyncworker: Handler HTTP recebendo mais do que Request</title>

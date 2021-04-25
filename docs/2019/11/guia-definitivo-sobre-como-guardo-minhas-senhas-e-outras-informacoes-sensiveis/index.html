@@ -6,12 +6,14 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
+    
+    <link rel="canonical" href="https://daltonmatos.com/2019/11/guia-definitivo-sobre-como-guardo-minhas-senhas-e-outras-informacoes-sensiveis/">
+    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.62.0" />
+<meta name="generator" content="Hugo 0.82.0" />
 
     
     
@@ -29,9 +31,10 @@ Já escrevi bastante sobre as pesquisas que fiz em relação a isso e esse post 
 <meta property="og:description" content="Introdução Desde que descobri a existência das chaves fabricadas pela Yubico (Token) fiquei interessado em ter uma para usar como Segundo fator de autenticação (MFA), quando descobri que além de segundo fator ela também suportava o uso de chaves GPG fiquei ainda mais curioso para testar um exemplar pessoalmente.
 Já escrevi bastante sobre as pesquisas que fiz em relação a isso e esse post é uma tentativa de juntar tudo de uma forma que uma pessoa que acabou de comprar sua chave possa prepará-la para fazer o mesmo uso que eu faço no dia a dia." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daltonmatos.com/2019/11/guia-definitivo-sobre-como-guardo-minhas-senhas-e-outras-informacoes-sensiveis/" />
-<meta property="article:published_time" content="2019-11-05T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-11-05T00:00:00+00:00" />
+<meta property="og:url" content="https://daltonmatos.com/2019/11/guia-definitivo-sobre-como-guardo-minhas-senhas-e-outras-informacoes-sensiveis/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-11-05T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2019-11-05T00:00:00&#43;00:00" />
+
 
 
     
@@ -46,7 +49,7 @@ Já escrevi bastante sobre as pesquisas que fiz em relação a isso e esse post 
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -80,7 +83,11 @@ html {
   <div class="container ">
     <div class="sidebar-about">
       <span class="site__title">
-        <a href="https://daltonmatos.com/"></a>
+        <a href="https://daltonmatos.com/">
+        
+          
+        
+        </a>
       </span>
       
         
@@ -161,7 +168,13 @@ html {
 	
 	
 	
+	
 	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
 	
 	
 	
@@ -231,7 +244,7 @@ html {
   
   
   <div class="post">
-    <h1 id="introduo">Introdução</h1>
+    <h1 id="introdução">Introdução</h1>
 <p>Desde que descobri a existência das chaves fabricadas pela <a href="https://yubico.com">Yubico</a> (Token) fiquei interessado em ter uma para usar como Segundo fator de autenticação (<a href="https://en.wikipedia.org/wiki/Multi-factor_authentication">MFA</a>), quando descobri que além de segundo fator ela também suportava o uso de chaves GPG fiquei ainda mais curioso para testar um exemplar pessoalmente.</p>
 <p>Já escrevi bastante sobre as pesquisas que fiz em relação a isso e esse post é uma tentativa de juntar tudo de uma forma que uma pessoa que acabou de comprar sua chave possa prepará-la para fazer o mesmo uso que eu faço no dia a dia.</p>
 <p>Ao longo desse texto irei deixando link para cada um dos artigos que escrevi sobre isso no passado. Se você quiser ver a lista de todos os artigos (inclusive esse), está <a href="/tags/yubikey">aqui</a>.</p>
@@ -264,7 +277,7 @@ html {
 <p>Essa também era uma parte bem relevante das funcionalidades. Não poder acessar minhas senhas pelo celular seria um grande problema. Acho que essa foi a funcionalidade mais difícil de ter rodando de forma satisfatória mas agora que já descobri todos os detalhes a experiência de uso é fantástica.</p>
 <p>O app que uso é o  <a href="https://play.google.com/store/apps/details?id=com.zeapo.pwdstore">Password Store</a> que, assim como a extensão do browser, entende as convenções criadas pelo <code>pass</code>. Um bônus desse app é que ele dá suporte ao uso da feature de NFC. O que significa que quando preciso decriptar algum conteúdo basta que eu encoste meu token na parte de trás do celular e tudo funciona.</p>
 <p>O Password Store precisa de um segundo App, o <a href="https://play.google.com/store/apps/details?id=org.sufficientlysecure.keychain">OpenKeyChain</a>. Esse é o app que efetivamente fala com a chave da Yubico e fornece uma API para que outros Apps também possam se comunicar com a chave.</p>
-<h1 id="o-que-voc-vai-precisar">O que você vai precisar</h1>
+<h1 id="o-que-você-vai-precisar">O que você vai precisar</h1>
 <ul>
 <li>Um token com suporte a GPG. O token que uso e que mais gostei foi a <a href="https://www.yubico.com/product/yubikey-5-nfc">Yubico 5 NFC</a>. Já usei a <a href="https://www.yubico.com/product/yubikey-5-nano">Nano</a> também, mas preferi a 5 NFC.</li>
 <li>Um celular com NFC, se quiser usar essa feature. Ou pelo menos um celular com <a href="https://en.m.wikipedia.org/wiki/USB_On-The-Go">USB OTG</a>, que aí você pode plugar a chave na porta USB do celular, usando um adaptador.</li>
@@ -289,13 +302,13 @@ html {
 <p><a href="https://daltonmatos.com/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/">Preparando uma Yubikey 4 Nano para uso diário</a></p>
 <p><a href="https://daltonmatos.com/2018/12/comprei-uma-yubikey-nova-e-agora/">Comprei uma yubikey nova, e agora?</a></p>
 <p>Usei esses mesmos textos para trocar de uma yubikey 4 Nano para uma yubikey 5 NFC.</p>
-<h2 id="bnus-usando-seu-token-para-guardar-sua-chave-ssh-e-de-assinatura">Bônus: Usando seu token para guardar sua chave SSH e de assinatura</h2>
+<h2 id="bônus-usando-seu-token-para-guardar-sua-chave-ssh-e-de-assinatura">Bônus: Usando seu token para guardar sua chave SSH e de assinatura</h2>
 <p>Uma possibilidade também é poder ter sua chave SSH (Authentication) e de assinatura (Sign) dentro do seu token. Isso significa que você pode, literalmente, carregar sua chave SSH no bolso. Para quem usa múltiplos computadores e tem acesso a múltiplos servidores isso é uma libertação. Antes de poder fazer isso eu tinha uma chave por PC. Agora posso ter apenas uma chave.</p>
 <p>Já escrevi sobre isso:</p>
 <p><a href="https://daltonmatos.com/2018/08/usando-seu-keyring-gpg-para-guardar-sua-chave-ssh/">Usando seu keyring GPG para guardar sua chave SSH</a></p>
 <p>Nesse texto também falo sobre outras chaves que podem ser colocadas dentro do token.</p>
 <p>No meu caso guardo também a chave de assinatura digital e assino todos os commits que faço em todos os códigos que produzo, não importando se é código de trabalho, projeto pessoal ou contribuição a projetos de terceiros.</p>
-<h2 id="a-importncia-de-se-ter-um-ou-mais-token-reserva">A importância de se ter um (ou mais) token reserva</h2>
+<h2 id="a-importância-de-se-ter-um-ou-mais-token-reserva">A importância de se ter um (ou mais) token reserva</h2>
 <p>Assim como temos o backup de nosso keyring GPG é interessante ter também um token de reserva, ou até mais de um. Isso porque em uma eventual perda do token que você carrega no bolso, você terá um idêntico em casa e poderá retomar suas atividades muito mais rapidamente.</p>
 <p>Sempre que tenho uma oportunidade eu compro tokens reserva, mesmo se já tiver algum em casa. Prefiro já estar preparado caso venha a perder algum dos tokens que estão em uso.</p>
 <h1 id="possibilidades-de-perder-o-acesso-a-todos-os-meus-dados">Possibilidades de perder o acesso a todos os meus dados</h1>
@@ -303,7 +316,7 @@ html {
 <p>Escrevi um pouco sobre essas idéias em posts antigos.</p>
 <p><a href="https://daltonmatos.com/2018/09/o-que-acontece-se-minha-yubikey-parar-de-funcionar/">O que acontece se minha Yubikey parar de funcionar?</a></p>
 <p><a href="https://daltonmatos.com/2018/09/modelos-de-seguranca-para-uso-de-smartcards/">Modelos de segurança para uso de smartcards</a></p>
-<h2 id="qual-o-mnimo-de-acesso-que-preciso-para-no-perder-meus-prprios-dados">Qual o mínimo de acesso que preciso para não perder meus próprios dados?</h2>
+<h2 id="qual-o-mínimo-de-acesso-que-preciso-para-não-perder-meus-próprios-dados">Qual o mínimo de acesso que preciso para não perder meus próprios dados?</h2>
 <p>A única coisa que preciso para garantir que posso ler meus próprios dados que estão encriptados é meu keyring GPG. Apesar de ser apenas &ldquo;uma coisa&rdquo; o acesso não é tão simples assim e explico o porque.</p>
 <p>Todas as minhas senhas e outros dados sensíveis estão encriptados com essa chave GPG, que atualmente está no token. O problema é que a cópia do keyring está em um local remoto, o arquivo que guarda a senha desse local está em um repositório git, também remoto.</p>
 <p>Então se eu perco meu token, não tenho um reserva já preparado e minha cópia da keyring está <strong>apenas</strong> no local remoto eu estou potencialmente travado pra fora. Potencialmente pois ainda existe a chance de passar pelo processo de recuperação de conta para obter acesso a esse backup.</p>
@@ -324,7 +337,7 @@ html {
 <p>Se isso tudo realmente acontecer minha última chance é passar pelo processo de recuperação de conta do local onde o backup da minha keyring está armazenado. Se minha chave SSH estiver fora da keyring GPG terei também que passar pelo processo de recuperação de conta do local onde está o repositório git.</p>
 <p>Se a chave SSH estiver também no seu keyring GPG, então você já terá acesso ao repositório git assim que tiver acesso ao backup do keyring. Isso significa que você precisará passar pelo processo de recuperação de apenas uma conta.</p>
 <p>O primeiro commit do meu repositório git é de 30 de Julho de 2018, isso indica que já estou usando esse modelo há mais de 1 ano. Até hoje perdi um token (e aí usei um reserva) e ainda não errei o PIN mais de 3 vezes, o que bloquearia o token e faria com que eu precisasse de acesso ao backup do keyring.</p>
-<h1 id="concluso">Conclusão</h1>
+<h1 id="conclusão">Conclusão</h1>
 <p>Todo esse esforço existe por alguns motivos:</p>
 <ul>
 <li>Não precisar decorar nenhuma senha de nenhum lugar onde eu tenho conta. A única senha que preciso decorar é o PIN que destrava o token, depois disso tudo é decriptado usando o próprio token;</li>
@@ -434,20 +447,17 @@ html {
         
     
 
-<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" integrity="sha384-ZbbbT1gw3joYkKRqh0kWyRp32UAvdqkpbLedQJSlnI8iLQcFVxaGyrOgOJiDQTTR" crossorigin="anonymous"></script>
 
 
     
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
         
-    
     <script type="text/javascript">
         
         hljs.initHighlightingOnLoad();
     </script>
     
-
 
 
 

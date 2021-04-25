@@ -6,12 +6,14 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
+    
+    <link rel="canonical" href="https://daltonmatos.com/2015/04/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/">
+    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.62.0" />
+<meta name="generator" content="Hugo 0.82.0" />
 
     
     
@@ -27,9 +29,10 @@
 <meta property="og:title" content="Chamando código Assembly legado (AVRASM2) a partir de um código novo em C (avr-gcc)" />
 <meta property="og:description" content="Contexto Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando avr-gcc. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Isso significa que o código assembly deve estar na sintaxe que o avr-as (GNU Assembler) espera encontrar. Quando me refiro a &ldquo;código legado&rdquo; estou falando de Assembly feito no AVR Studio, usando o AVRASM2 como Assembler." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daltonmatos.com/2015/04/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/" />
-<meta property="article:published_time" content="2015-04-12T00:00:00+00:00" />
-<meta property="article:modified_time" content="2015-04-12T00:00:00+00:00" />
+<meta property="og:url" content="https://daltonmatos.com/2015/04/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2015-04-12T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2015-04-12T00:00:00&#43;00:00" />
+
 
 
     
@@ -44,7 +47,7 @@
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -78,7 +81,11 @@ html {
   <div class="container ">
     <div class="sidebar-about">
       <span class="site__title">
-        <a href="https://daltonmatos.com/"></a>
+        <a href="https://daltonmatos.com/">
+        
+          
+        
+        </a>
       </span>
       
         
@@ -159,7 +166,13 @@ html {
 	
 	
 	
+	
 	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
 	
 	
 	
@@ -233,10 +246,10 @@ html {
 <p>Todos os tutoriais que encontrei na internet que falam sobre mistura de C e ASM em um mesmo projeto ensinam a fazer da mesma forma, que é usando <code>avr-gcc</code>. O problema comum em todos eles é que assumem que você está começando um projeto do zero. Isso significa que o código assembly deve estar na sintaxe que o <code>avr-as</code> (GNU Assembler) espera encontrar. Quando me refiro a &ldquo;código legado&rdquo; estou falando de Assembly feito no AVR Studio, usando o AVRASM2 como Assembler. A sintaxe do Assembly que o <code>AVRASM2</code> espera é incompatível com a que o <code>avr-as</code> espera, então não podemos simplesmente pegar o código e compilar com <code>avr-as</code>.</p>
 <p>Dependendo do tamanho do projeto original é inviável migrar tudo de um vez e é aí que poder mesclar C e ASM se torna muito útil, pois você pode ir escrevendo o código C ao mesmo tempo em que o sistema está evoluindo e eventualmente ganhando novas funcionalidades. O desafio desse post é conseguir juntar dois projetos que foram feitos usando ferramentas diferentes (<code>avr-gcc</code> e <code>AVR Studio</code>) e que, a princípio, são incompatíveis.</p>
 <p>Muitos desses projetos ASM (todos?) feitos há muito tempo atrás provavelmente foram feitos com assemblers que não tinham em mente a junção com código C e portanto geram binários que não possuem suporte à link-edição e outras coisas necessárias para que possamos juntar as duas linguagens. Esse é o caso do <code>AVR Studio</code> (quando usando <code>AVRASM2</code> como Assembler), ele gera no final do build um arquivo no formato <a href="http://en.wikipedia.org/wiki/Intel_HEX">Intel Hex</a>, que não possui, dentre outras coisas, suporte à link-edição.</p>
-<h1 id="preparao-dos-arquivos">Preparação dos arquivos</h1>
+<h1 id="preparação-dos-arquivos">Preparação dos arquivos</h1>
 <p>Antes de podermos começar precisamos ter todos os nossos arquivos em um mesmo formato, para que possamos usar o <code>avr-gcc</code> para gerar nosso binário final. Isso significa que teremos que converter todos os arquivos para um formato que o <code>avr-gcc</code> entenda.</p>
 <p>Como o AVRASM2 gera Intel Hex (HEX) temos que converter esse conteúdo para elf32-avr (<a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF</a>), assim poderemos juntar esse código com nosso código compilado pelo <code>avr-gcc</code>. Não existe uma conversão direta de HEX pra ELF, o que podemos fazer é converter de HEX para flat binary e depois para ELF. A conversão é feita com <code>avr-objcopy</code>.</p>
-<h1 id="exemplo-de-cdigo-avrasm2">Exemplo de código AVRASM2</h1>
+<h1 id="exemplo-de-código-avrasm2">Exemplo de código AVRASM2</h1>
 <p>Vamos pegar um pequeno exemplo de código feito com AVRASM2 para podermos fazer o processo completo.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#a6e22e">.include</span> <span style="color:#e6db74">&#34;m328Pdef.inc&#34;</span>
 
@@ -276,10 +289,10 @@ Olhando o arquivo ELF de perto, vemos que o símbolo <code>_blinks</code> não e
   0000000a g       .progmem.data	00000000 _binary_blinks_bin_end
   0000000a g       *ABS*	        00000000 _binary_blinks_bin_size
 </code></pre><p>Os três símobolos <code>_binary_*</code> foram criados pelo <code>avr-objcopy</code> e marcam, respectivamente, o início, fim e tamanho total do nosso código, depois de compilado. Mesmo não tendo o símbolo <code>_blinks</code> podemos deduzir onde ele está. Se voltarmos no código assembly veremos que a instrução <code>.org 0x0000</code> está lá e sabemos que ela força o posicionamento do ínício do nosso código no endereço <code>0</code>. Então podemos usar o símbolo <code>_binary_blinks_bin_start</code> (que está posicionado no endereço <code>0</code>) como sendo nosso ponto de entrada no código assembly.</p>
-<h1 id="analisando-o-cdigo-em-c">Analisando o código em C</h1>
+<h1 id="analisando-o-código-em-c">Analisando o código em C</h1>
 <p>Para validar nossa hipótese, vamos fazer um código em C que chama essa rotina escrita em Assembly. O código é bem simples, tudo que ele faz é piscar o LED que está ligado na porta <code>D13</code>. Como esse código foi testando em um Arduino Nano, a porta <code>D13</code> é, na verdade, o bit 5 da <a href="http://www.arduino.cc/en/Reference/PortManipulation">PORTB</a>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>  <span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;util/delay.h&gt;</span><span style="color:#75715e">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;util/delay.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e"></span>
   <span style="color:#75715e">// Arduino Pin13 is mapped to PORTB, bit 5
 </span><span style="color:#75715e"></span>  <span style="color:#75715e">// See: http://www.arduino.cc/en/Reference/PortManipulation
@@ -294,11 +307,11 @@ Olhando o arquivo ELF de perto, vemos que o símbolo <code>_blinks</code> não e
     PORTB <span style="color:#f92672">=</span> PORTB <span style="color:#f92672">|</span> _BV(PB5); <span style="color:#75715e">// HIGH
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> (;;){
       uint8_t i;
-      <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> total_blinks; i<span style="color:#f92672">+</span><span style="color:#f92672">+</span>){
+      <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> total_blinks; i<span style="color:#f92672">++</span>){
         PORTB <span style="color:#f92672">=</span> PORTB <span style="color:#f92672">|</span> _BV(PB5); <span style="color:#75715e">// HIGH
 </span><span style="color:#75715e"></span>        _delay_ms(<span style="color:#ae81ff">200</span>);
 
-        PORTB <span style="color:#f92672">&amp;</span><span style="color:#f92672">=</span> <span style="color:#f92672">~</span>_BV(PB5); <span style="color:#75715e">// LOW
+        PORTB <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>_BV(PB5); <span style="color:#75715e">// LOW
 </span><span style="color:#75715e"></span>          _delay_ms(<span style="color:#ae81ff">200</span>);
       }
       _delay_ms(<span style="color:#ae81ff">1000</span>);
@@ -307,7 +320,7 @@ Olhando o arquivo ELF de perto, vemos que o símbolo <code>_blinks</code> não e
     <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
   }
 </code></pre></div><p>Como vamos usar esse mesmo código para linkar com vários códigos ASM diferentes, deixamos o nome da função como uma constante (<code>ASM_SYM</code>) e vamos passar um valor dessa constante para o <code>avr-gcc</code> (via flag <code>-D</code>) no momento de compilar esse código.</p>
-<h1 id="compilando-tudo-e-juntando-em-um-mesmo-binrio">Compilando tudo e juntando em um mesmo binário</h1>
+<h1 id="compilando-tudo-e-juntando-em-um-mesmo-binário">Compilando tudo e juntando em um mesmo binário</h1>
 <p>A compilação do código em C é simples, nada demais em relação aqualquer outra compilação:</p>
 <pre><code>  $ avr-gcc -mmcu=atmega328p -Os -DF_CPU=16000000 -DASM_SYM=_binary_blinks_bin_start -o main.elf main.c blinks.elf
 </code></pre><p>Perceba que aqui estamos passando o parametro <code>-DASM_SYM=_binary_blinks_bin_start</code> para o <code>avr-gcc</code>. Isso faz com que ele use esse símbolo na chamada <code>uint8_t total_blinks = ASM_SYM(5)</code>. Isso significa que é como se o código fosse escrito assim: <code>uint8_t total_blinks = _binary_blinks_bin_start(5);</code></p>
@@ -348,7 +361,7 @@ Olhando o arquivo ELF de perto, vemos que o símbolo <code>_blinks</code> não e
 <p>Nesse ponto, temos um ELF que precisamos converter de volta para HEX, para que possamos fazer o flash para o micro controlador.</p>
 <pre><code>  $ avr-objcopy -I elf32-avr -O ihex -j .text -j .data main.elf main.hex
 </code></pre><p>De fato, esse é um exemplo muito simples e provavelmente não representa uma situação real em que temos um projeto Assembly legado que precisa ser migrado para C. Pensando nisso, vamos analisar exemplos mais complexos de código Assembly que fazem uso de outras instruçoes como <code>jmp, call, rjmp</code>.</p>
-<h1 id="analisando-um-cdigo-que-usa-jmp">Analisando um código que usa jmp</h1>
+<h1 id="analisando-um-código-que-usa-jmp">Analisando um código que usa jmp</h1>
 <p>Agora vamos fazer o mesmo procedimento mas usando um código Assembly que faz uso da instrução <code>jmp</code>.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">  <span style="color:#a6e22e">.org</span> <span style="color:#ae81ff">0x0000</span>
 
@@ -501,20 +514,17 @@ Olhando o arquivo ELF de perto, vemos que o símbolo <code>_blinks</code> não e
         
     
 
-<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" integrity="sha384-ZbbbT1gw3joYkKRqh0kWyRp32UAvdqkpbLedQJSlnI8iLQcFVxaGyrOgOJiDQTTR" crossorigin="anonymous"></script>
 
 
     
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
         
-    
     <script type="text/javascript">
         
         hljs.initHighlightingOnLoad();
     </script>
     
-
 
 
 

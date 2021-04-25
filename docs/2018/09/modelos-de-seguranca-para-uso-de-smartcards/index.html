@@ -6,12 +6,14 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
+    
+    <link rel="canonical" href="https://daltonmatos.com/2018/09/modelos-de-seguranca-para-uso-de-smartcards/">
+    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.62.0" />
+<meta name="generator" content="Hugo 0.82.0" />
 
     
     
@@ -31,9 +33,10 @@ Na época eu já queria um desses pelo simples fato de ser um token físico, mas
 Minha curiosidade era mais no sentido de quanta &ldquo;burocracia&rdquo; um dispositivo desse poderia inserir no meu dia de trabalho.
 Na época eu já queria um desses pelo simples fato de ser um token físico, mas pensando bem usar o celular com algum App de TOTP seria bem semelhante, talvez até &ldquo;melhor&rdquo; já que o App do celular pode exigir uma senha antes de abrir e no caso do token físico, não tem senha nenhuma, basta inserir na porta USB e tocar com o dedo." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daltonmatos.com/2018/09/modelos-de-seguranca-para-uso-de-smartcards/" />
-<meta property="article:published_time" content="2018-09-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2018-09-06T00:00:00+00:00" />
+<meta property="og:url" content="https://daltonmatos.com/2018/09/modelos-de-seguranca-para-uso-de-smartcards/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-09-06T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2018-09-06T00:00:00&#43;00:00" />
+
 
 
     
@@ -48,7 +51,7 @@ Na época eu já queria um desses pelo simples fato de ser um token físico, mas
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -82,7 +85,11 @@ html {
   <div class="container ">
     <div class="sidebar-about">
       <span class="site__title">
-        <a href="https://daltonmatos.com/"></a>
+        <a href="https://daltonmatos.com/">
+        
+          
+        
+        </a>
       </span>
       
         
@@ -163,7 +170,13 @@ html {
 	
 	
 	
+	
 	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
 	
 	
 	
@@ -242,7 +255,7 @@ html {
 <p>Minha atração <strong>definitiva</strong> em relação às keys fabricadas pela <a href="https://Yubico.com">Yubico</a> foi o fato delas serem PGP Compatibile. Ou seja, não só elas são segundo fator de autenticação mas também podem armazenar de forma segura suas chaves privadas.</p>
 <p>Outro ponto que as chaves da Yubico têm é a possibilidade de <a href="https://www.yubico.com/solutions/smart-card/">armazenar certificados digitais</a>, aqueles no formato <a href="https://en.m.wikipedia.org/wiki/X.509">x509</a>. Isso faz ser possível, por exemplo, rodar um site com HTTPS onde a chave privada do certificado está na Yubikey. Um exemplo de experimento sobre isso: <a href="https://blog.benjojo.co.uk/post/tls-https-server-from-a-yubikey">aqui</a></p>
 <p><strong>Nota</strong>: Esses certificados também são usados na implementação do Secure Boot, o que me faz pensar que seria possível assinar o GRUB da minha máquina usando uma chave privada que está na minha Yubikey. Dessa forma seria possível fazer a proteção de ponta a ponta usando Secure Boot + <a href="/2018/08/arch-linux-com-full-disk-encryption/">Full disk encryption</a>. Até cheguei a mandar um <a href="https://twitter.com/daltonmatos/status/1032083641885765634?s=19">tweet para a Yubico</a> sugerindo uma documentação de como fazer isso. Nesse meio tempo, continuo estudando sobre Secure Boot.</p>
-<h1 id="modelo-de-segurana-para-usar-uma-yubikey-com-chaves-privadas">Modelo de segurança para usar uma Yubikey com chaves privadas</h1>
+<h1 id="modelo-de-segurança-para-usar-uma-yubikey-com-chaves-privadas">Modelo de segurança para usar uma Yubikey com chaves privadas</h1>
 <p>Assim que descobri a possibilidade de ter chaves privadas dentro de uma Yubikey comecei a pensar e a pesquisar sobre modelos de segurança para que eu pudesse fazer uso desse novo dispositivo de forma segura (minimamente!) mas ao mesmo tempo sem adicionar muita burocracia no dia a dia e também sem tornar fácil para terceiros terem acesso ao conteúdo das chaves, mas que seja relativamente fácil pra mim.</p>
 <h1 id="gerando-sua-chave-gpg">Gerando sua chave GPG</h1>
 <p>O primeiro ponto é como/onde gerar suas chaves. Essa escolha é importante pois você precisa considerar alguns fatores, sendo o mais importante deles: Se sua Yubikey falhar, que alternativas você tem? Você consegue reconstruir uma nova Yubikey com a mesma chave que estava na Yubikey anterior? É aceitável você perder sua chave GPG e simplesmente gerar uma nova, caso tenha que preparar uma nova Yubikey?</p>
@@ -255,7 +268,7 @@ html {
 <p>A partir do momento em que as chaves são geradas fora da Yubikey, um novo problema surge: Como guardar essa cópia das chaves de forma segura?</p>
 <p><strong>Nota</strong>: Vamos referenciar essa chave principal como &ldquo;Master Key&rdquo; para ficar mais fácil de identificar.</p>
 <p>A primeira coisa que vem em mente é guardar essa cópia encriptada, mas que tipo de encriptação usar?</p>
-<h3 id="guardar-a-master-key-usando-encriptao-assimtrica">Guardar a Master Key usando encriptação assimétrica</h3>
+<h3 id="guardar-a-master-key-usando-encriptação-assimétrica">Guardar a Master Key usando encriptação assimétrica</h3>
 <p>Para usar criptografia assimétrica seria preciso gerar um novo par de chaves para encriptar a Master Key, mas nesse momento o mesmo problema que estamos tentando resolver surge novamente: Como guardar essa nova chave de forma segura?</p>
 <p>E aí entramos em um loop infinito.</p>
 <h3 id="guardar-essa-nova-chave-em-um-usb-stick">Guardar essa nova chave em um USB stick</h3>
@@ -266,14 +279,14 @@ html {
 </ol>
 <p>Pesquisando sobre isso vi gente sugerindo guardar em uma safebox no banco, por exemplo. Novamente, o modelo de segurança tem um limite, e esse limite é você quem escolhe. Até onde você aceita perder? Até quanto de vulnerabilidade você aceita ter? Pense nisso.</p>
 <p>O problema de depender de um dispositivo físico é que você não sabe quando ele vai parar de funcionar. Imagina você guardar o seu pendrive em um lugar super seguro e na hora que você precisa dele ele simplesmente não funciona.</p>
-<h3 id="guardando-a-master-key-usando-encriptao-simtrica">Guardando a Master Key usando encriptação simétrica</h3>
+<h3 id="guardando-a-master-key-usando-encriptação-simétrica">Guardando a Master Key usando encriptação simétrica</h3>
 <p>Uma outra opção é usar encriptação simétrica, nesse caso você precisará escolher e armazenar/memorizar uma senha suficientemente segura (para o seu modelo de segurança).</p>
-<h4 id="gerando-sua-senha-usando-o-mtodo-dos-dados">Gerando sua senha usando o método dos dados</h4>
+<h4 id="gerando-sua-senha-usando-o-método-dos-dados">Gerando sua senha usando o método dos dados</h4>
 <p>Uma forma possível para gerar essa senha é usar o <a href="https://en.m.wikipedia.org/wiki/Diceware">método dos dados</a>, onde você tem um conjunto de X palavras, atribui um número a cada uma delas e vai jogando o dado para escolher essas palavras. Cada palavra requer 5 jogadas do dado. Esses 5 números sorteados no dado são usados para fazer o &ldquo;lookup&rdquo; de uma palavra na lista de palavras.</p>
 <p>Nesse método você vai precisar armazenar essa senha em algum lugar seguro, afinal memorizar todas as palavras sorteadas é um risco que pouca gente aceita correr.</p>
 <p>Lembra do problema de guardar a chave que encripta a Master Key? Aqui estamos na mesma situação. Onde/como guardar essa senha que você acabou de sortear?</p>
 <p>Nesse método o tamanho da senha é definido por você. Você escolhe a hora de parar de jogar o dado.</p>
-<h4 id="escolhendo-sua-senha-a-partir-de-uma-obra-literria">Escolhendo sua senha a partir de uma obra literária</h4>
+<h4 id="escolhendo-sua-senha-a-partir-de-uma-obra-literária">Escolhendo sua senha a partir de uma obra literária</h4>
 <p>Uma outra forma é escolher como senha o trecho de um livro. Nesse método você pode escolher um trecho de uma tamanho razoavelmente grande (2 parágrafos, por exemplo) pois você não precisa memorizar a senha em si, basta lembrar qual o livro e qual o trecho escolhido.</p>
 <p>O grande lance aqui é a escolha do livro. Você precisa ter cuidado na escolha da o obra, afinal se você escolher um livro que tem a chance de ser re-editado ou re-escrito de alguma maneira, você pode ter dificuldades de remontar sua senha, já que ela estará vinculada a uma edição específica desse livro.</p>
 <h1 id="uso-da-yubikey-no-dia-a-dia">Uso da Yubikey no dia a dia</h1>
@@ -289,7 +302,7 @@ html {
 <p>Mas se você cachear essa senha por um tempo muito longo, qual a real segurança que essa chave te dá, se ela fica o dia todo já inserida na porta USB do seu PC? Afinal, qualquer pessoa que tiver acesso físico ao seu PC, conseguirá usá-la sem precisar saber a senha.</p>
 <p>Essa questão do tempo de cache é um ponto bem importante se você já está com algum nível de paranóia.</p>
 <p>Pensando por esse lado, seria melhor você ter que digitar a senha <strong>sempre</strong> que precisar usar a chave, ou então, para diminuir a janela onde um ataque seria possível de acontecer, configurar o cache para um tempo bem curto, como por exemplo 30min ou 1h.</p>
-<h2 id="parania-nvel-hard">Paranóia nível hard</h2>
+<h2 id="paranóia-nível-hard">Paranóia nível hard</h2>
 <p>O nível de paranóia mais alto provavelmente pertence ao fabricante de um dispositivo desses, pois ele precisa pensar em todos os possíveis ataques que podem ser aplicados a alguém que faz uso dessa chave.</p>
 <p>E foi isso que eles provavelmente pensaram quando criaram a funcionalidade de &ldquo;require touch&rdquo; nas Yubikeys série 4.</p>
 <p>Essas chaves podem ser configuradas para, além de pedir a senha pedir também um toque físico (com o dedo mesmo) para que a operação seja concluída. Esse toque, a partir do momento que é configurado, é pedido <strong>sempre</strong>, não tem &ldquo;cache&rdquo;.</p>
@@ -395,20 +408,17 @@ html {
         
     
 
-<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" integrity="sha384-ZbbbT1gw3joYkKRqh0kWyRp32UAvdqkpbLedQJSlnI8iLQcFVxaGyrOgOJiDQTTR" crossorigin="anonymous"></script>
 
 
     
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
         
-    
     <script type="text/javascript">
         
         hljs.initHighlightingOnLoad();
     </script>
     
-
 
 
 

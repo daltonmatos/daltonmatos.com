@@ -3,12 +3,14 @@
     
   <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
+    
+    <link rel="canonical" href="https://daltonmatos.com/">
+    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.62.0" />
+<meta name="generator" content="Hugo 0.82.0" />
 
     
 
@@ -23,7 +25,7 @@
 <meta property="og:description" content="Dalton Barreto" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://daltonmatos.com/" />
-<meta property="og:updated_time" content="2020-01-04T00:00:00+00:00" />
+
 
 
     
@@ -38,7 +40,7 @@
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -73,7 +75,11 @@ html {
   <div class="container ">
     <div class="sidebar-about">
       <span class="site__title">
-        <a href="https://daltonmatos.com/"></a>
+        <a href="https://daltonmatos.com/">
+        
+          
+        
+        </a>
       </span>
       
         
@@ -154,7 +160,13 @@ html {
 	
 	
 	
+	
 	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
 	
 	
 	
@@ -189,13 +201,13 @@ html {
 
 <article>
   <header>
-    <h1>Asyncworker: Handler HTTP recebendo mais do que Request</h1>
+    <h1>Asyncworker: Recebendo parametros do Path do Request através de typehints</h1>
     
     
 <div class="post__meta">
     
     
-      <i class="fas fa-calendar-alt"></i> Jan 04, 2020
+      <i class="fas fa-calendar-alt"></i> Apr 25, 2021
     
     
     
@@ -206,13 +218,16 @@ html {
           <br/>
            <i class="fas fa-tags"></i>
           
-          <a class="badge badge-tag" href="/tags/python">python</a>
-           
-      
           <a class="badge badge-tag" href="/tags/asyncworker">asyncworker</a>
            
       
+          <a class="badge badge-tag" href="/tags/python">python</a>
+           
+      
           <a class="badge badge-tag" href="/tags/async">async</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/http">http</a>
            
       
           <a class="badge badge-tag" href="/tags/typehint">typehint</a>
@@ -221,7 +236,7 @@ html {
     
     
     <br/>
-    <i class="fas fa-clock"></i> 6 min read
+    <i class="fas fa-clock"></i> 5 min read
 </div>
 
 
@@ -229,107 +244,87 @@ html {
   
   
   <div class="post">
-    <h1 id="contexto">Contexto</h1>
-<p>Uma implementação recente no <a href="https://github.com/B2W-BIT/async-worker">asyncworker</a> (<a href="https://b2w-bit.github.io/async-worker/userguide/handlers/http.html#handlers-que-recebem-mais-do-que-apenas-request">doc</a>) permitiu que um handler http pudesse receber parâmetros mais complexos do que simplesmente <code>Request</code>, que é o que normalmente um handler http recebe.
-Essa implementação permite que possíveis valores possam ser acumulados ao longo da execução do código e no momento que o handler for chamado para atender o <code>Request</code> atual, esses valores seriam consultados para saber se o handler está interessado em receber algum deles.
-Esse &ldquo;interesse&rdquo; é demonstrado pelo handler através da sua própria assinatura python.
-O mais legal nesse caso é que tudo isso acaba sendo código python sintaticamente válido. Nesse post usamos o asyncworker <code>0.11.0</code>.</p>
-<p>Vejamos um exemplo simples.</p>
-<h1 id="exemplo-de-um-handler-http">Exemplo de um handler HTTP</h1>
-<p>Quando falamos de framework HTTP geralmente as implementações dos endpoints recebem um objeto <code>Request</code> e retornam um objeto <code>Response</code>.</p>
-<h2 id="definio-do-handler">Definição do handler</h2>
-<p>Vamos escrever um handler http que apenas recebe um JSON no corpo do request e retorna esse json.</p>
-<p>O que vamos fazer aqui é escrever código para que nosso handler não precise receber <code>Request</code> e possa receber algo mais rico e já validado, como por exemplo um objeto que já represente o corpo do request.</p>
-<h2 id="handler-recebendo-request">Handler recebendo Request</h2>
-<script type="application/javascript" src="https://gist.github.com/daltonmatos/1bffddc9ca4f36a801cf874b1e37f521.js?file=handler-recebe-request.py"></script>
+    <p>No <a href="/2020/01/asyncworker-handler-http-recebendo-mais-do-que-request/">último post</a> exploramos algumas possibilidades de um handler http receber mais do que <code>Request</code> quando for chamado. Naquele post fizemos uso de um decorator para exemplificar o pasring do body do request.</p>
+<p>Nesse post vamos ver o que o asyncworker trouxe de novo para que essa funcionalidade seja mais simples e fácil de usar.</p>
+<p>A versão <a href="https://github.com/b2wdigital/async-worker/releases/tag/0.19.1"><code>0.19.1</code></a> do asyncworker traz um novo typehint que permite receber parametros do path do request: <a href="https://b2wdigital.github.io/async-worker/userguide/handlers/http/doc.html#handler-path-param"><code>PathParam[T]</code></a>.</p>
+<p>Esse post usa <a href="https://pypi.org/project/async-worker/0.19.1/"><code>asyncworker==0.19.1</code></a>.</p>
+<h1 id="ideia-geral-sobre-os-typehints-inteligentes">Ideia geral sobre os typehints inteligentes</h1>
+<p>O papel principal desses typehints é permitir que os handlers definam em suas assinaturas quais parametros querem receber. A partir dessa assinatura o asyncworker saberá como obter os valores desses parametros e chamará o handler com os valores corretos.</p>
+<p>Uma outra característica importante é que o uso desses typehints ajuda também no momento que seu código for checado por um analisador estático, como o <a href="http://mypy-lang.org/">mypy</a> por exemplo.</p>
+<p>Todos os typehints fornecidos pelo asyncwoker são <a href="https://docs.python.org/3/library/typing.html#typing.Generic"><code>Generic[T]</code></a>. Isso significa que se seu handler quiser receber um parametro do tipo <code>int</code> ele não vai ser declarado com <code>(user_id: int)</code> e sim com <code>(user_id: PathParam[int])</code>.</p>
+<p>A escolha de se fazer dessa forma foi pra remover ambiguidades. Um handler que recebe (<code>user_id: int)</code> poderia receber esse parametro tanto do path quando da query string, por exemplo. Para não termos que escolher ordem de prioridade (no momento do parsing) preferimos ter um tipo específico para dizer <strong>de onde</strong> o valor está vindo.</p>
+<p>Outro ponto relevante é que, tendo um tipo intermediário (nesse caso <code>PathParam</code>) nos permite fazer lazy parsing do request. O que nos leva ao próximo ponto.</p>
+<h2 id="extraindo-o-valor-do-parametro-de-dentro-do-typehint">Extraindo o valor do parametro de dentro do typehint</h2>
+<p>Como o seu handler recebe <code>PathParam[int]</code> temos que ter uma forma de acessar o valor do <code>int</code> que foi obtido do request. Essa extração é feita através do método <code>unpack()</code>. Todos os typehints fornecidos pelo asyncworker possuem esse método e ele sempre retorna uma instância de <code>T</code>, que é o parametro passado ao tipo genérico <code>PathParam</code>.</p>
+<p>Ter esse método nos permite fazer o efetivo parsing do request apenas quando ele é chamado. Isso é bem útil quando estamos lidando com requests grandes (tamanho em bytes do corpo). Como todos os typehints possuem a mesma interface todos precisam usar a estrutura do <code>unpack()</code>.</p>
+<p>Esse método é uma corotina, logo deve ser chamado com <code>await unpack()</code>. Um exemplo simples de um handler que recebe um <code>user_id</code>:</p>
+<script type="application/javascript" src="https://gist.github.com/daltonmatos/44301ec563ed914ad8fc8bb1d583e15b.js?file=handler-recebe-user-id.py"></script>
 
-<p>Aqui temos a implementação padrão do handler, recebendo <code>Request</code> e pegando desse request os dados necessários.</p>
-<h2 id="cdigos-fornecidos-pelo-asyncworker-para-podermos-chamar-um-handler-com-assinatura-dinmica">Códigos fornecidos pelo asyncworker para podermos chamar um handler com assinatura dinâmica</h2>
-<p>O asyncworker fornece uma infra-estrutura de código que ajuda nessa parte de poder ter um handler com a assinatura dinâmica, ou seja, o handler pode ter uma assinatura mais complexa do que um simples <code>(request: Request)</code> e podemos inclusive mudar essa assinatura ao longo do tempo sem precisarmos mudar nenhuma linha de código, a não ser a própria linha da assinatura. Veremos exemplos disso mais adiante.</p>
-<p>Essa infra-estrutura é dividida em algumas partes:</p>
+<h2 id="regras-sobre-o-uso-do-typeint-pathparamt">Regras sobre o uso do typeint PathParam[T]</h2>
+<p>Existem algumas regras simples para que seja possível usar o typehint <code>PathParam[T]</code>.</p>
 <ul>
-<li><code>TypesRegistry</code>;</li>
-<li>Uma instancia de <code>TypesResgitry</code> presente em <strong>cada</strong> <code>Request</code> que chega;</li>
-<li>A corotina <code>call_http_handler(request, handler)</code> que é capaz de analisar a assinatura de uma handler, consultar a instância de <code>TypesRegistry</code> que a <code>Request</code> possui e chamar o handler com os parametros corretos.</li>
-</ul>
-<p>O <a href="https://github.com/B2W-BIT/async-worker/blob/d23c8cdf2a29a4560d7017dac2f8a7ef11e9998f/asyncworker/types/registry.py#L4">TypesRegistry</a> possui uma interface bem simples para que possamos ir adicionando valores de tipos quaisquer. Tem apenas dois métodos: <code>set()</code> e <code>get()</code>.</p>
-<p>O objeto <code>Request</code> original também é modificado e recebe uma instância desse <code>TypesRegistry</code>. Isso é feito automaticamente pelo asyncworker, mesmo que você não faça uso dessa estrutura de chamada dinâmica.</p>
-<p>A última parte dessa estrutura de código é a função <a href="https://github.com/B2W-BIT/async-worker/blob/d23c8cdf2a29a4560d7017dac2f8a7ef11e9998f/asyncworker/routes.py#L158-L163"><code>call_http_handler()</code></a>. Com ela é possível passar o request original e o handler a ser chamado. Dessa forma o handler terá sua assinatura analisada e será chamado com os parametros corretos.</p>
-<h2 id="exemplo-de-decorator-que-faz-uso-dessa-estrutura-para-chamar-um-handler">Exemplo de decorator que faz uso dessa estrutura para chamar um handler</h2>
-<p>O que faremos aqui é apenas um decorator &ldquo;oco&rdquo;, mas que já faz uso dessa estrutura que mencionamos. Do ponto de vista do código do handler nada muda, ele vai continuar recebendo <code>Request</code>, mas toda a estrutura para que ele possa receber mais do que isso já estará iniciada.</p>
-<script type="application/javascript" src="https://gist.github.com/daltonmatos/1bffddc9ca4f36a801cf874b1e37f521.js?file=parse-body-decorator.py"></script>
-
-<p>Veja que esse decorator não faz nada demais e o handler continua recebendo o <code>Request</code>. Mas podemos começar e modificá-lo para que o handler receba parametros mais ricos.</p>
-<h3 id="modelo-que-representa-o-corpo-do-request">Modelo que representa o corpo do request</h3>
-<p>Vamos definir o modelo que vai representar o corpo do request, que será o <code>UserResource</code>. Usaremos <a href="https://pydantic-docs.helpmanual.io/">pydantic</a> para modelar esse objeto.</p>
-<script type="application/javascript" src="https://gist.github.com/daltonmatos/1bffddc9ca4f36a801cf874b1e37f521.js?file=user-resource-model.py"></script>
-
-<p>É um modelo bem simples e vai ser mesmo apenas para validarmos o que estamos falando, mas lembre-se que esse modelo pode ser arbtitrariamente complexo.</p>
-<h3 id="modificando-nosso-decorator-para-pegar-o-corpo-do-request-e-construir-um-modelo-userresource">Modificando nosso decorator para pegar o corpo do request e construir um modelo UserResource</h3>
-<script type="application/javascript" src="https://gist.github.com/daltonmatos/1bffddc9ca4f36a801cf874b1e37f521.js?file=parse-body-decorator-using-user-resource-model.py"></script>
-
-<p>A partir de agora nosso request já possui um objeto do tipo <code>UserResource</code> dentro do seu <code>TypesRegistry</code> e esse objeto já pode ser passado para quaisquer handlers que se interessem por esse tipo. Então podemos mudar a assinatura do nosso handler.</p>
-<h2 id="mudando-a-assinatura-do-handler-para-receber-userresource">Mudando a assinatura do handler para receber UserResource</h2>
-<p>Apenas para relembrar, esse era o código original do nosso handler:</p>
-<script type="application/javascript" src="https://gist.github.com/daltonmatos/1bffddc9ca4f36a801cf874b1e37f521.js?file=handler-only.py"></script>
-
-<p>E esse é o novo código do handler:</p>
-<script type="application/javascript" src="https://gist.github.com/daltonmatos/1bffddc9ca4f36a801cf874b1e37f521.js?file=handler-recebe-user-resource.py"></script>
-
-<p>Aqui temos o handler já recebendo o corpo do request validado. O decorator <code>parse_body</code> pode, por exemplo, já retornar <code>HTTP 400</code> caso o corpo do request não esteja em conformidade com o modelo <code>UserResource</code>. Pode também ser modificado para que fique mais genérico, podendo ser reusado em múltiplos handlers, algo nessa linha:</p>
-<pre><code>@app.route([&quot;/posts&quot;], type=RouteTypes.HTTP, methods=[&quot;POST&quot;])
-@parse_body(PostResource)
-async def users(post: PostResource):
-  ...
-</code></pre>
-<h3 id="verso-final-do-cdigo">Versão final do código</h3>
-<p>Esse é o código em sua forma final, já com o handler usando o decorator e tendo sua assinatura recebendo um modelo já validado:</p>
-<script type="application/javascript" src="https://gist.github.com/daltonmatos/1bffddc9ca4f36a801cf874b1e37f521.js?file=asyncworker-app-handler-recebe-user-resource.py"></script>
-
-<h2 id="exemplos-adicionais-de-decorators">Exemplos adicionais de decorators</h2>
-<p>Um outro exemplo é um decorator de autenticação que pode fornecer por exemplo um objeto <code>AuthenticatedUser</code>. Um handler ficaria com o código nessa linha:</p>
-<pre><code>@app.route([&quot;/users&quot;], type=RouteTypes.HTTP, methods=[&quot;POST&quot;])
-@auth
-@parse_body
-async def users(body: UserResource):
-    return json_response(body.dict())
-</code></pre>
-<p>O que o decorator <code>auth</code> faz é:</p>
+<li>O parametro na declaração do path deve ter <strong>o mesmo</strong> nome do parametro na assinatura do handler;</li>
+<li>Qualquer tipo primitivo do python poder ser usado como argumento do <code>PathParam</code>: <code>int</code>, <code>float</code>, <code>bool</code>;
 <ul>
-<li>Analisar o request que está sendo atendido;</li>
-<li>Checar se os dados de autenticação estão corretos;</li>
-<li>Buscar os dados do usuário autenticado (ou já retornar <code>HTTP 401</code>);</li>
-<li>Adicionar ao <code>TypesRegsitry</code> desse request uma instância de <code>AuthenticatedUser</code>.</li>
+<li>Quando usar o tipo <code>bool</code>, valem as mesmas regras do Pydantic para tipos <code>bool</code>: <a href="https://pydantic-docs.helpmanual.io/usage/types/#booleans">Pydantic Boolean</a>.</li>
 </ul>
-<p>O que isso significa? Significa que esse handler está agora exigindo um request autenticado mas não necessáriamente está interessado em saber <strong>qual</strong> usuário está fazendo o request.</p>
-<p>O mais legal é: Se a partir de algum momento o handler quiser saber quem é o usuário autenticado basta mudar a assinatura para:</p>
-<pre><code>async def users(body: UserResource, user: AuthenticatedUser):
-    return json_response(user.dict())
-</code></pre>
-<p>Aqui não importa a ordem os parametros, a análise da assinatura será feita da mesma forma e o handler será chamado.</p>
-<h1 id="futuro">Futuro</h1>
-<p>O que vimos aqui é um código ainda experimental e que acabou de ser criado então ainda existem alguns passos que temos que fazer manualmente, como por exemplo a implementação dos decorators mostrados aqui. Fazer com decorators é apenas <strong>uma</strong> forma de fazer.</p>
-<p>Podemos por exemplo implementar o decorator <code>auth</code> em forma de um middleware, que pode eventualmente ser aplicado a um grupo de handlers.</p>
-<p>Um outra ideia também é embutir mais lógica no asyncworker para que cada vez menos decorators/middlewares sejam necessários. Um exemplo simples é o próprio parsing do body do request. Em vez de termos esse decorator <code>parse_body</code> o próprio asyncworker poderia fornecer anotações de tipo para isso, assim:</p>
-<pre><code>from asyncworker.types import RequestBody
+</li>
+<li>Não é permitido usar outros tipos genéricos como parametro do <code>PathParam</code>, tais como <code>List</code> e <code>Tuple</code>. Essa é uma implementação que está no radar mas ainda não está feita;</li>
+<li>Não é permitido usar <code>Optional[PathParam[T]]</code>, pelo menos por enquanto.</li>
+<li>Não é permitido usar tipos complexos, por exemplo: <code>PathParam[User]</code>.</li>
+</ul>
+<h1 id="mais-exemplos-de-uso-do-pathparamt">Mais exemplos de uso do PathParam[T]</h1>
+<p>Abaixo vemos outros exemplos de como esse typehint pode ser usado.</p>
+<h2 id="recebendo-múltiplos-parametros-do-path">Recebendo múltiplos parametros do path</h2>
+<p>Podemos receber múltiplos parametros do path, do mesmo tipo ou de tipos diferentes:</p>
+<script type="application/javascript" src="https://gist.github.com/daltonmatos/44301ec563ed914ad8fc8bb1d583e15b.js?file=handler-recebe-multiplos-parametros-do-path.py"></script>
 
-@app.route([&quot;/users&quot;], type=RouteTypes.HTTP, methods=[&quot;POST&quot;])
-async def users(body: RequestBody[UserResource]):
-    return json_response(body.dict())
-</code></pre>
-<p>O mais interessante disso é que parte das regras do sistema (parsing do corpo do request, nesse caso) é descrita com código python válido. Isso significa que não é possível seu código estar escrito de uma forma e se comportar de outra.</p>
-<p>Como essas anotações podem ser analisadas dinamicamente podemos, por exemplo, gerar documentaação de forma automática sem que essa documentação fique defasada em relação ao código, afinal é o próprio código quem diz como a documenação será criada.</p>
-<p>O que fica aqui são algumas ideias de implementação para o projeto asyncworker. Se você gostou, estamos sempre interessados em receber contribuições para o projeto, tanto código quanto discussão de ideias para o futuro.</p>
-<p>O projeto está no github: <a href="https://github.com/B2W-BIT/async-worker">https://github.com/B2W-BIT/async-worker</a></p>
+<p>Esse handler recebe 4 parametros de tipos diferentes e pode ser chamado dessa forma:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl -s <span style="color:#e6db74">&#34;http://127.0.0.1:8080/path/on/nome/42/5.93&#34;</span>
+<span style="color:#f92672">{</span>
+   <span style="color:#e6db74">&#34;_float&#34;</span> : 5.93,
+   <span style="color:#e6db74">&#34;bool&#34;</span> : true,
+   <span style="color:#e6db74">&#34;number&#34;</span> : 42,
+   <span style="color:#e6db74">&#34;string&#34;</span> : <span style="color:#e6db74">&#34;nome&#34;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h2 id="ignorando-alguns-parametros-do-path">Ignorando alguns parametros do path</h2>
+<p>Não é estritamente necessário declarar na assinatura do handler <strong>todos</strong> os parametros que estão na declaração do path. Na assinatura do handler devem estar apenas os parametros que o handler <strong>precisa</strong> receber. Exemplo:</p>
+<script type="application/javascript" src="https://gist.github.com/daltonmatos/44301ec563ed914ad8fc8bb1d583e15b.js?file=handler-ignoring-some-path-params.py"></script>
+
+<p>Esse handler funciona normalmente, mesmo não tendo interesse em todos os parametros do path.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl -s <span style="color:#e6db74">&#34;http://127.0.0.1:8080/path/on/nome/42/5.93&#34;</span>
+<span style="color:#f92672">{</span>
+   <span style="color:#e6db74">&#34;bool&#34;</span> : true,
+   <span style="color:#e6db74">&#34;string&#34;</span> : <span style="color:#e6db74">&#34;nome&#34;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h2 id="retornando-http-400-bad-request-quando-a-conversão-do-valor-falha">Retornando HTTP 400 Bad Request quando a conversão do valor falha</h2>
+<p>No caso de um handler querer um <code>int</code> mas o request traz uma string, o asyncworker retorna HTTP 400: Bad Request. Por enquanto essa response é <code>texr/plain</code> contento apenas o erro original, mas existe a intenção de mudar isso no futuro para poder retornar JSON (ou outro formato preferido).</p>
+<p>O mesmo comportamento acontece com os outros tipos, basta que ocorra um erro de validação no valor original. Se o valor original não puder ser convertido para o tipo desejado, retornamos HTTP 400.</p>
+<script type="application/javascript" src="https://gist.github.com/daltonmatos/44301ec563ed914ad8fc8bb1d583e15b.js?file=handler-recebe-user-id.py"></script>
+
+<p>Esse handler por exemplo, se receber o seguinte request: <code>GET /users/abc/books</code> retornará HTTP 400.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl -si <span style="color:#e6db74">&#34;http://127.0.0.1:8080/users/abc/books&#34;</span>
+
+HTTP/1.1 <span style="color:#ae81ff">400</span> Bad Request
+Content-Type: text/plain; charset<span style="color:#f92672">=</span>utf-8
+Content-Length: <span style="color:#ae81ff">45</span>
+Date: Sun, <span style="color:#ae81ff">25</span> Apr <span style="color:#ae81ff">2021</span> 18:23:45 GMT
+Server: Python/3.6 aiohttp/3.7.4
+
+invalid literal <span style="color:#66d9ef">for</span> int<span style="color:#f92672">()</span> with base 10: <span style="color:#e6db74">&#39;abc&#39;</span>
+</code></pre></div><h1 id="futuro">Futuro</h1>
+<p>Essa é a primeira implementação de suporte real a typehints inteligentes no asyncworker. É uma implementação funcional e serviu para confirmar que é possível prover funcionalidade através de typehints na assinatura dos handlers. Outras implementções surgirão no futuro, como por exemplo <code>QueryParam[T]</code>, <code>RequestHeader[T]</code> e <code>RequestBody[T]</code>. O objetivo é que seja possível extrair <strong>qualquer parte</strong> do request original para que um handler posssa fazer todo o seu trabalho <strong>sem precisar receber</strong> uma instância de <code>Request</code>.</p>
+<p>Outras ideias de implementação também envolvem <code>Optional[PathParam[T]]</code> e <code>PathParam[List[T]]</code>.</p>
+<p>Asyncworker é um projeto de código aberto e está hospedado no Github: <a href="https://github.com/b2wdigital/async-worker">https://github.com/b2wdigital/async-worker</a></p>
 
   </div>
   
 
 <div class="navigation navigation-single">
     
-    <a href="/2020/01/chamando-funcoes-python-com-assinatura-dinamica-baseada-em-typehint/" class="navigation-prev">
+    <a href="/2020/01/asyncworker-handler-http-recebendo-mais-do-que-request/" class="navigation-prev">
       <i aria-hidden="true" class="fa fa-chevron-left"></i>
-      <span class="navigation-tittle">Chamando funções Python com assinatura dinâmica Baseada em Typehint</span>
+      <span class="navigation-tittle">Asyncworker: Handler HTTP recebendo mais do que Request</span>
     </a>
     
     
@@ -347,6 +342,15 @@ async def users(body: RequestBody[UserResource]):
 
 
 <h4>2020</h4>
+
+<li>
+  <span class="list__title--small">
+    <a href="/2020/01/asyncworker-handler-http-recebendo-mais-do-que-request/" >Asyncworker: Handler HTTP recebendo mais do que Request</a>
+      
+      <time class="pull-right hidden-tablet">Jan 04 &#39;20</time>
+      
+  </span>
+</li>
 
 <li>
   <span class="list__title--small">
@@ -391,7 +395,7 @@ async def users(body: RequestBody[UserResource]):
         </div>
         
   
-  <script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" integrity="sha384-ZbbbT1gw3joYkKRqh0kWyRp32UAvdqkpbLedQJSlnI8iLQcFVxaGyrOgOJiDQTTR" crossorigin="anonymous"></script>
 
 
     </body>

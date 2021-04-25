@@ -3,12 +3,14 @@
     
   <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
+    
+    <link rel="canonical" href="https://daltonmatos.com/">
+    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.62.0" />
+<meta name="generator" content="Hugo 0.82.0" />
 
     
 
@@ -23,7 +25,7 @@
 <meta property="og:description" content="Dalton Barreto" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://daltonmatos.com/" />
-<meta property="og:updated_time" content="2020-01-04T00:00:00+00:00" />
+
 
 
     
@@ -38,7 +40,7 @@
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -73,7 +75,11 @@ html {
   <div class="container ">
     <div class="sidebar-about">
       <span class="site__title">
-        <a href="https://daltonmatos.com/"></a>
+        <a href="https://daltonmatos.com/">
+        
+          
+        
+        </a>
       </span>
       
         
@@ -154,7 +160,13 @@ html {
 	
 	
 	
+	
 	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
 	
 	
 	
@@ -189,13 +201,13 @@ html {
 
 <article>
   <header>
-    <h1>Uso da Yubikey no Android</h1>
+    <h1>Como armazeno de forma segura meus dados sensíveis de acessos a contas online</h1>
     
     
 <div class="post__meta">
     
     
-      <i class="fas fa-calendar-alt"></i> Sep 29, 2018
+      <i class="fas fa-calendar-alt"></i> Oct 04, 2018
     
     
     
@@ -206,19 +218,25 @@ html {
           <br/>
            <i class="fas fa-tags"></i>
           
-          <a class="badge badge-tag" href="/tags/yubikey">yubikey</a>
-           
-      
           <a class="badge badge-tag" href="/tags/pass">pass</a>
            
       
+          <a class="badge badge-tag" href="/tags/yubikey">yubikey</a>
+           
+      
           <a class="badge badge-tag" href="/tags/gpg">gpg</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/mfa">mfa</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/2fa">2fa</a>
           
       
     
     
     <br/>
-    <i class="fas fa-clock"></i> 3 min read
+    <i class="fas fa-clock"></i> 4 min read
 </div>
 
 
@@ -226,40 +244,46 @@ html {
   
   
   <div class="post">
-    <p>O último ponto que faltava na minha migração para um novo password manager era poder acessar meus dados usando o celular.</p>
-<p>Aqui vou mostrar cada um dos apps que uso para poder ter o celular como uma ferramenta completa para poder usar meu smartcard.</p>
-<h1 id="suporte--yubikey">Suporte à yubikey</h1>
-<p>Os smartcards da <a href="https://www.yubico.com/products/yubikey-hardware/">Yubico</a> já são naturalmente suportados pelo Android. Os <a href="https://www.yubico.com/products/yubikey-for-mobile/">smartcards que possuem NFC</a> têm suporte ainda melhor, pois basta aproximar o telefone do smartcard para que eles se comuniquem.</p>
-<p>No meu caso tenho uma <a href="https://www.yubico.com/product/yubikey-4-series/#yubikey-4-nano">Yubikey USB-A</a>, então uso um adaptador USB-A &gt; USB-C para poder usá-la no celular. Funciona muito bem.</p>
-<p><strong>Nota</strong>: Acredito que para funcionar plugado na USB do celular o aparelho precisa ter suporte a <a href="https://en.wikipedia.org/wiki/USB_On-The-Go">USB OTG</a>, que é o meu caso.</p>
-<h1 id="open-keychain">Open Keychain</h1>
-<p>O <a href="https://www.openkeychain.org/">OpenKeyChain</a> é o responsável por suportar o smartcard. Pense nele como uma espécie de &ldquo;driver&rdquo;. Além de implementar suporte genérico ao uso de um smartcard, ele também implementa o necessário para que você consiga usar as funcionalidades relacionadas à chave GPG, ou seja, ele é capaz de assinar conteúdos, encriptar/decriptar dados usando a chave privada que está no smartcard.</p>
-<p>Como o nome já diz ele é uma Keychain, isso significa que você pode importar chaves públicas de outras pessoas e isso te dá a possibilidade de trocar conteúdo encriptado com elas.</p>
-<p>Além disso ele expõe uma API pública, dessa forma outros apps podem usar essa API e por isso podem também dar suporte ao uso de smartcards. É o caso do TermBot, que veremos a seguir.</p>
-<h1 id="termbot">TermBot</h1>
-<p>Como tenho minha <a href="/2018/08/usando-seu-keyring-gpg-para-guardar-sua-chave-ssh/">chave SSH dentro do smartcard</a> seria ideal poder ter um cliente SSH que fosse capaz de usar essa chave.</p>
-<p>Existe um app que faz isso e é o <a href="https://play.google.com/store/apps/details?id=org.sufficientlysecure.termbot">TermBot</a>. O que ele faz, na verdade, é falar com a API do OpenKeyChain. Dessa forma tenho como fazer SSH para máquinas remotas usando a mesma chave que está dentro do smartcard.</p>
-<h1 id="password-store">Password Store</h1>
-<p>O App <a href="https://github.com/zeapo/Android-Password-Store">PasswordStore</a> é quem sabe ler os dados gravados <a href="/2018/09/so-long-lastpass-and-thank-you-for-all-the-fish/">no password manager que uso</a>, o <a href="https://passwordstore.org">pass</a>.</p>
-<p>Com esse App consigo sincronizar todos os dados de senhas, assim não preciso sempre do PC para pegar uma senha caso precise me logar em algum dos sites usando o celular.</p>
-<p>Diferente do <code>pass</code>, esse app não possui suporte a plugins o que significa que não posso, através dele, <a href="/2018/09/multi-factor-authentication-na-linha-de-comando/">gerar os tokens MFA que consigo gerar na linha de comando</a> e no <a href="https://github.com/browserpass/browserpass">browser</a>.</p>
-<p>Isso significa que, nesses casos onde preciso de um token MFA tenho então que usar um Authentication App, o que torna tudo muito curioso pois agora só preciso do App que gera o token quando estou logando em uma conta <strong>usando o próprio celular</strong>.</p>
-<p>O que eu estava acostumado a fazer era sempre pegar o celular quando estava logando em uma conta <strong>usando o PC</strong>. Agora consigo fazer todo o fluxo (desde preencher usuário/senha até preencher o token MFA) usando apenas o PC, o que é de certa forma libertador pois não dependo mais do celular. Inclusive posso eventualmente perdê-lo sem <strong>nenhum prejuízo</strong> para o meu fluxo do dia-a-dia.</p>
-<p>Com esses apps que citei acima consigo, no celular: Assinar conteúdos, encriptar, decriptar, autenticar em servidores SSH e ler todas as minhas senhas do meu password manager. Tudo isso usando a chave privada que está dentro do smartcard.</p>
+    <p>Esse texto é uma descrição geral do <a href="/2018/09/modelos-de-seguranca-para-uso-de-smartcards/">modelo de segurança</a> que escolhi usar depois de pesquisar sobre como outras pessoas guardam dados sensíveis de forma segura.</p>
+<p>A motivação principal, além de poder ter os dados guardados de forma segura (e aprender muito sobre esse assunto), foi poder ter o total controle sobre eles.</p>
+<p>Se você usa um password manager online por exemplo, o mínimo que você deveria fazer seria manter esses dados encriptados. Afinal, se estiverem nas mãos de uma empresa qualquer que pelo menos estejam codificados com chaves que só você tem.</p>
+<h1 id="confiança-na-criptografia">Confiança na criptografia</h1>
+<p>Tudo que estamos fazendo aqui gira em torno de uma boa criptografia. No dia em que a criptografia que você escolheu for quebrada, você está basicamente perdido. Talvez um dos caminhos seja re-encriptar seus dados usando uma criptografia mais forte e torcer para as cópias antigas não caírem nas mãos de quem sabe quebrar a criptografia anterior. Renovar todas as senhas (ou pelo menos as mais críticas) se torna bem importante também.</p>
+<h1 id="dados-nas-mãos-de-terceiros">Dados nas mãos de terceiros</h1>
+<p>Ter seus dados nas mãos de terceiros não é, necessariamente, um problema. O problema começa quando esse terceiro sofre algum tipo de vazamento de informações.</p>
+<p>Boa parte da minha motivação de fazer essa migração foi gravar meus dados de uma forma que eu tenha <strong>certeza</strong> de que eles estão encriptados, e não só isso, que eles estejam encriptados <strong>apenas</strong> com as chaves que <strong>eu</strong> escolhi.</p>
+<p>Quando sou eu quem escolhe as chaves que serão usadas preciso <a href="/2018/09/modelos-de-seguranca-para-uso-de-smartcards/#gerando-sua-chave-gpg">guardá-la de forma segura</a>.</p>
+<h1 id="authenticator-app">Authenticator App</h1>
+<p>O primeiro passo na migração foi <a href="/2018/09/multi-factor-authentication-na-linha-de-comando/#totp-na-linha-de-comando">trocar de Authenticator App</a>. Usei o Google Authenticator por muito tempo, até começar a pensar: &ldquo;O que aconteceria se perdesse meu telefone?</p>
+<p>Quando percebi a dor de cabeça que isso me daria, comecei a procurar por outras apps que fariam o mesmo papel.</p>
+<p>Foi quando descobri o <a href="https://authy.com">Authy</a>. A grande diferença dele é que ele faz backup dos seus tokens MFA e isso já é uma <strong>grande</strong> vantagem. Com ele, caso eu perdesse meu celular poderia recuperar o número junto à operadora, instalar o Authy novamente e meus tokens estariam novamente disponíveis para uso.</p>
+<p>Aqui entra uma outra questão também, que é a operadora de telefonia. Se alguém conseguir (via engenharia social?) induzir a operadora a recuperar sua linha telefônica em um chip que <strong>não é o seu</strong>, esse chip terá acesso irrestrito aos seus tokens MFA. Poder guardar os tokens comigo me protege também dessa possibilidade.</p>
+<p>Assim como no caso do password manager online o Authy guarda seus backups em um servidor remoto. E aqui vamos à questão de ter o controle sobre esses dados e termos a certeza de que estão bem guardados, não só em termos de proteção contra eventuais vazamentos mas também na questão de qual criptografia foi usada (e se foi usada alguma) para guardá-los.</p>
+<h2 id="tokens-mfa-gerados-fora-do-celular">Tokens MFA gerados fora do Celular</h2>
+<p>Quando descobri a possibilidade de <a href="/2018/09/multi-factor-authentication-na-linha-de-comando/">gerar os tokens OTP na linha de comando</a> passei a não depender do celular para acessar minhas contas, mesmo as que estão com MFA habilitado.</p>
+<p>Isso é ótimo e vai um pouco na contra-mão do que costumamos ver, que é uma dependência <strong>total</strong> da presença do celular e no momento em que esse celular (com o App de autenticação) é perdido começa uma longa caminhada para recuperar o acesso a <strong>todas</strong> as contas.</p>
+<p>Exatamente por causa dessa dependência é que acho que surgiram Apps de autenticação como o Authy, que se dizem diferenciados por fazer o backup dos seus tokens MFA. Mas mesmo nesses casos, você ainda depende do celular para recuperar acesso ao seu Authy em caso de perda.</p>
+<h1 id="password-manager">Password Manager</h1>
+<p>A <a href="/2018/09/so-long-lastpass-and-thank-you-for-all-the-fish/">troca de password manager</a> veio logo em seguida. Mesmos motivos, agora tenho os dados guardados encriptados com <strong>minha(s) chave(s)</strong> e guardados de forma segura. Isso sem contar que não há transparência em relação a como esses dados eram guardados no password manager anterior. O máximo que era dito é que estavam &ldquo;encriptados&rdquo;.</p>
+<h1 id="acesso-aos-dados-no-celular">Acesso aos dados no celular</h1>
+<p>O passo seguinte foi <a href="/2018/09/uso-da-yubikey-no-android/">poder ter acesso a tudo isso no celular</a>. Com esse último passo consegui fechar todo o ciclo de uso dessas informações, pois agora posso acessar usando o PC ou usando o celular (caso esteja sem o PC no momento).</p>
+<p>#######</p>
+<p>Olhando pra trás percebo que cheguei a um ponto onde o celular é irrelevante, pois nada está guardado lá. Na verdade transformei meu <a href="/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/">smartcard</a> no ponto mais importante, e mesmo que ele seja perdido depende praticamente só de mim conseguir o acesso aos meus dados novamente.</p>
+<p>A partir do <a href="/2018/09/o-que-acontece-se-minha-yubikey-parar-de-funcionar/">momento que perco meu smartcard</a> preciso começar o processo de retomar o acesso à minha <a href="/2018/08/usando-seu-keyring-gpg-para-guardar-sua-chave-ssh/">chave GPG</a>, depois disso volto <strong>imediatamente</strong> ao normal, com acesso completo a todas as minhas contas, como se nada tivesse acontecido.</p>
 
   </div>
   
 
 <div class="navigation navigation-single">
     
-    <a href="/2018/09/o-que-acontece-se-minha-yubikey-parar-de-funcionar/" class="navigation-prev">
+    <a href="/2018/09/uso-da-yubikey-no-android/" class="navigation-prev">
       <i aria-hidden="true" class="fa fa-chevron-left"></i>
-      <span class="navigation-tittle">O que acontece se minha Yubikey parar de funcionar?</span>
+      <span class="navigation-tittle">Uso da Yubikey no Android</span>
     </a>
     
     
-    <a href="/2018/10/como-armazeno-de-forma-segura-meus-dados-sensiveis-de-acessos-a-contas-online/" class="navigation-next">
-      <span class="navigation-tittle">Como armazeno de forma segura meus dados sensíveis de acessos a contas online</span>
+    <a href="/2018/10/multiplos-certificados-ssl-com-lets-encrypt-e-traefik/" class="navigation-next">
+      <span class="navigation-tittle">Múltiplos certificados SSL com Let&#39;s Encrypt e traefik</span>
       <i aria-hidden="true" class="fa fa-chevron-right"></i>
     </a>
     
@@ -277,6 +301,15 @@ html {
 
 
 <h4>2018</h4>
+
+<li>
+  <span class="list__title--small">
+    <a href="/2018/09/uso-da-yubikey-no-android/" >Uso da Yubikey no Android</a>
+      
+      <time class="pull-right hidden-tablet">Sep 29 &#39;18</time>
+      
+  </span>
+</li>
 
 <li>
   <span class="list__title--small">
@@ -298,27 +331,18 @@ html {
 
 <li>
   <span class="list__title--small">
+    <a href="/2018/09/so-long-lastpass-and-thank-you-for-all-the-fish/" >So long LastPass and thank you for all the fish</a>
+      
+      <time class="pull-right hidden-tablet">Sep 14 &#39;18</time>
+      
+  </span>
+</li>
+
+<li>
+  <span class="list__title--small">
     <a href="/2018/09/modelos-de-seguranca-para-uso-de-smartcards/" >Modelos de segurança para uso de smartcards</a>
       
       <time class="pull-right hidden-tablet">Sep 06 &#39;18</time>
-      
-  </span>
-</li>
-
-<li>
-  <span class="list__title--small">
-    <a href="/2018/08/usando-seu-keyring-gpg-para-guardar-sua-chave-ssh/" >Usando seu keyring GPG para guardar sua chave SSH</a>
-      
-      <time class="pull-right hidden-tablet">Aug 12 &#39;18</time>
-      
-  </span>
-</li>
-
-<li>
-  <span class="list__title--small">
-    <a href="/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/" >Preparando uma Yubikey 4 Nano para uso diário</a>
-      
-      <time class="pull-right hidden-tablet">Jul 30 &#39;18</time>
       
   </span>
 </li>
@@ -344,7 +368,7 @@ html {
         </div>
         
   
-  <script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" integrity="sha384-ZbbbT1gw3joYkKRqh0kWyRp32UAvdqkpbLedQJSlnI8iLQcFVxaGyrOgOJiDQTTR" crossorigin="anonymous"></script>
 
 
     </body>

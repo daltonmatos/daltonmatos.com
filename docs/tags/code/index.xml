@@ -6,11 +6,7 @@
     <description>Recent content in code on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Sun, 25 Nov 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://daltonmatos.com/tags/code/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 25 Nov 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://daltonmatos.com/tags/code/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Usando vim como interpretador de código</title>
       <link>https://daltonmatos.com/2018/11/usando-vim-como-interpretador-de-codigo/</link>

@@ -6,12 +6,14 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
+    
+    <link rel="canonical" href="https://daltonmatos.com/2020/01/chamando-funcoes-python-com-assinatura-dinamica-baseada-em-typehint/">
+    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.62.0" />
+<meta name="generator" content="Hugo 0.82.0" />
 
     
     
@@ -29,9 +31,10 @@ Isso te dá a possibilidade de eventualmente mudar a assinatura de um método e 
 <meta property="og:description" content="Contexto Com a possibilidade de declarar tipos em códigos python vem uma possibilidade interessante: Poder deduzir quais parâmetros uma função (ou método) quer receber e fazer essa chamada dinamicamente.
 Isso te dá a possibilidade de eventualmente mudar a assinatura de um método e ainda assim não mudar a chamada a esse método, isso porque os parâmetros são &ldquo;resolvidos&rdquo; no momento da chamada e não mais no momento da escrita do código." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daltonmatos.com/2020/01/chamando-funcoes-python-com-assinatura-dinamica-baseada-em-typehint/" />
-<meta property="article:published_time" content="2020-01-03T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-01-03T00:00:00+00:00" />
+<meta property="og:url" content="https://daltonmatos.com/2020/01/chamando-funcoes-python-com-assinatura-dinamica-baseada-em-typehint/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-01-03T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2020-01-03T00:00:00&#43;00:00" />
+
 
 
     
@@ -46,7 +49,7 @@ Isso te dá a possibilidade de eventualmente mudar a assinatura de um método e 
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -80,7 +83,11 @@ html {
   <div class="container ">
     <div class="sidebar-about">
       <span class="site__title">
-        <a href="https://daltonmatos.com/"></a>
+        <a href="https://daltonmatos.com/">
+        
+          
+        
+        </a>
       </span>
       
         
@@ -161,7 +168,13 @@ html {
 	
 	
 	
+	
 	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
 	
 	
 	
@@ -233,49 +246,49 @@ html {
 <p>O typehint, como o próprio nome diz, é apenas uma &ldquo;dica&rdquo; de qual é o tipo de cada parâmetro de seu código. Cabe a você honrar esses tipos e obedecer essas anotações.</p>
 <p>Essa ideia de descobrir dinamicamente o valor a ser passado em uma chamada a uma função python é totalmente baseado na declaração de tipos que está no código. Isso significa que estamos assumindo que os tipos estão sendo obedecidos.</p>
 <p>Uma ótima forma de fazer o enforcement desses tipos no seu código é usando um analisador estático como o <a href="http://mypy-lang.org/">mypy</a>.</p>
-<h2 id="analisando-a-assinatura-de-uma-funo-dinamicamente">Analisando a assinatura de uma função dinamicamente</h2>
+<h2 id="analisando-a-assinatura-de-uma-função-dinamicamente">Analisando a assinatura de uma função dinamicamente</h2>
 <p>O início de tudo é ter os parâmetros dessa função com seus tipos declarados. Caso contrário não teremos como inferir quais valores são possíveis de serem passados.</p>
 <p>Uma declaração simples pode ser:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>(a: int, b: str) <span style="color:#f92672">-</span><span style="color:#f92672">&gt;</span> int:
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>(a: int, b: str) <span style="color:#f92672">-&gt;</span> int:
     <span style="color:#66d9ef">pass</span>
 </code></pre></div><p>É possível, via introspecção, descobrir quais são os tipos que estão declarados nesses typehints. Uma forma simples é olhando o atributo <code>__annotations__</code> que toda função (e métodos) possui. Olhando esse caso temos:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  <span style="color:#66d9ef">print</span>(func<span style="color:#f92672">.</span>__annotations__)
   {
-  <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#39;</span>: <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">int</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&gt;,</span>
-  <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>: <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">str</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&gt;,</span>
-  <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">return</span><span style="color:#e6db74">&#39;</span>: <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">int</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&gt;</span>
+  <span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">int</span><span style="color:#e6db74">&#39;&gt;,</span>
+  <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">str</span><span style="color:#e6db74">&#39;&gt;,</span>
+  <span style="color:#e6db74">&#39;return&#39;</span>: <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">int</span><span style="color:#e6db74">&#39;&gt;</span>
   }
 </code></pre></div><p>Isso nos retorna um dicionário onde a chave é o nome do parâmetro e o valor é o tipo com o qual esse parâmetro foi anotado.</p>
 <p>A key <code>return</code> é reservada e representa o tipo retornado pela função, mas não precisaremos dela para essa nossa análise.</p>
 <p>Os typehints podem também ser strings, assim:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>(a: <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">int</span><span style="color:#e6db74">&#34;</span>, b: <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">str</span><span style="color:#e6db74">&#34;</span>):
-    <span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>(a: <span style="color:#e6db74">&#34;int&#34;</span>, b: <span style="color:#e6db74">&#34;str&#34;</span>):
+    <span style="color:#f92672">...</span>
 </code></pre></div><p>Essa construção é útil quando o tipo que você precisa ainda não foi declarado ou não está disponível em tempo de escrita do código.</p>
 <p>Se olharmos o atributo <code>__annotations__</code> dessa nova função vemos que os tipos no dicionário retornado são na verdade strings, veja:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>(a: <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">int</span><span style="color:#e6db74">&#34;</span>, b: <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">str</span><span style="color:#e6db74">&#34;</span>):
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>(a: <span style="color:#e6db74">&#34;int&#34;</span>, b: <span style="color:#e6db74">&#34;str&#34;</span>):
       <span style="color:#66d9ef">pass</span>
 
     <span style="color:#66d9ef">print</span>(func<span style="color:#f92672">.</span>__annotations__)
-    {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">int</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span>: <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">str</span><span style="color:#e6db74">&#39;</span>}
+    {<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#e6db74">&#39;int&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#e6db74">&#39;str&#39;</span>}
 </code></pre></div><p>Isso é muito ruim pois temos que &ldquo;parsear&rdquo; essa string de alguma forma e transformar isso em um tipo python de verdade.</p>
 <p>Mas alguém já pensou nisso e criou uma forma de fazer esse parsing automaticamente pra nós. Basta usar a função <code>typing.get_type_hints()</code>, assim:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    <span style="color:#f92672">import</span> typing
-    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>(a: <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">int</span><span style="color:#e6db74">&#34;</span>, b: <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">str</span><span style="color:#e6db74">&#34;</span>):
+    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>(a: <span style="color:#e6db74">&#34;int&#34;</span>, b: <span style="color:#e6db74">&#34;str&#34;</span>):
       <span style="color:#66d9ef">pass</span>
 
     <span style="color:#66d9ef">print</span>(typing<span style="color:#f92672">.</span>get_type_hints(func))
-    {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#39;</span>: <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">int</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&gt;, </span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">: &lt;class </span><span style="color:#e6db74">&#39;</span>str<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&gt;}</span>
+    {<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">int</span><span style="color:#e6db74">&#39;&gt;, &#39;</span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;: &lt;class &#39;</span>str<span style="color:#e6db74">&#39;&gt;}</span>
 </code></pre></div><p>Veja como agora o dicionário já veio com os tipos python reais.</p>
 <p>Se algumas das strings não puderem ser resolvidas para &ldquo;tipos concretos&rdquo; uma exception será lançada.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    <span style="color:#f92672">import</span> typing
-    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>(a: <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">bla</span><span style="color:#e6db74">&#34;</span>):
+    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>(a: <span style="color:#e6db74">&#34;bla&#34;</span>):
       <span style="color:#66d9ef">pass</span>
 
 
     <span style="color:#66d9ef">print</span>(typing<span style="color:#f92672">.</span>get_type_hints(func))
-    <span style="color:#a6e22e">NameError</span>: name <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">bla</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> defined</code></pre></div>
+    <span style="color:#a6e22e">NameError</span>: name <span style="color:#e6db74">&#39;bla&#39;</span> <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> defined</code></pre></div>
 <p>Dessa forma podemos ter certeza que todos os tipos existem e que podemos usá-los no momento de analisar uma assinatura para fazer a chamada.</p>
-<h2 id="estratgia-para-passar-dinamicamente-parmetros-para-uma-funo">Estratégia para passar dinamicamente parâmetros para uma função</h2>
+<h2 id="estratégia-para-passar-dinamicamente-parâmetros-para-uma-função">Estratégia para passar dinamicamente parâmetros para uma função</h2>
 <p>Agora já temos quase tudo que precisamos para conseguir analisar dinamicamente uma função e poder escolher quais parâmetros serão passados pra ela.</p>
 <p>O que está faltando é justamente o valores que podem ser passados.</p>
 <p>Normalmente quando estamos escrevendo um código nós já temos esses valores nas mãos e fazemos a chamada diretamente:</p>
@@ -283,24 +296,24 @@ html {
       <span style="color:#66d9ef">pass</span>
 
     num <span style="color:#f92672">=</span> <span style="color:#ae81ff">42</span>
-    name <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Dalton</span><span style="color:#e6db74">&#34;</span>
+    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Dalton&#34;</span>
     await func(num, name)
 </code></pre></div><p>Pensando na nossa análise dinâmica temos que lembrar que nesse caso esses valores viriam de algum lugar e seriam acumulados ao longo da execução do código e poderiam ser usados para ajudar e escolher o que será passado no momento de chamar uma função.</p>
 <p>Uma forma válida de acumular esses valores seria em uma espécie de &ldquo;repositório de tipos&rdquo;, que poderia ser também um dicionário onde a <code>key</code> é o tipo e o <code>value</code> é um valor daquele tipo. Esse repositório seria usado como fonte de consulta no momento de escolher o que será passado na chamada.</p>
 <p>Algo nessa linha:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>(a: int, b: str):
-      <span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span>
+      <span style="color:#f92672">...</span>
 
     await call_func(func, types_repository)
 </code></pre></div><p>Aqui nesse caso a implementação do <code>call_func</code> é que teria a lógica de olhar os <code>__annotations__</code> e procurar no <code>types_repository</code> se existem valores para cada um dos tipos que a função <code>func</code> quer receber.</p>
 <p>De tudo que vimos até agora o mais importante é: Temos um conjunto de valores que são acumulados em algum lugar (com seus respectivos tipos) e que podem ser usados como fonte de consulta no momento de chamar uma função qualquer.</p>
-<h2 id="prova-de-conceito-de-um-repositrio-de-tipos">Prova de conceito de um Repositório de tipos</h2>
+<h2 id="prova-de-conceito-de-um-repositório-de-tipos">Prova de conceito de um Repositório de tipos</h2>
 <p>Aqui vamos implementar uma versão bem simplificada do que poderia ser um Repositório de tipos. Essa implementação pode ser tão simples quanto um <code>dict</code> python comum.</p>
 <p>Algo nessa linha:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    <span style="color:#f92672">from</span> typing <span style="color:#f92672">import</span> Dict, Type, Any
 
     types_registry: Dict[Type, Any] <span style="color:#f92672">=</span> dict()
-</code></pre></div><h2 id="prova-de-conceito-de-uma-implementao-da-funo-call-func">Prova de conceito de uma implementação da função call_func()</h2>
+</code></pre></div><h2 id="prova-de-conceito-de-uma-implementação-da-função-call_func">Prova de conceito de uma implementação da função call_func()</h2>
 <p>Aqui vamos usar o repositório de tipos (aqui um simples <code>dict</code>) para confirmar que é possível fazer uma chamada a uma função (ou método) analisando dinamicamente sua assinatura.</p>
 <p>O código abaixo é um exemplo <strong>bem simples</strong> de uma implementação</p>
 <script type="application/javascript" src="https://gist.github.com/daltonmatos/cd423d265ba092300f65ac00af37c8c4.js?file=dynamic-sig-call.py"></script>
@@ -310,15 +323,15 @@ html {
     int is 42, str is Dalton
     int is 42, str is Dalton
 </code></pre></div><p>Vejam que esse exemplo é <strong>muito</strong> simplificado. Não tratamos aqui, por exemplo, caso de parametros opcionais, parametros que são uma lista, múltiplos parametros de um mesmo tipo. Aqui fizemos apenas uma Prova de Conceito para mostrar que é possível fazer a analise da assinatura e a chamada à função.</p>
-<h1 id="concluso">Conclusão</h1>
+<h1 id="conclusão">Conclusão</h1>
 <p>É claro que não vamos mudar nosso código do dia a dia para passar a chamar os métodos de forma dinâmica descobrindo quais valores devem ser passados, mas ter a possibilidade de fazer isso pode ser muito útil em alguns contextos.</p>
 <p>Um deles pode ser a implementação de um handler http que não recebe o objeto <code>Request</code> e pode já receber o conteúdo do corpo desse <code>Request</code> já validado e em forma de uma objeto python.</p>
 <p>Um exemplo simples:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">save_user</span>(request: Request):
-      <span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span>
+      <span style="color:#f92672">...</span>
 </code></pre></div><p>Mudaria para algo como:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">save_user</span>(user: User):
-      <span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span>
+      <span style="color:#f92672">...</span>
 </code></pre></div><p>Nesse caso algum código anterior à execução desse handler, um middleware por exemplo, já extraiu o corpo do request e já criou o objeto <code>User</code> que será passado ao handler.</p>
 <p>O framework http poderia usar o que vimos nesse post para analisar a assinatura do handler em questão e fazer a chamada passando os parâmetros necessários de forma dinâmica.</p>
 <p>Escrevi sobre isso em outro post onde mostro um exemplo de uso dessa técnica em um handler do asyncworker.  <a href="/2020/01/asyncworker-handler-http-recebendo-mais-do-que-request/">Asyncworker: Handler Http Recebendo Mais Do Que Request</a></p>
@@ -381,20 +394,17 @@ html {
         
     
 
-<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" integrity="sha384-ZbbbT1gw3joYkKRqh0kWyRp32UAvdqkpbLedQJSlnI8iLQcFVxaGyrOgOJiDQTTR" crossorigin="anonymous"></script>
 
 
     
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
         
-    
     <script type="text/javascript">
         
         hljs.initHighlightingOnLoad();
     </script>
     
-
 
 
 

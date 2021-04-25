@@ -6,12 +6,14 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
+    
+    <link rel="canonical" href="https://daltonmatos.com/2018/10/multiplos-certificados-ssl-com-lets-encrypt-e-traefik/">
+    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.62.0" />
+<meta name="generator" content="Hugo 0.82.0" />
 
     
     
@@ -22,18 +24,19 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Múltiplos certificados SSL com Let&#39;s Encrypt e traefik"/>
-<meta name="twitter:description" content="O que o let&#39;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.
+<meta name="twitter:description" content="O que o let&rsquo;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.
 Gerar um certificado é tão simples quanto rodar um comando. O única coisa que você precisa ter em me te é como comprovar que você controla o domínio para o qual você está gerando um certificado.
 Challenge http-01 Um dos challenges mais comuns é usar um server http para comprovar que você controla o domínio."/>
 
 <meta property="og:title" content="Múltiplos certificados SSL com Let&#39;s Encrypt e traefik" />
-<meta property="og:description" content="O que o let&#39;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.
+<meta property="og:description" content="O que o let&rsquo;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.
 Gerar um certificado é tão simples quanto rodar um comando. O única coisa que você precisa ter em me te é como comprovar que você controla o domínio para o qual você está gerando um certificado.
 Challenge http-01 Um dos challenges mais comuns é usar um server http para comprovar que você controla o domínio." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daltonmatos.com/2018/10/multiplos-certificados-ssl-com-lets-encrypt-e-traefik/" />
-<meta property="article:published_time" content="2018-10-08T00:00:00+00:00" />
-<meta property="article:modified_time" content="2018-10-08T00:00:00+00:00" />
+<meta property="og:url" content="https://daltonmatos.com/2018/10/multiplos-certificados-ssl-com-lets-encrypt-e-traefik/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-10-08T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2018-10-08T00:00:00&#43;00:00" />
+
 
 
     
@@ -48,7 +51,7 @@ Challenge http-01 Um dos challenges mais comuns é usar um server http para comp
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -82,7 +85,11 @@ html {
   <div class="container ">
     <div class="sidebar-about">
       <span class="site__title">
-        <a href="https://daltonmatos.com/"></a>
+        <a href="https://daltonmatos.com/">
+        
+          
+        
+        </a>
       </span>
       
         
@@ -163,7 +170,13 @@ html {
 	
 	
 	
+	
 	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
 	
 	
 	
@@ -233,10 +246,10 @@ html {
   
   
   <div class="post">
-    <p>O que o let's encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.</p>
+    <p>O que o let&rsquo;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.</p>
 <p>Gerar um certificado é tão simples quanto rodar <strong>um comando</strong>. O única coisa que você precisa ter em me te é como comprovar que você controla o domínio para o qual você está gerando um certificado.</p>
 <h1 id="challenge-http-01">Challenge http-01</h1>
-<p>Um dos challenges mais comuns é usar um server http para comprovar que você controla o domínio. Esse tipo de challenge é útil quando você está gerando um certificado para uma máquina que é pública, ou seja, os servidores do let's encrypt vão conseguir acessá-la para comprovar que você tem o controle do domínio.</p>
+<p>Um dos challenges mais comuns é usar um server http para comprovar que você controla o domínio. Esse tipo de challenge é útil quando você está gerando um certificado para uma máquina que é pública, ou seja, os servidores do let&rsquo;s encrypt vão conseguir acessá-la para comprovar que você tem o controle do domínio.</p>
 <p>Mas e quando você precisa gerar certificados que serão usados em máquinas privadas?</p>
 <h1 id="challenge-dns-01">Challenge dns-01</h1>
 <p>Esse tipo de challenge é super útil para podermos gerar certificados a partir de máquinas privadas. Isso porque a confirmação do controle do domínio é feita via registro DNS.</p>
@@ -244,7 +257,7 @@ html {
 <h1 id="traefik">Traefik</h1>
 <p><a href="https://traefik.io/">Traefik</a> é um Proxy reverso capaz de descobrir automaticamente a localização dos backends para os quais ele fará forward das requisições. Isso é especialmente útil em ambientes dinâmicos onde as aplicações podem eventualmente mudar de lugar dentro de um mesmo cluster.</p>
 <h1 id="certbot">Certbot</h1>
-<p>O <a href="https://certbot.eff.org/">Certbot</a> é o cliente oficial para gerar certificados usando a infraestrutura do <a href="https://letsencrypt.org/">let's encrypt</a>.</p>
+<p>O <a href="https://certbot.eff.org/">Certbot</a> é o cliente oficial para gerar certificados usando a infraestrutura do <a href="https://letsencrypt.org/">let&rsquo;s encrypt</a>.</p>
 <p>Apesar do certbot gerar os certificados sempre em arquivos diferentes ele mantém um symlink apontando sempre para o certificado mais atual.</p>
 <p>Isso é <strong>muito</strong> útil pois para você que vai usar esse certificado, basta apontar na configuração do seu servidor esse caminho fixo. Sempre que você gerar um novo certificado, basta pedir ao servidor para recarregar os certificados atuais e pronto, você tem novos certificados disponíveis e sem precisar reiniciar o servidor web.</p>
 <h1 id="hot-reload-com-traefik">Hot reload com Traefik</h1>
@@ -256,7 +269,7 @@ html {
 <p>E é aqui que entra o principal desse post: Um deploy-hook que escrevi para resolver esse problema.</p>
 <p>O que esse deploy hook faz é gerar um trecho de configuração que aponta para os certificados corretos, mas em vez de usar o symlink gerado pelo certbot ele segue esse symlink e usa o path final do arquivo do certificado, dessa forma a cada novo certificado gerado um novo arquivo de configuração será criado. Isso faz o traefik perceber a mudança e recarregar o certificado.</p>
 <p>Vejamos no detalhe como funciona:</p>
-<h1 id="configurao-do-traefik">Configuração do Traefik</h1>
+<h1 id="configuração-do-traefik">Configuração do Traefik</h1>
 <p>O traefik precisa ser configurado de forma especial, principalmente no que diz respeito às configurações de certificados SSL.</p>
 <p>Esse é o trecho onde os entrypoints são criados, que são quem abrem as portas.</p>
 <pre><code>defaultEntryPoints = [&quot;http&quot;]
@@ -276,7 +289,7 @@ html {
 directory = conf.d/
 watch = true
 </code></pre><p>O que isso faz é: Quaisquer arquivos de configuração nessa pasta serão carregados pelo traefik e não só isso, caso haja qualquer mudança nesses arquivos o traefik vai recarregá-los. Isso é o que queremos.</p>
-<h2 id="configurao-de-um-certificado-ssl">Configuração de um certificado SSL</h2>
+<h2 id="configuração-de-um-certificado-ssl">Configuração de um certificado SSL</h2>
 <p>Esse é um trecho de exemplo em que adicionamos um novo certificado ao traefik.</p>
 <pre><code>[[tls]]
   entryPoints = [&quot;https&quot;]
@@ -293,7 +306,7 @@ watch = true
       keyFile = &quot;/etc/letsencrypt/live/app.daltonmatos.com/privkey.pem&quot;
 </code></pre><p>Esse path, na verdade, aponta para <code>/etc/letsencrypt/archive/app.daltonmatos.com/privkey1.pem</code>. À medida que vamos renovando esse certificado o certbot vai gerando novos arquivo na pasta <code>/etc/letsencrypt/archive/app.daltonmatos.com/</code> com nomes <code>privkey2.pem</code>, <code>privkey3.pem</code> e assim por diante.</p>
 <p>E aqui entera o deploy-hook que escrevi para podermos gerar os techos de configuração sempre usando os paths da pasta <code>archive/</code> e não da pasta <code>live/</code>.</p>
-<h1 id="implementao-do-certbot-deploy-hook">Implementação do certbot deploy-hook</h1>
+<h1 id="implementação-do-certbot-deploy-hook">Implementação do certbot deploy-hook</h1>
 <p>O <a href="https://certbot.eff.org/docs/using.html#renewing-certificates">deploy-hook</a> é uma forma de pedir ao certbot que chame um comando escolhido por você sempre que um certificado for renovado <strong>com sucesso</strong>.</p>
 <p>O que nosso deploy-hook faz é descobrir o path final do certificado. Esse é o código:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> os
@@ -301,27 +314,27 @@ watch = true
 <span style="color:#f92672">from</span> hooks <span style="color:#f92672">import</span> conf
 
 
-SSL_CONFIG_TEMPLATE <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">[[tls]]</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">  entryPoints = [</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">https</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">]</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">  [tls.certificate]</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">      certFile = </span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{{certfile_path}}</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">      keyFile = </span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{{keyfile_path}}</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+SSL_CONFIG_TEMPLATE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span><span style="color:#e6db74">[[tls]]
+</span><span style="color:#e6db74">  entryPoints = [&#34;https&#34;]
+</span><span style="color:#e6db74">  [tls.certificate]
+</span><span style="color:#e6db74">      certFile = &#34;{{certfile_path}}&#34;
+</span><span style="color:#e6db74">      keyFile = &#34;{{keyfile_path}}&#34;
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">&#34;&#34;&#34;</span>
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_config_file_for_certificate</span>(output_path, lineage_path):
     content <span style="color:#f92672">=</span> render_config_for_certificate(lineage_path)
-    outputfile <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(output_path, os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>basename(lineage_path<span style="color:#f92672">.</span>strip(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/</span><span style="color:#e6db74">&#34;</span>)))
-    outputfile <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">.toml</span><span style="color:#e6db74">&#34;</span>
-    <span style="color:#66d9ef">with</span> open(outputfile, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">wa</span><span style="color:#e6db74">&#34;</span>) <span style="color:#66d9ef">as</span> outfile:
+    outputfile <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(output_path, os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>basename(lineage_path<span style="color:#f92672">.</span>strip(<span style="color:#e6db74">&#34;/&#34;</span>)))
+    outputfile <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;.toml&#34;</span>
+    <span style="color:#66d9ef">with</span> open(outputfile, <span style="color:#e6db74">&#34;wa&#34;</span>) <span style="color:#66d9ef">as</span> outfile:
         outfile<span style="color:#f92672">.</span>write(content)
 
     <span style="color:#66d9ef">return</span> outputfile
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">render_config_for_certificate</span>(live_folder):
-    certfile_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(live_folder, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">fullchain.pem</span><span style="color:#e6db74">&#34;</span>)
-    keyfile_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(live_folder, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">privkey.pem</span><span style="color:#e6db74">&#34;</span>)
+    certfile_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(live_folder, <span style="color:#e6db74">&#34;fullchain.pem&#34;</span>)
+    keyfile_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(live_folder, <span style="color:#e6db74">&#34;privkey.pem&#34;</span>)
     <span style="color:#66d9ef">return</span> render_template(resolve_symlink(certfile_path), resolve_symlink(keyfile_path))
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">render_template</span>(certfile_path, keyfile_path):
@@ -383,20 +396,17 @@ SSL_CONFIG_TEMPLATE <span style="color:#f92672">=</span> <span style="color:#e6d
         
     
 
-<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" integrity="sha384-ZbbbT1gw3joYkKRqh0kWyRp32UAvdqkpbLedQJSlnI8iLQcFVxaGyrOgOJiDQTTR" crossorigin="anonymous"></script>
 
 
     
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
         
-    
     <script type="text/javascript">
         
         hljs.initHighlightingOnLoad();
     </script>
     
-
 
 
 

@@ -6,18 +6,14 @@
     <description>Recent content in ssl on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Mon, 08 Oct 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://daltonmatos.com/tags/ssl/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 08 Oct 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://daltonmatos.com/tags/ssl/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Múltiplos certificados SSL com Let&#39;s Encrypt e traefik</title>
       <link>https://daltonmatos.com/2018/10/multiplos-certificados-ssl-com-lets-encrypt-e-traefik/</link>
       <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://daltonmatos.com/2018/10/multiplos-certificados-ssl-com-lets-encrypt-e-traefik/</guid>
-      <description>O que o let&#39;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.
+      <description>O que o let&amp;rsquo;s encrypt trouxe foi a possibilidade de gerar certificados de forma simples, gratuita e automatizada.
 Gerar um certificado é tão simples quanto rodar um comando. O única coisa que você precisa ter em me te é como comprovar que você controla o domínio para o qual você está gerando um certificado.
 Challenge http-01 Um dos challenges mais comuns é usar um server http para comprovar que você controla o domínio.</description>
     </item>

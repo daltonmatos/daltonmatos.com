@@ -6,12 +6,14 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
+    
+    <link rel="canonical" href="https://daltonmatos.com/2020/01/asyncworker-handler-http-recebendo-mais-do-que-request/">
+    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.62.0" />
+<meta name="generator" content="Hugo 0.82.0" />
 
     
     
@@ -27,9 +29,10 @@
 <meta property="og:title" content="Asyncworker: Handler HTTP recebendo mais do que Request" />
 <meta property="og:description" content="Contexto Uma implementação recente no asyncworker (doc) permitiu que um handler http pudesse receber parâmetros mais complexos do que simplesmente Request, que é o que normalmente um handler http recebe. Essa implementação permite que possíveis valores possam ser acumulados ao longo da execução do código e no momento que o handler for chamado para atender o Request atual, esses valores seriam consultados para saber se o handler está interessado em receber algum deles." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daltonmatos.com/2020/01/asyncworker-handler-http-recebendo-mais-do-que-request/" />
-<meta property="article:published_time" content="2020-01-04T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-01-04T00:00:00+00:00" />
+<meta property="og:url" content="https://daltonmatos.com/2020/01/asyncworker-handler-http-recebendo-mais-do-que-request/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-01-04T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2020-01-04T00:00:00&#43;00:00" />
+
 
 
     
@@ -44,7 +47,7 @@
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -78,7 +81,11 @@ html {
   <div class="container ">
     <div class="sidebar-about">
       <span class="site__title">
-        <a href="https://daltonmatos.com/"></a>
+        <a href="https://daltonmatos.com/">
+        
+          
+        
+        </a>
       </span>
       
         
@@ -159,7 +166,13 @@ html {
 	
 	
 	
+	
 	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
 	
 	
 	
@@ -237,14 +250,14 @@ O mais legal nesse caso é que tudo isso acaba sendo código python sintaticamen
 <p>Vejamos um exemplo simples.</p>
 <h1 id="exemplo-de-um-handler-http">Exemplo de um handler HTTP</h1>
 <p>Quando falamos de framework HTTP geralmente as implementações dos endpoints recebem um objeto <code>Request</code> e retornam um objeto <code>Response</code>.</p>
-<h2 id="definio-do-handler">Definição do handler</h2>
+<h2 id="definição-do-handler">Definição do handler</h2>
 <p>Vamos escrever um handler http que apenas recebe um JSON no corpo do request e retorna esse json.</p>
 <p>O que vamos fazer aqui é escrever código para que nosso handler não precise receber <code>Request</code> e possa receber algo mais rico e já validado, como por exemplo um objeto que já represente o corpo do request.</p>
 <h2 id="handler-recebendo-request">Handler recebendo Request</h2>
 <script type="application/javascript" src="https://gist.github.com/daltonmatos/1bffddc9ca4f36a801cf874b1e37f521.js?file=handler-recebe-request.py"></script>
 
 <p>Aqui temos a implementação padrão do handler, recebendo <code>Request</code> e pegando desse request os dados necessários.</p>
-<h2 id="cdigos-fornecidos-pelo-asyncworker-para-podermos-chamar-um-handler-com-assinatura-dinmica">Códigos fornecidos pelo asyncworker para podermos chamar um handler com assinatura dinâmica</h2>
+<h2 id="códigos-fornecidos-pelo-asyncworker-para-podermos-chamar-um-handler-com-assinatura-dinâmica">Códigos fornecidos pelo asyncworker para podermos chamar um handler com assinatura dinâmica</h2>
 <p>O asyncworker fornece uma infra-estrutura de código que ajuda nessa parte de poder ter um handler com a assinatura dinâmica, ou seja, o handler pode ter uma assinatura mais complexa do que um simples <code>(request: Request)</code> e podemos inclusive mudar essa assinatura ao longo do tempo sem precisarmos mudar nenhuma linha de código, a não ser a própria linha da assinatura. Veremos exemplos disso mais adiante.</p>
 <p>Essa infra-estrutura é dividida em algumas partes:</p>
 <ul>
@@ -282,7 +295,7 @@ O mais legal nesse caso é que tudo isso acaba sendo código python sintaticamen
 async def users(post: PostResource):
   ...
 </code></pre>
-<h3 id="verso-final-do-cdigo">Versão final do código</h3>
+<h3 id="versão-final-do-código">Versão final do código</h3>
 <p>Esse é o código em sua forma final, já com o handler usando o decorator e tendo sua assinatura recebendo um modelo já validado:</p>
 <script type="application/javascript" src="https://gist.github.com/daltonmatos/1bffddc9ca4f36a801cf874b1e37f521.js?file=asyncworker-app-handler-recebe-user-resource.py"></script>
 
@@ -332,6 +345,11 @@ async def users(body: RequestBody[UserResource]):
       <span class="navigation-tittle">Chamando funções Python com assinatura dinâmica Baseada em Typehint</span>
     </a>
     
+    
+    <a href="/2021/04/asyncworker-recebendo-parametros-do-path-do-request-atraves-de-typehints/" class="navigation-next">
+      <span class="navigation-tittle">Asyncworker: Recebendo parametros do Path do Request através de typehints</span>
+      <i aria-hidden="true" class="fa fa-chevron-right"></i>
+    </a>
     
 </div>
 
@@ -388,20 +406,17 @@ async def users(body: RequestBody[UserResource]):
         
     
 
-<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" integrity="sha384-ZbbbT1gw3joYkKRqh0kWyRp32UAvdqkpbLedQJSlnI8iLQcFVxaGyrOgOJiDQTTR" crossorigin="anonymous"></script>
 
 
     
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
         
-    
     <script type="text/javascript">
         
         hljs.initHighlightingOnLoad();
     </script>
     
-
 
 
 

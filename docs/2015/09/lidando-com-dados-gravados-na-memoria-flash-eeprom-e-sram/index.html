@@ -6,12 +6,14 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
+    
+    <link rel="canonical" href="https://daltonmatos.com/2015/09/lidando-com-dados-gravados-na-memoria-flash-eeprom-e-sram/">
+    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.62.0" />
+<meta name="generator" content="Hugo 0.82.0" />
 
     
     
@@ -29,9 +31,10 @@ Contexto Até agora, nos posts anteriores vimos apenas como fazer chamadas de fu
 <meta property="og:description" content="Esse post faz parte de uma série de posts sobre mistura de código C (avr-gcc) com código Assembly (avrasm2). Se você ainda não leu os posts anteriores, recomendo que leia antes de prosseguir.
 Contexto Até agora, nos posts anteriores vimos apenas como fazer chamadas de função de uma linguagem para outra, mas uma parte muito importante de qualquer projeto com micro-controladores é a possibilidade de gravar dados na área de memória do chip (memória flash, por exemplo)." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daltonmatos.com/2015/09/lidando-com-dados-gravados-na-memoria-flash-eeprom-e-sram/" />
-<meta property="article:published_time" content="2015-09-27T00:00:00+00:00" />
-<meta property="article:modified_time" content="2015-09-27T00:00:00+00:00" />
+<meta property="og:url" content="https://daltonmatos.com/2015/09/lidando-com-dados-gravados-na-memoria-flash-eeprom-e-sram/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2015-09-27T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2015-09-27T00:00:00&#43;00:00" />
+
 
 
     
@@ -46,7 +49,7 @@ Contexto Até agora, nos posts anteriores vimos apenas como fazer chamadas de fu
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -80,7 +83,11 @@ html {
   <div class="container ">
     <div class="sidebar-about">
       <span class="site__title">
-        <a href="https://daltonmatos.com/"></a>
+        <a href="https://daltonmatos.com/">
+        
+          
+        
+        </a>
       </span>
       
         
@@ -161,7 +168,13 @@ html {
 	
 	
 	
+	
 	<a href="https://github.com/daltonmatos" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
 	
 	
 	
@@ -235,9 +248,9 @@ html {
 <h1 id="contexto">Contexto</h1>
 <p>Até agora, nos posts anteriores vimos apenas como fazer chamadas de função de uma linguagem para outra, mas uma parte muito importante de qualquer projeto com micro-controladores é a possibilidade de gravar dados na área de memória do chip (memória flash, por exemplo). É bem comum usar essa memória para gravar valores que serão usados pelo código. O mais comum é vermos strings sendo guardadas para uso futuro, mas é perfeitamente possível guardarmos outros valores como constantes, números e até mesmo definição de fontes, no caso de estarmos lidando com displays de LCD.</p>
 <p>Além da memória flash, temos duas outras memórias dispońiveis para usar dessa mesma forma. A memória <a href="https://en.wikipedia.org/wiki/Static_random-access_memory">SRAM</a> e a <a href="https://en.wikipedia.org/wiki/EEPROM">EEPROM</a>. Vamos ver logo abaixo como gravamos/lemos dados dessas três memórias disponíveis nos micro-controladores AVR (pelo menos na maioria deles).</p>
-<h1 id="lendogravando-dados-na-memria-sram-e-eeprom">Lendo/Gravando dados na memória SRAM e EEPROM</h1>
+<h1 id="lendogravando-dados-na-memória-sram-e-eeprom">Lendo/Gravando dados na memória SRAM e EEPROM</h1>
 <p>Tanto a memória SRAM quanto a EEPROM possuem posicionamentos fixos em cada chip AVR, isso significa que, independente da lingagem usada, o endereço de leitura/escrita será sempre o mesmo. Isso significa que não precisamos nos preocupar com nenhum tipo de deslocamento de código quando fizermos a link-edição com algum código C. Tanto o <code>avr-gcc</code> quanto o <code>avrasm2</code> vão inicializar corretamente os valores iniciais e finais dos endereços dessas duas memórias e o código poderá referenciar esses endereços livremente.</p>
-<h1 id="lendogravando-dados-na-memria-flash">Lendo/Gravando dados na memória Flash</h1>
+<h1 id="lendogravando-dados-na-memória-flash">Lendo/Gravando dados na memória Flash</h1>
 <p>O problema começa quando precisamos ler/gravar dados na memória flash. Isso acontece pois as duas instruções que devemos usar para isso (<code>LPM</code> e <code>SPM</code>) trabalham de uma forma peculiar, que explico a seguir:</p>
 <p>Quando usamos quaisquer uma dessas duas instruções, temos que usar o registrador <code>Z</code> para dizer onde queremos ler/gravar nosso dado. Então, dando um exemplo simples poderíamos pensar no seguinte código:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">
@@ -300,7 +313,7 @@ html {
 <p>Podemos definir a constante <code>offset</code> no início do nosso código Assembly, dessa forma:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"> <span style="color:#a6e22e">.equ</span> <span style="color:#66d9ef">offset</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#ae81ff">0x80</span>
 </code></pre></div><p>A única forma que encontrei de descobrir esse deslocamento foi compilar o código inteiro e depois olhar no disassembly onde o código Assembly legado acabou sendo posicionado no binário final. Isso é chato (apesar de ser possível de automatizar) e passível de erro mas foi o que consegui fazer. Depois de descobrir o deslocamento, volto no código Assembly e adiciono esse offset ao código da macro <code>ldz</code>.</p>
-<h1 id="o-jeito-simples-de-conferir-se-o-offset-escolhido-est-correto">O jeito simples de conferir se o offset escolhido está correto</h1>
+<h1 id="o-jeito-simples-de-conferir-se-o-offset-escolhido-está-correto">O jeito simples de conferir se o offset escolhido está correto</h1>
 <p>Podemos colocar um código simples bem no início do nosso código assembly para nos ajudar a conferir se o <code>offset</code> escolhido está correto.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">  _offset_check:
     <span style="color:#a6e22e">ldz</span> <span style="color:#66d9ef">_offset_check_data</span>*<span style="color:#ae81ff">2</span>
@@ -309,7 +322,7 @@ html {
 </code></pre></div><p>O que esse código faz é apenas carregar o endereço de uma label no registrador <code>Z</code>. Ninguém vai chamar esse código, mas ele estará bem no início do nosso código Assembly e por isso aparecerá também no início do disassembly do binário final e poderemos conferir se as duas instruções <code>ldi</code> estarão carregando o endereço correto nos regisradores <code>r31:r30</code> (<code>Z</code>).</p>
 <p>Vejamos como essa checagem funciona. Vamos link-editar um código assembly com essa checagem com um código C qualquer e vamos ver como fica o disassembly.</p>
 <p>Esse será nosso código C:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e"></span>
 
   <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">hello_main</span>();
@@ -397,13 +410,13 @@ html {
     8e:	01 02       	muls	r16, r17
 </code></pre><p>Olhando agora para as instruções <code>ldi</code> vemos que ela carrega o endereço correto, que é <code>0x008e</code>. Esse é exatamente o endereço na nossa label <code>_offset_data</code>. Note que os valores já estão multiplicados por 2, isso porque estamos analisando o disassembly já do arquivo <code>avr-elf32</code> onde os novos endereços são o dobro dos endereços originais, que encontramos no arquivo <code>.map</code> produzido pelo <code>avrasm2</code>. É por isso que não precisamos adicionar o valor de <code>offset*2</code>, pois o offset que vemos no disassembly, nesse caso <code>0x008a</code>, já está multiplicado.</p>
 <p>Com esse ajuste de offset, seu código assembly consegue rodar junto com o código C e ainda fazer uso livre da memória flash para ler/gravar dados.</p>
-<h1 id="bnus">Bônus</h1>
+<h1 id="bônus">Bônus</h1>
 <p>Agora que já podemos chamar código das duas linguagens e usar a memória flash livremente para ler/gravar dados seria interessante poder declarar novas constantes no código C e poder passá-las para o código Assembly. Pensando em uma possível migração de Assembly para C, é importante poder ir transferindo aos poucos, e isso inclui definições de constantes. Abaixo veremos como fazer as duas coisas: Declarar no C um valor que é salvo na memória flash e passá-lo para o código Assembly como parâmetro de função e declarar no Assembly um valor que é salvo na memória flash e passá-lo para o código C.</p>
 <h1 id="declarando-o-valor-no-c-e-passando-para-o-assembly">Declarando o valor no C e passando para o assembly</h1>
 <p>Esse será nosso código C onde declaramos uma string que será salva na memória flash.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e"></span>
-  <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> p[] PROGMEM <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Hello from C.</span><span style="color:#e6db74">&#34;</span>};
+  <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> p[] PROGMEM <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;Hello from C.&#34;</span>};
 
   <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">hello_main</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> []);
 
@@ -424,10 +437,10 @@ html {
     <span style="color:#a6e22e">lpm</span> <span style="color:#66d9ef">r0</span>, <span style="color:#66d9ef">Z</span>
 </code></pre></div><h1 id="definindo-o-valor-no-assembly-e-passando-para-o-c">Definindo o valor no Assembly e passando para o C</h1>
 <p>Agora faremos o mesmo, mas tendo definido a constante no Assembly. Vejamos o código C que receberá o endereço da memória flash onde o dado estára gravado.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>  <span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;avr/pgmspace.h&gt;</span><span style="color:#75715e">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  <span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;avr/io.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;avr/pgmspace.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e"></span>
-  <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> p[] PROGMEM <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Hello from C.</span><span style="color:#e6db74">&#34;</span>};
+  <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> p[] PROGMEM <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;Hello from C.&#34;</span>};
 
   <span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">hello_main</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> []);
 
@@ -549,20 +562,17 @@ html {
         
     
 
-<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" integrity="sha384-ZbbbT1gw3joYkKRqh0kWyRp32UAvdqkpbLedQJSlnI8iLQcFVxaGyrOgOJiDQTTR" crossorigin="anonymous"></script>
 
 
     
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
         
-    
     <script type="text/javascript">
         
         hljs.initHighlightingOnLoad();
     </script>
     
-
 
 
 
