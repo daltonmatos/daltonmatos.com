@@ -6,14 +6,11 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
-    
-    <link rel="canonical" href="https://daltonmatos.com/2018/08/arch-linux-com-full-disk-encryption/">
-    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.82.0" />
+<meta name="generator" content="Hugo 0.92.2" />
 
     
     
@@ -32,8 +29,8 @@ Sempre que me perguntam se a performance de um disco encriptado é boa ou ruim, 
 Sempre que me perguntam se a performance de um disco encriptado é boa ou ruim, eu respondo que não sei pois nunca tive um laptop onde o disco não estava encriptado." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://daltonmatos.com/2018/08/arch-linux-com-full-disk-encryption/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2018-08-02T00:00:00&#43;00:00" />
-<meta property="article:modified_time" content="2018-08-02T00:00:00&#43;00:00" />
+<meta property="article:published_time" content="2018-08-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-08-02T00:00:00+00:00" />
 
 
 
@@ -49,7 +46,7 @@ Sempre que me perguntam se a performance de um disco encriptado é boa ou ruim, 
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
+<link rel="stylesheet" href="/scss/hyde-hyde.3081c4981fb69a2783dd36ecfdd0e6ba7a158d4cbfdd290ebce8f78ba0469fc6.css" integrity="sha256-MIHEmB&#43;2mieD3Tbs/dDmunoVjUy/3SkOvOj3i6BGn8Y=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -261,22 +258,22 @@ ele esteja montado no lugar certo, geralmente <code>/mnt/</code>.</p>
 <p>O particionamento é idêntico, só estou escrevendo especificamente sobre ele pois vamos usar um tipo diferente de tabela de partição. Por muito tempo usamos o particionamento <code>msdos</code>, há algum tempo surgiu um novo tipo de particionamento, o <a href="https://en.wikipedia.org/wiki/GUID_Partition_Table">GPT</a> e vamos usá-lo.</p>
 <p>O <code>fdisk</code> é capaz de gerar partições <code>GPT</code> então poderemos usá-lo para essa preparação.</p>
 <p><strong>Atenção</strong>: O que vamos fazer agora destruirá <strong>todos os dados do seu disco</strong>.</p>
-<pre><code>$ sudo fdisk /dev/sdb
+<pre tabindex="0"><code>$ sudo fdisk /dev/sdb
 </code></pre><p>Aqui, <code>/dev/sdb</code> deve ser o disco onde você está instalando sua distribuição Linux.</p>
 <p>Depois pressione <code>g</code> e isso fará com que todas as partições sejam removidas e uma nova tabela de partição <code>GPT</code> seja criada.</p>
 <p>Agora vamos criar as partições. Vamos criar duas partições: Uma para o GRUB e outra para nossos dados. A do GRUB pode ter 64MB (pode até sem <strong>bem</strong> menor se você quiser, afinal aqui ficarão apenas os binários do próprio GRUB) e deve ser do tipo <code>04 Boot</code>. A outra pode ser do tipo default (<code>20 Linux Partition</code>) e deve ocupar todo o restante do disco.</p>
 <p>O particionamento está pronto. Até aqui nada de diferente a não ser o <code>GPT</code>, e isso nem tem relação com a escolha de usar encriptação.</p>
 <p>Rodando um <code>fdisk -l /dev/sdb</code> temos:</p>
-<pre><code>Device      Start      End  Sectors  Size Type
+<pre tabindex="0"><code>Device      Start      End  Sectors  Size Type
 /dev/sdb1    2048   133119   131072   64M BIOS boot
 /dev/sdb2  133120 15974366 15841247  7,6G Linux filesystem
 </code></pre><h1 id="preparando-o-disco-para-a-instalação">Preparando o disco para a instalação</h1>
 <p>A preparação do disco acontece quase que igualmente à preparação original, a diferença é que antes de rodar o <code>mke2fs</code> você precisa rodar dois comandos para encriptar:</p>
 <p>Antes tínhamos essa preparação:</p>
-<pre><code>$ mke2fs -t ext4 /dev/sdb2
+<pre tabindex="0"><code>$ mke2fs -t ext4 /dev/sdb2
 $ mount /dev/sdb2 /mnt
 </code></pre><p>Agora temos:</p>
-<pre><code>$ cryptsetup luksFormat /dev/sdb2
+<pre tabindex="0"><code>$ cryptsetup luksFormat /dev/sdb2
 $ cryptsetup luksOpen /dev/sdb2 crypt
 $ mke2fs -t ext4 /dev/mapper/crypt
 $ mount /dev/mapper/crypt /mnt
@@ -286,16 +283,16 @@ $ mount /dev/mapper/crypt /mnt
 <p>Como estamos agora com um disco encriptado, precisamos dizer ao kernel como destravar esse disco para que ele possa fazer o processo normal de boot. Para isso vamos editar o arquivo <code>/etc/mkinitcpio.conf</code>. Esse é o arquivo de configuração para o <code>mkinitcpio</code>, que é o comando responsável por gerar nosso initrd.</p>
 <p>Só precisamos alterar uma linha. Ache a linha <code>HOOKS=&quot;....&quot;</code> e adicione a essa linha o hook <code>encrypt</code>. Certifique-se que esse Hook apareça <strong>antes</strong> do Hook <code>filesystems</code>.</p>
 <p>Geralmente a linha, depois de ser alterada, fica assim:</p>
-<pre><code>HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)
+<pre tabindex="0"><code>HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)
 </code></pre><h1 id="configurando-o-grub">Configurando o GRUB</h1>
 <p>Para o GRUB precisamos editar duas linhas no <code>/etc/default/grub</code>, são elas:</p>
-<pre><code>GRUB_ENABLE_CRYPTODISK=y
+<pre tabindex="0"><code>GRUB_ENABLE_CRYPTODISK=y
 GRUB_CMDLINE_LINUX=&quot;cryptdevice=UUID=&lt;UUID&gt;:crypt&quot;
 </code></pre><p>Onde <code>&lt;UUID&gt;</code> é o valor do UUID da partção que encriptamos, no nosso caso aqui <code>/dev/sdb2</code>. Para oncseguir o UUID de uma partição, use o comando <code>blkid</code>.</p>
-<pre><code>$ sudo blkid
+<pre tabindex="0"><code>$ sudo blkid
 /dev/sdb2: UUID=&quot;d0eb2665-291f-4010-abf1-da46304a592e&quot; PARTUUID=&quot;d939470b-3425-1745-9b8c-503d2be1c2f3&quot;
 </code></pre><p>Então nesse caso, nossa linha ficaria assim:</p>
-<pre><code>GRUB_CMDLINE_LINUX=&quot;cryptdevice=UUID=d0eb2665-291f-4010-abf1-da46304a592e:crypt&quot;
+<pre tabindex="0"><code>GRUB_CMDLINE_LINUX=&quot;cryptdevice=UUID=d0eb2665-291f-4010-abf1-da46304a592e:crypt&quot;
 </code></pre><p>Instale o GRUB normalmente, termine e instalação da sua distribuição e dê boot.</p>
 <p>Bem no início do boot, antes mesmo do menu do GRUB aparecer, o próprio GRUB vai pedir a senha para destravar o disco.</p>
 <h1 id="considerações-finais">Considerações finais</h1>

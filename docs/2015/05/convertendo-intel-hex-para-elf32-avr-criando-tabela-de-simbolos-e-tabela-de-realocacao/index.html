@@ -6,14 +6,11 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
-    
-    <link rel="canonical" href="https://daltonmatos.com/2015/05/convertendo-intel-hex-para-elf32-avr-criando-tabela-de-simbolos-e-tabela-de-realocacao/">
-    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.82.0" />
+<meta name="generator" content="Hugo 0.92.2" />
 
     
     
@@ -32,8 +29,8 @@ Contexto No post anterior vimos que é possível chamar código assembly (feito 
 Contexto No post anterior vimos que é possível chamar código assembly (feito com AVRASM2) a partir de codigo C (avr-gcc). Vimos também que existem algumas limitaçoes na estratégia usada, tivemos que ajustar a instrução .org e isso significa que tínhamos que ajustar o código assembly toda vez que adicionávamos mais código C." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://daltonmatos.com/2015/05/convertendo-intel-hex-para-elf32-avr-criando-tabela-de-simbolos-e-tabela-de-realocacao/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2015-05-03T00:00:00&#43;00:00" />
-<meta property="article:modified_time" content="2015-05-03T00:00:00&#43;00:00" />
+<meta property="article:published_time" content="2015-05-03T00:00:00+00:00" />
+<meta property="article:modified_time" content="2015-05-03T00:00:00+00:00" />
 
 
 
@@ -49,7 +46,7 @@ Contexto No post anterior vimos que é possível chamar código assembly (feito 
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
+<link rel="stylesheet" href="/scss/hyde-hyde.3081c4981fb69a2783dd36ecfdd0e6ba7a158d4cbfdd290ebce8f78ba0469fc6.css" integrity="sha256-MIHEmB&#43;2mieD3Tbs/dDmunoVjUy/3SkOvOj3i6BGn8Y=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -249,7 +246,7 @@ html {
 <p>No <a href="https://daltonmatos.com/2015/04/chamando-codigo-assembly-legado-avrasm2-a-partir-de-um-codigo-novo-em-c-avr-gcc/">post anterior</a> vimos que é possível chamar código assembly (feito com AVRASM2) a partir de codigo C (avr-gcc). Vimos também que existem algumas limitaçoes na estratégia usada, tivemos que ajustar a instrução <code>.org</code> e isso significa que tínhamos que ajustar o código assembly toda vez que adicionávamos mais código C. Nesse post vamos ver uma outra abordagem em que isso não é mais necessário.</p>
 <h1 id="olhando-para-o-exemplo-inicial">Olhando para o exemplo inicial</h1>
 <p>Esse será o código assembly que usaremos para ilustrar esse post.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">
   <span style="color:#a6e22e">.org</span> <span style="color:#ae81ff">0x0000</span>
 
 
@@ -268,7 +265,7 @@ html {
     <span style="color:#a6e22e">clr</span> <span style="color:#66d9ef">r25</span>
     <span style="color:#a6e22e">ret</span>
 </code></pre></div><p>Esse código, depois de compilado e linkado com um código C produz esse disassembly:</p>
-<pre><code>
+<pre tabindex="0"><code>
   00000080 &lt;_binary_build_blink_call_asm_bin_start&gt;:
     80:   0e 94 08 00     call    0x10    ; 0x10 &lt;__zero_reg__+0xf&gt;
     84:   0e 94 05 00     call    0xa     ; 0xa &lt;__zero_reg__+0x9&gt;
@@ -287,14 +284,14 @@ html {
 <p>Olhando as duas primeiras instruçoes de nossa rotina Assembly (<code>_binary_build_blink_call_asm_bin_start</code>), vemos que as duas chamadas estão indo para endereços completamente errados (<code>0x10</code> e <code>0xa</code>). É fácil perceber que os endereços corretos deveriam ser, respectivamente, <code>0x90</code> e <code>0x8a</code>. Até aqui nenhuma novidade em relação ao que já fizemos. Acontece que podemos mostrar ao compilador onde cada uma de nossas rotinas começa e fazemos isso atráves da <a href="http://wiki.osdev.org/ELF_Tutorial#The_Symbol_Table">tabela de símbolos</a>.</p>
 <h1 id="manipulando-a-tabela-de-símbolos">Manipulando a tabela de símbolos</h1>
 <p>A tabela de símbolos diz ao compilador onde está cada parte do nosso código, no nosso caso, onde estão cada uma das rotinas assembly. Vamos voltar um pouco e olhar a tabela de símbolos do nosso código assembly compilado, recém convertido para ELF partir de um HEX. Se olharmos bem veremos que só temos os símbolos criados pelo <code>avr-objcopy</code> quando fizemos a conversão.</p>
-<pre><code>
+<pre tabindex="0"><code>
   SYMBOL TABLE:
   00000000 l    d  .text	00000000 .text
   00000000 g       .text	00000000 _binary_build_blink_call_asm_bin_start
   00000016 g       .text	00000000 _binary_build_blink_call_asm_bin_end
   00000016 g       *ABS*	00000000 _binary_build_blink_call_asm_bin_size
 </code></pre><p>E o disassembly:</p>
-<pre><code>
+<pre tabindex="0"><code>
   00000000 &lt;_binary_build_blink_call_asm_bin_start&gt;:
      0:	0e 94 08 00 	call	0x10	; 0x10 &lt;_binary_build_blink_call_asm_bin_start+0x10&gt;
      4:	0e 94 05 00 	call	0xa	; 0xa &lt;_binary_build_blink_call_asm_bin_start+0xa&gt;
@@ -308,7 +305,7 @@ html {
 </code></pre><p>(Lembrando que nesse disasembly as duas primeiras instruções estão corretas pois o código ainda não foi linkado com o código C)</p>
 <p>Quando convertemos um HEX para ELF perdemos todas as labels (símbolos) originais do Assembly. Na verdade, só de compilar o Assembly as labels já são convertidas em endereços absolutos.</p>
 <p>Acontece que o <code>avrasm2</code> pode gerar, no momento da compilação, dois arquivos adicionais: Um tem todos os labels e seus endereços finais (<code>.map, opção -m</code>) e o outro tem o código assembly final, ainda em formato de texto mas já com todos os endereços resolvidos (<code>.lst, opção -l</code>). Olhando o <code>.lst</code> vemos como ficou nossa rotina <code>_blinks</code>:</p>
-<pre><code>
+<pre tabindex="0"><code>
                     .org 0x0000
 
                    _blinks:
@@ -327,22 +324,22 @@ html {
   00000a 9508        ret
 </code></pre><p>Podemos perceber que a linha do <code>call</code> é codificada como <code>940e 0008</code>. A primeira parte é o código da instrução (<code>940e</code>) e a segunda é o endereço para onde ela transfere o controle da execução (<code>0008</code>).</p>
 <p>No aquivo que contém todos as labels e seus respectivos endereços finais, temos o seguinte:</p>
-<pre><code>  CSEG _blinks      00000000
+<pre tabindex="0"><code>  CSEG _blinks      00000000
   CSEG _clear       00000008
   CSEG _real_code   00000005
 </code></pre><p>Aqui temos nossos três símbolos: <code>_blinks</code>, <code>_clear</code> e <code>_real_code</code>. Olhando o disassembly do arquivo ELF vemos que a primeira instrução <code>call</code> foi codificada como: <code>0e 94 08 00</code>, que é essencialmente a mesma coisa que tínhamos no nosso arquivo <code>.lst</code>!</p>
 <p>ELF:</p>
-<pre><code>
+<pre tabindex="0"><code>
   00000000 &lt;_blinks&gt;:
      0:	0e 94 08 00 	call	0x10	; 0x10 &lt;_binary_build_blink_call_asm_bin_start+0x10&gt;
 </code></pre><p>.lst:</p>
-<pre><code>
+<pre tabindex="0"><code>
                    _blinks:
   000000 940e 0008   call _clear
 </code></pre><p>A única diferença entre eles parece ser a <a href="http://en.wikipedia.org/wiki/Endianness">representação do bit mais significativo</a>. No ELF a representação está com o byte menos significativo primeiro (mais à esquerda) e no <code>.lst</code> está com byte menos signifcativo por último (mais à diretia). Isso significa que nossa rotina <code>_clear</code> que no HEX estava no endereço <code>0x0008</code> está agora no ELF no endereço <code>0x10</code>.</p>
 <p>Ainda não entendo porque o código da instrução menciona o endereço <code>0008</code> e o disassembly mostra <code>call 0x10</code> (um é o dobro do outro!), mas percebi que a princípio os endereços sempre coincidem! Ou seja, no ELF os endereços são sempre o dobro dos respectivos endereços no HEX. Talvez isso tenha relação com como o ELF representa internamente as instruçoes. A instrução que vai para o AVR é mesmo <code>0e 94 08 00</code>, ou seja, o <code>call</code> irá saltar para o endereço <code>0008</code> da memória flash do AVR, mas como estamos adicionando símbolos no ELF, precisamos obeceder o endereçamento que ele mostra.</p>
 <p>Agora que sabemos onde estão nossas duas rotinas (<code>_clear</code> e <code>_real_code</code>) dentro do ELF podemos adicionar dois símoblos à tabela de símbolos. Como não encontrei nenhuma ferramenta que adicionasse símbolos a um ELF, escrevei meu pŕoprio <a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/elf-add-symbol.cpp">código que faz isso</a>, chamei a ferramenta de <code>elf-add-symbol</code>. Nossa nova tabela de símbolos ficou assim (mais detalhe em como ela foi adicionada ao arquivo ELF: <a href="#automatizando-todo-o-processo">Automatizando todo o processo</a>):</p>
-<pre><code>
+<pre tabindex="0"><code>
   SYMBOL TABLE:
   00000000 l    d  .text	00000000 .text
   00000000 g       .text	00000000 _blinks
@@ -351,7 +348,7 @@ html {
 
 </code></pre><p>A tabela é simples. Temos o endereço do símbolo, a seção do ELF onde ele está, o tamanho do símbolo e o nome do símbolo. O <code>g</code> e <code>l</code> significam, respectivamente, Símbolo Global e Símbolo Local. Isso é importante pois apenas símbolos globais são enxergados no momento da link-edição.</p>
 <p>Depois que fazemos isso, até o disassembly muda e fica mais simples de entender, pois conseguimos ver onde começa cada rotina, veja:</p>
-<pre><code>
+<pre tabindex="0"><code>
   Disassembly of section .text:
 
   00000000 &lt;_blinks&gt;:
@@ -369,7 +366,7 @@ html {
     12:	99 27       	eor	r25, r25
     14:	08 95       	ret
 </code></pre><p>Isso já ajuda, mas quando linkamos esse código Assembly com código C, mesmo tendo manipulado a tabela de símbolos (que já é um bom começo) ainda ficamos com endreços errados. Vejamos o disassembly após a link-edição:</p>
-<pre><code>  00000080 &lt;_blinks&gt;:
+<pre tabindex="0"><code>  00000080 &lt;_blinks&gt;:
     80:   0e 94 08 00     call    0x10    ; 0x10 &lt;__zero_reg__+0xf&gt;
     84:   0e 94 05 00     call    0xa     ; 0xa &lt;__zero_reg__+0x9&gt;
     88:   08 95           ret
@@ -392,7 +389,7 @@ html {
 <h2 id="tabela-de-realocação">Tabela de realocação</h2>
 <p>A <a href="http://wiki.osdev.org/ELF_Tutorial#Relocation_Sections">Tabela de realocação</a> existe exatamente para dizer ao compilador quais símbolos mudarão de lugar e quais instruçoes ele deve editar e trocar o endereço final.</p>
 <p>Para entendermos a tabela de realocação precisamos voltar ao nosso disassembly inicial, antes de ser link-editado ao código C.</p>
-<pre><code>
+<pre tabindex="0"><code>
   Disassembly of section .text:
 
   00000000 &lt;_blinks&gt;:
@@ -411,20 +408,20 @@ html {
     14:   08 95           ret
 </code></pre><p>(<a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/elf-add-symbol.cpp">Usando a mesma ferramenta</a> que escrevi para manipular a tabela de símbolos podemos construir a tabela de realocação)</p>
 <p>Vejamos a tabela em detalhes (mais detalhes em como ela foi adicionada: <a href="#automatizando-todo-o-processo">Automatizando todo o processo</a>):</p>
-<pre><code>
+<pre tabindex="0"><code>
   RELOCATION RECORDS FOR [.text]:
   OFFSET   TYPE              VALUE
   00000000 R_AVR_CALL        _clear
   00000004 R_AVR_CALL        _real_code
 </code></pre><p>A tabela funciona da segunte forma: Cada seção do ELF pode ter sua tabela de realocação. Nesse caso, essa tabela de realocação &ldquo;pertence&rdquo; à secão <code>.text</code>, ou seja, ela faz referência apenas a símbolos que existem na seção <code>.text</code>, que é onde estão as instruçoes do nosso código. O campo <code>OFFSET</code> indica o endereço da instrução que deverá ser editada (veremos isso em detalhe mais adiante). O campo <code>TYPE</code> indica o <a href="https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=include/elf/avr.h;h=115296da404d034d0626ebe57ac2631a6849d239;hb=HEAD#l53">tipo de realocação</a>, confesso que olhei esse valor (<code>R_AVR_CALL</code>) em um ELF gerado pelo avr-gcc (mais sobre isso: <a href="#engenharia-reversa-para-descobrir-o-valor-do-ravrcall">Engenharia reversa para descobrir o valor do R_AVR_CALL</a>). O campo <code>VALUE</code> indica qual símbolo será realocado.</p>
 <p>Agora vamos analisar cada uma das linhas da tabela de realocação:</p>
-<pre><code>  00000000 R_AVR_CALL        _clear
+<pre tabindex="0"><code>  00000000 R_AVR_CALL        _clear
 </code></pre><p>Essa linha nos diz que a instrução que está na posição <code>0x0000</code> (<code>call 0x10</code>) está fazendo uma chamada a um rotina de nome <code>_clear</code> e que essa rotina estará em algum lugar no binário final. Seja qual for esse lugar, essa instrução <code>call</code> deve ser editada e o valor <code>0x10</code> deve ser trocado pelo endereço final da rotina <code>_clear</code>.</p>
 <p>O mesmo acontece pra a outra linha:</p>
-<pre><code>  00000004 R_AVR_CALL        _real_code
+<pre tabindex="0"><code>  00000004 R_AVR_CALL        _real_code
 </code></pre><p>Aqui é exatamente a mesma coisa, mas a instrução que será editada é o <code>call 0xa</code> e o <code>0xa</code> será trocado pelo endereço final da rotina <code>_real_code</code>.</p>
 <p>Agora que temos um ELF com tabela de símbolos e tabela de realocação estamos prontos para re-linkar com o código C. Fazendo isso temos o seguinte dissasembly:</p>
-<pre><code>
+<pre tabindex="0"><code>
   00000080 &lt;_blinks&gt;:
     80:   0e 94 48 00     call    0x90    ; 0x90 &lt;_clear&gt;
     84:   0e 94 45 00     call    0x8a    ; 0x8a &lt;_real_code&gt;
@@ -446,7 +443,7 @@ html {
 <p>É claro que o que fizemos aqui foi uma análise manual de como construir todo o aparato necessário para que possamos realocar rotinas que estão espalhadas pelo nosso código Assembly legado, mas quando estamos lidando com um projeto grande precisamos fazer isso de forma automatizada. Para isso eu escrevi um script que me ajuda a manipular a tabela de símbolos e a tabela de realocação.</p>
 <p>Primeiro escrei um <a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/extract-symbols-metadata.py">script python</a> que funciona da segunte maneira:</p>
 <p>Dado o conteudo do arquivo de mapa (<code>.map</code> produzido pelo <code>avrasm2</code>) e a saída do disassembly do ELF ele consegue encontrar o novo endereço dos símbolos dentro do ELF e também quais instruçoes possuem desvio para endereços absolutos e, portanto, precisarão ser editadas. Usando esse script com o código que analisamos nese post, temos a seguinte saída:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">
 
   $ avr-objdump -d blink_call.asm.elf <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  | python2 extract-symbols-metadata.py blink_call.asm.map
@@ -455,14 +452,14 @@ html {
   _real_code 0xa 0x4
 
 </code></pre></div><p>Olhando bem para essa saída ela representa <strong>exatamente</strong> nossa tabela de realocação. Essa saida é estruturada da segunte forma:</p>
-<pre><code> &lt;nome_do_símbolo&gt; &lt;endereço_do_símbolo&gt; &lt;endereço_das_instruçoes_que_usam_esse_símbolo&gt;
+<pre tabindex="0"><code> &lt;nome_do_símbolo&gt; &lt;endereço_do_símbolo&gt; &lt;endereço_das_instruçoes_que_usam_esse_símbolo&gt;
 </code></pre><p>Agora o que precisamos fazer é transformar essa saída em uma tabela de realocação, dentro o ELF. Para isso usamos a ferramenta <a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/elf-add-symbol.cpp"><code>elf-add-symbol</code></a>. Assumindo que gravamos esse conteudo em <code>blink_call.asm.symtab</code> podemos fazer o seguinte:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">cat blink_call.asm.symtab | ./elf-add-symbol blink_call.asm.elf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">cat blink_call.asm.symtab | ./elf-add-symbol blink_call.asm.elf
 </code></pre></div><p>Essa chamada modifica o arquivo <code>blink_call.asm.elf</code> adicionando a tabela de símbolos e a tabela de realocação! E então estamos prontos para link-editar nosso ELF com nosso código C.</p>
 <h2 id="engenharia-reversa-para-descobrir-o-valor-do-r_avr_call">Engenharia reversa para descobrir o valor do R_AVR_CALL</h2>
 <p>A tabela de realocação tem a uma <a href="http://wiki.osdev.org/ELF_Tutorial#Relocation_Sections">estrutura espefícia</a>. Um dos campos dessa estrutura é o <code>r_info</code>. Esse campo diz duas coisas: Qual o símbolo está sendo realocado (8 bits mais significativos) e qual o tipo de realocação será feita (8 bits menos significativos). Quando escrevi o <a href="https://github.com/daltonmatos/avrgcc-mixed-with-avrasm2/blob/master/experiments/tools/elf-add-symbol.cpp"><code>elf-add-symbol</code></a>, na biblioteca que usei (<a href="http://elfio.sourceforge.net/">ELFIO</a>) só existiam constantes para os tipos de realocação do ELF32 para arquitetura x86 então, de alguma forma, eu precisava descobrir qual o valor eu deveria colocar nesse campo para a realocação de símbolos para AVR.</p>
 <p>O que fiz foi compilar um arquivo assembly com o <code>avr-gcc</code> e usando a ferramenta <code>avr-readelf</code> consegui ver o seguinte:</p>
-<pre><code>
+<pre tabindex="0"><code>
   Relocation section '.rela.text' at offset 0x100 contains 2 entries:
    Offset     Info    Type            Sym.Value  Sym. Name + Addend
   00000000  00000112 R_AVR_CALL        00000000   .text + a

@@ -6,14 +6,11 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
-    
-    <link rel="canonical" href="https://daltonmatos.com/2018/08/curl-de-guerrilha/">
-    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.82.0" />
+<meta name="generator" content="Hugo 0.92.2" />
 
     
     
@@ -32,8 +29,8 @@ O curl é muito mais do que um &ldquo;baixador de arquivos&rdquo; e diria até q
 O curl é muito mais do que um &ldquo;baixador de arquivos&rdquo; e diria até que o propósito principal dele nem é esse, apesar dele conseguir fazer isso também." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://daltonmatos.com/2018/08/curl-de-guerrilha/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2018-08-04T00:00:00&#43;00:00" />
-<meta property="article:modified_time" content="2018-08-04T00:00:00&#43;00:00" />
+<meta property="article:published_time" content="2018-08-04T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-08-04T00:00:00+00:00" />
 
 
 
@@ -49,7 +46,7 @@ O curl é muito mais do que um &ldquo;baixador de arquivos&rdquo; e diria até q
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
+<link rel="stylesheet" href="/scss/hyde-hyde.3081c4981fb69a2783dd36ecfdd0e6ba7a158d4cbfdd290ebce8f78ba0469fc6.css" integrity="sha256-MIHEmB&#43;2mieD3Tbs/dDmunoVjUy/3SkOvOj3i6BGn8Y=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -245,7 +242,7 @@ html {
 <p>O <code>curl</code> é <strong>muito mais</strong> do que um &ldquo;baixador de arquivos&rdquo; e diria até que o propósito principal dele nem é esse, apesar dele conseguir fazer isso também.</p>
 <h1 id="curl--i">curl -i</h1>
 <p>O <code>-i</code> é útil pois ele mostra os headers da resposta que foi recebida. Isso muitas vezes é o que a gente precisa para fazer um debug para conferir o comportamento de algum recurso remoto.</p>
-<pre><code>$ curl -i https://httpbin.org/ip
+<pre tabindex="0"><code>$ curl -i https://httpbin.org/ip
 HTTP/1.1 200 OK
 Connection: keep-alive
 Server: gunicorn/19.9.0
@@ -261,7 +258,7 @@ Via: 1.1 vegur
 }
 </code></pre><h1 id="curl--i-1">curl -I</h1>
 <p>O <code>-I</code> é semelhante ao <code>-i</code> mas com a diferença que o método HTTP usado é <code>HEAD</code> em vez de <code>GET</code>. Se o servidor funcionar corretamente ele vai responder apenas com os headers, sem um response body. Então essa opção é útil quando queremos ver <strong>apenas</strong> os headers da resposta.</p>
-<pre><code>$ curl -I https://httpbin.org/ip
+<pre tabindex="0"><code>$ curl -I https://httpbin.org/ip
 HTTP/1.1 200 OK
 Connection: keep-alive
 Server: gunicorn/19.9.0
@@ -273,7 +270,7 @@ Access-Control-Allow-Credentials: true
 Via: 1.1 vegur
 </code></pre><h1 id="curl--h">curl -H</h1>
 <p>O <code>-H</code> serve para passar headers adicionais no request que será feito. Muito útil para quando você precisa enviar credenciais de autenticação que não são padrão (tipo BasicAuth, etc). Com essa opção você pode enviar qualquer header.</p>
-<pre><code>$ curl -H &quot;X-Meu-Header: Meu Valor&quot; https://httpbin.org/headers
+<pre tabindex="0"><code>$ curl -H &quot;X-Meu-Header: Meu Valor&quot; https://httpbin.org/headers
 {
   &quot;headers&quot;: {
     &quot;Accept&quot;: &quot;*/*&quot;,
@@ -290,28 +287,28 @@ Via: 1.1 vegur
 <p>O <code>--socks5</code> permite usar um proxy como intermediário. Isso é <strong>muito</strong> útil e vou explicar porque. Acho até que é a opção que mais uso no dia a dia.</p>
 <p>As máquinas que eu mantenho rodando como parte do meu trabalho estão em uma rede interna, lá no cloud provider que usamos. <strong>Nenhuma</strong> máquina de produção possui IP público, então como conectar (via HTTP/HTTPS, por exemplo) nessas máquinas?</p>
 <p>O que fazemos é: Temos apenas <strong>uma</strong> máquina pública, que roda <strong>apenas</strong> SSH e só aceita logins via par de chaves. Esse é o primeiro ponto. Essa máquina pública possui conectividade com as máquinas privadas. Então como usá-la como &ldquo;ponte&rdquo; para chegar nas máquinas privadas? <code>--socks5</code> com uma ajudinha do seu ssh-client. Aliás SSH é assunto para um posto inteiro.</p>
-<pre><code>$ ssh -ND 10010 user@host-publico
+<pre tabindex="0"><code>$ ssh -ND 10010 user@host-publico
 </code></pre><p>Esse comando liga um Proxy SOCKS5 na porta <code>10010</code> da sua interface local, ou seja, <code>127.0.0.1</code>.</p>
 <p>Agora imagina que existe uma API que responde em <code>api.myservice</code> e que esse nome (<code>api.myservice</code>) resolve para um IP <strong>privado</strong>, afinal a máquina onde essa API roda só possui esse IP (lembra que nenhuma máquina tem IP público?)</p>
 <p>Pois bem, podemos acessá-la assim:</p>
-<pre><code>$ curl --socks5 127.0.0.1:10010 http://api.myservice
+<pre tabindex="0"><code>$ curl --socks5 127.0.0.1:10010 http://api.myservice
 </code></pre><p>E você verá a resposta da API.</p>
 <p>Nota: Para isso funcionar desse jeito que mostrei o nome <code>api.myservice</code> deve estar em um DNS público. Se esse não for o caso, podemos acessar essa mesma API dessa forma:</p>
-<pre><code>$ curl --socks5 127.0.0.1:10010 -H &quot;Host: api.myservice&quot; http://10.10.0.45
+<pre tabindex="0"><code>$ curl --socks5 127.0.0.1:10010 -H &quot;Host: api.myservice&quot; http://10.10.0.45
 </code></pre><p>Aqui, assumi que <code>10.0.0.45</code> é o IP  do servidor onde a API está rodando ou pelo menos é o IP do Proxy reverso que está na frente dessa API.</p>
 <h1 id="curl---resolve">curl &ndash;resolve</h1>
 <p>O <code>--resolve</code> é útil quando você precisa usar um nome DNS que ainda não existe ou que você não consegue resolver facilmente (oportuno, não?).</p>
 <p>Pegando o exemplo acima e considerando que o DNS não é público, poderemos fazer <strong>o mesmo</strong> acesso assim:</p>
-<pre><code>$ curl --socks5 127.0.0.1:10010 --resolve api.myservice:80:10.0.0.45 http://api.myservice
+<pre tabindex="0"><code>$ curl --socks5 127.0.0.1:10010 --resolve api.myservice:80:10.0.0.45 http://api.myservice
 </code></pre><p>O que <code>curl</code> faz nesse caso é justamente &ldquo;simular&rdquo; que esses nomes vieram de um DNS, assim qualquer request para <code>api.myservice</code> (porta 80) será feito para <code>10.0.0.45</code> como se um DNS tivesse resolvido esse nome pra nós.</p>
 <p>Outra vantagem do <code>--resolve</code> é poder ser usados com https. Quando tentamos usar o <code>-H</code> para um request HTTPS, vemos isso:</p>
-<pre><code>dig +short google.com                        
+<pre tabindex="0"><code>dig +short google.com                        
 216.58.202.206
 
 curl -H &quot;Host: bla.google.com&quot; https://216.58.202.206                  
 curl: (51) SSL: no alternative certificate subject name matches target host name '216.58.202.206'
 </code></pre><p>Mas podemos usar o <code>--resolve</code> e vemos que não há mais erro de certificado, pois o request foi feito com sucesso e o servidor (nesse caso do Google) respondeu.</p>
-<pre><code>curl -sI --resolve bla.google.com:443:216.58.202.206 https://bla.google.com
+<pre tabindex="0"><code>curl -sI --resolve bla.google.com:443:216.58.202.206 https://bla.google.com
 HTTP/2 404 
 content-type: text/html; charset=UTF-8
 referrer-policy: no-referrer
@@ -320,7 +317,7 @@ date: Fri, 03 Aug 2018 12:24:28 GMT
 alt-svc: quic=&quot;:443&quot;; ma=2592000; v=&quot;44,43,39,35&quot;
 </code></pre><h1 id="curl--d-">curl -d@-</h1>
 <p>A opção <code>-d</code> serve para passar dados no corpo de um request, geralmente um request POST. A variação <code>-d@</code> te permite especificar um arquivo, cujo o conteúdo será o corpo do request. A combinação <code>-d@-</code> permite que o <code>curl</code> leia esse conteúdo da entrada padrão. Então podemos fazer um request POST usando como corpo do request a saída de um script, por exemplo. Assim:</p>
-<pre><code>$ meu-script.sh | curl -d@- https://api.myservice/new
+<pre tabindex="0"><code>$ meu-script.sh | curl -d@- https://api.myservice/new
 </code></pre><p>Usar <code>-d</code> implica em trocar o método HTTP para <code>POST</code>.</p>
 <h1 id="curl--x">curl -X</h1>
 <p>A opção <code>-X</code> permite escolher qual será o método HTTP usado. Por exemplo: <code>-X POST</code>, <code>-X DELETE</code>, <code>-X PATCH</code> ou quaisquer outras possibilidades. Só é permitido passar <strong>uma</strong> opção <code>-X</code> por chamada do <code>curl</code>.</p>

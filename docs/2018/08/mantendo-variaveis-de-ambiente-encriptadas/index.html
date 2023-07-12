@@ -6,14 +6,11 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
-    
-    <link rel="canonical" href="https://daltonmatos.com/2018/08/mantendo-variaveis-de-ambiente-encriptadas/">
-    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.82.0" />
+<meta name="generator" content="Hugo 0.92.2" />
 
     
     
@@ -32,8 +29,8 @@ Variáveis de ambiente Variáveis de ambiente, ou apenas ENVs são muito comuns 
 Variáveis de ambiente Variáveis de ambiente, ou apenas ENVs são muito comuns no dia a dia de quem lida com desenvolvimento." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://daltonmatos.com/2018/08/mantendo-variaveis-de-ambiente-encriptadas/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2018-08-16T00:00:00&#43;00:00" />
-<meta property="article:modified_time" content="2018-08-16T00:00:00&#43;00:00" />
+<meta property="article:published_time" content="2018-08-16T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-08-16T00:00:00+00:00" />
 
 
 
@@ -49,7 +46,7 @@ Variáveis de ambiente Variáveis de ambiente, ou apenas ENVs são muito comuns 
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
+<link rel="stylesheet" href="/scss/hyde-hyde.3081c4981fb69a2783dd36ecfdd0e6ba7a158d4cbfdd290ebce8f78ba0469fc6.css" integrity="sha256-MIHEmB&#43;2mieD3Tbs/dDmunoVjUy/3SkOvOj3i6BGn8Y=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -254,7 +251,7 @@ Depois de ter começado a usar um <a href="/tags/yubikey">smartcard</a> para arm
 <p>A encriptação não sem nenhum mistério, é passar um valor para o <code>gnupg</code> e guardar o resultado na <code>ENV</code> desejada. Como o resultado da encriptação é um valor multi-linha, precisamos manter esse &ldquo;formato&rdquo;. Aqui está um exemplo de como gerar uma variável dessas.</p>
 <p>Aqui vamos apenas chamar o comando mostrado, colar o conteúdo a ser encriptado e dar um <code>Enter</code>.</p>
 <p>Depois pressione <code>^D</code> (<code>Ctrl+d</code>). Precisamos disso porque o <code>gnupg</code> está lendo do <code>stdin</code> e o <code>^D</code> é o sinal de que a entrada terminou.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">$ gpg -e -r daltonmatos@gmail.com
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">$ gpg -e -r daltonmatos@gmail.com
 AQUI VAI O CONTEÚDO SENSÍVEL
 -----BEGIN PGP MESSAGE-----
 
@@ -274,7 +271,7 @@ pPWRurxuZxJmRsUJy1gzQrUbcA<span style="color:#f92672">==</span>
 <span style="color:#f92672">=</span>lCiu
 -----END PGP MESSAGE-----</code></pre></div>
 <p>Agora salvamos isso em algum arquivo que será importado pelo nosso shell. Eu tenho essas (e outras) coisas em um arquivo <code>~/.shell-extras</code>, mas pode ser em qualquer lugar, desde que seja importado pelo seu shell.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">export CRYPT_API_AUTH_TOKEN<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">export CRYPT_API_AUTH_TOKEN<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;
 </span><span style="color:#e6db74">-----BEGIN PGP MESSAGE-----
 </span><span style="color:#e6db74">
 </span><span style="color:#e6db74">hQIMA0V2jZ1vFNR0AQ/9FqSgxyz5hdrwTiYNEkvPf4s+IvXophjbR9dxfRj2shYq
@@ -294,14 +291,14 @@ pPWRurxuZxJmRsUJy1gzQrUbcA<span style="color:#f92672">==</span>
 </span><span style="color:#e6db74">-----END PGP MESSAGE-----
 </span><span style="color:#e6db74">&#34;</span></code></pre></div>
 <p>Para fazer um teste rápido podemos rodar:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">printenv CRYPT_API_AUTH_TOKEN | gpg -d
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">printenv CRYPT_API_AUTH_TOKEN | gpg -d
 gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
       <span style="color:#e6db74">&#34;Dalton Barreto &lt;daltonmatos@gmail.com&gt;&#34;</span>
 AQUI VAI O CONTEÚDO SENSÍVEL</code></pre></div>
 <p>Isso vai nos dar o resultado original. Essa é a confirmação de que tudo está correto e já podemos usar esse valor em quaisquer comandos em nosso shell prompt (ou script!).</p>
 <h1 id="usando-uma-variável-em-um-comando-qualquer">Usando uma variável em um comando qualquer</h1>
 <p>O uso na linha de comando é bem simples, na verdade o que temos que fazer é encaixar esse <code>printnev</code> que fizemos aí em cima no meio da linha de comando onde precisamos usar o valor sensível. Algo assim:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">curl -H <span style="color:#e6db74">&#34;X-Secret: </span><span style="color:#66d9ef">$(</span>printenv CRYPT_API_AUTH_TOKEN| gpg -d<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> https://httpbin.org/headers            
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">curl -H <span style="color:#e6db74">&#34;X-Secret: </span><span style="color:#66d9ef">$(</span>printenv CRYPT_API_AUTH_TOKEN| gpg -d<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> https://httpbin.org/headers            
 gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
       <span style="color:#e6db74">&#34;Dalton Barreto &lt;daltonmatos@gmail.com&gt;&#34;</span>
 <span style="color:#f92672">{</span>
@@ -317,14 +314,14 @@ gpg: encrypted with 4096-bit RSA key, ID 45768D9D6F14D474, created 2017-09-14
 <h2 id="facilitando-o-uso-desses-valores-em-nossos-comandos">Facilitando o uso desses valores em nossos comandos</h2>
 <p>Para não precisar digitar todo esse comando do <code>printenv</code> sempre que precisar usar alguma <code>ENV</code>, escrevi uma shell function que facilita esse uso. Chamei essa function de <code>decrypt_env</code>. O que ela recebe como parametro é apenas o nome da env e retorna seu valor, decriptado.</p>
 <p>Para poder diferenciar, pelo nome, envs que são encriptadas sempre uso o prefixo <code>CRYPT_</code> em todas as <code>ENVs</code> que possuem conteúdo encriptado. Essa shell function é bem simples:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">decrypt_env<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">decrypt_env<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
   local env_name_sufix<span style="color:#f92672">=</span>$1
   local env_name<span style="color:#f92672">=</span>CRYPT_<span style="color:#e6db74">${</span>env_name_sufix<span style="color:#e6db74">}</span>
   gpg -d <span style="color:#f92672">&lt;&lt;&lt;</span><span style="color:#e6db74">${</span>(P)env_name<span style="color:#e6db74">}</span> 2&gt;/dev/null
 <span style="color:#f92672">}</span></code></pre></div>
 <p>Esse código está no meu <a href="https://github.com/daltonmatos/dotfiles/blob/master/zsh/zshrc#L194-L198">dotfiles</a>.</p>
 <p>De posse dessa função, nossa linha de comando de exemplo ficaria assim:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">curl -H <span style="color:#e6db74">&#34;X-Secret: </span><span style="color:#66d9ef">$(</span>decrypt_env API_AUTH_TOKEN<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> https://httpbin.org/headers           
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">curl -H <span style="color:#e6db74">&#34;X-Secret: </span><span style="color:#66d9ef">$(</span>decrypt_env API_AUTH_TOKEN<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> https://httpbin.org/headers           
 <span style="color:#f92672">{</span>
   <span style="color:#e6db74">&#34;headers&#34;</span>: <span style="color:#f92672">{</span>
     <span style="color:#e6db74">&#34;Accept&#34;</span>: <span style="color:#e6db74">&#34;*/*&#34;</span>, 

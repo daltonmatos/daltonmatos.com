@@ -6,14 +6,11 @@
 
     <head>
     <link href="https://gmpg.org/xfn/11" rel="profile">
-    
-    <link rel="canonical" href="https://daltonmatos.com/2018/12/comprei-uma-yubikey-nova-e-agora/">
-    
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.82.0" />
+<meta name="generator" content="Hugo 0.92.2" />
 
     
     
@@ -36,8 +33,8 @@ A chave nova é uma Yubikey 5 NFC, e resolvi trocar por alguns motivos:
  Possui NFC, ou seja, posso usar no celular sem precisar de nenhum tipo de adaptador. Atualmente carrego comigo um adaptador USB-A &gt; USB-C; É a primeira chave da yubico que possui NFC e suporte a chaves GPG de 4096bits; Apesar da chave ser fisicamente um pouco maior ela já possui um furo que permite ser colocada diretamente na argola do meu molho chaves." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://daltonmatos.com/2018/12/comprei-uma-yubikey-nova-e-agora/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2018-12-07T00:00:00&#43;00:00" />
-<meta property="article:modified_time" content="2018-12-07T00:00:00&#43;00:00" />
+<meta property="article:published_time" content="2018-12-07T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-12-07T00:00:00+00:00" />
 
 
 
@@ -53,7 +50,7 @@ A chave nova é uma Yubikey 5 NFC, e resolvi trocar por alguns motivos:
 
 
 
-<link rel="stylesheet" href="/scss/hyde-hyde.71157e768c4e111a23c3531b95e0cbb59bbef3c9e6901d36247cb53d6b6be258.css" integrity="sha256-cRV&#43;doxOERojw1MbleDLtZu&#43;88nmkB02JHy1PWtr4lg=">
+<link rel="stylesheet" href="/scss/hyde-hyde.3081c4981fb69a2783dd36ecfdd0e6ba7a158d4cbfdd290ebce8f78ba0469fc6.css" integrity="sha256-MIHEmB&#43;2mieD3Tbs/dDmunoVjUy/3SkOvOj3i6BGn8Y=">
 
 
 <link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
@@ -258,7 +255,7 @@ html {
 </ul>
 <h1 id="comunicando-com-a-chave-pela-primeira-vez">Comunicando com a chave pela primeira vez</h1>
 <p>Quando inserimos a nova chave pela primeira vez, após <a href="/2018/07/preparando-uma-yubikey-4-nano-para-uso-diario/">instalar os pacotes necessários</a> vemos que ela está vazia:</p>
-<pre><code>$ gpg --card-status               
+<pre tabindex="0"><code>$ gpg --card-status               
 Reader ...........: 1050:0407:X:0
 Application ID ...: D2760001240102010006090456150000
 Version ..........: 2.1
@@ -286,7 +283,7 @@ General key info..: [none]
 <li>Login data</li>
 </ul>
 <p>Fazemos isso usando o <code>gpg --card-edit</code>.</p>
-<pre><code>$ gpg --card-edit
+<pre tabindex="0"><code>$ gpg --card-edit
 gpg/card&gt; help
 quit           quit this menu
 admin          show admin commands
@@ -297,7 +294,7 @@ passwd         menu to change or unblock the PIN
 verify         verify the PIN and list all data
 unblock        unblock the PIN using a Reset Code
 </code></pre><p>Aqui vemos os comandos básicos. O primeiro comando que vamos usar é o <code>verify</code>. Esse comando vai permitir que façamos uma checagem no PIN padrão que vem configurado na yubikey. Vamos <a href="#mudando-o-pin-e-admin-pin">trocar esse PIN mais tarde</a>. O PIN padrão que vem em todas as yubikeys é: <code>123456</code>.</p>
-<pre><code>gpg/card&gt; verify
+<pre tabindex="0"><code>gpg/card&gt; verify
 
 Reader ...........: 1050:0407:X:0
 Application ID ...: D2760001240102010006090456150000
@@ -322,10 +319,10 @@ General key info..: [none]
 Se essa senha for recusada significa que sua yubikey já foi configurada por alguém. Se você tiver <strong>certeza</strong> que essa yubikey é nova e nunca foi usada o melhor é entrar em contato com o fabricante.</p>
 <h1 id="nota-sobre-o-tamanho-máximo-da-chave-que-pode-ser-movida-para-a-yubikey">Nota sobre o tamanho máximo da chave que pode ser movida para a yubikey</h1>
 <p>Obsereve a seguinte linha:</p>
-<pre><code>Key attributes ...: rsa2048 rsa2048 rsa2048
+<pre tabindex="0"><code>Key attributes ...: rsa2048 rsa2048 rsa2048
 </code></pre><p>Essa linha indica o tipo e tamanho máximo de cada uma das chaves que sua yubikey suporta. Nesse caso as três chaves (sign/encrypt/auth) são do tipo <code>RSA</code> e com tamanho máximo de <code>2048</code> bits.</p>
 <p>Se suas chaves são maiores do que esse tamanho, então antes você precisa ajustar os Key Attributes de sua yubikey. Para isso faça assim:</p>
-<pre><code>$ gpg --card-edit  
+<pre tabindex="0"><code>$ gpg --card-edit  
 
 gpg/card&gt; admin
 Admin commands are allowed
@@ -359,7 +356,7 @@ Key attributes ...: rsa4096 rsa4096 rsa4096
 </code></pre><p>Perceba agora que a indicação é <code>rsa4096</code>.</p>
 <h1 id="editando-os-dados-básicos-da-sua-yubikey">Editando os dados básicos da sua yubikey</h1>
 <p>Os comandos que precisamos estão dentro do menu <code>admin</code>.</p>
-<pre><code>gpg/card&gt; admin
+<pre tabindex="0"><code>gpg/card&gt; admin
 Admin commands are allowed
 
 gpg/card&gt; help
@@ -393,7 +390,7 @@ gpg/card&gt;
 </ul>
 <p>Com isso em mãos podemos começar:</p>
 <h2 id="mudando-no-nome-do-cardholder">Mudando no Nome do cardholder</h2>
-<pre><code>$ gpg --card-edit
+<pre tabindex="0"><code>$ gpg --card-edit
 
 gpg/card&gt; admin
 Admin commands are allowed
@@ -404,21 +401,21 @@ Cardholder's given name: Dalton
 
 gpg/card&gt; 
 </code></pre><p>Assim que você digita todas as informações a yubikey vai pedir uma senha, mas perceba que o que está pedindo agora <strong>não é</strong> o PIN e sim o <strong>ADMIN PIN</strong>. O ADMIN PIN padrão de toda yubikey nova é: <code>12345678</code>. Assim que você informa o ADMIN PIN correto os dados são salvos. Se rodarmos o comando <code>verify</code> novamente, vemos que agora o nome está preenchido:</p>
-<pre><code>gpg/card&gt; verify
+<pre tabindex="0"><code>gpg/card&gt; verify
 
 ...
 Name of cardholder: Dalton Barreto
 ...
 </code></pre><p>Aqui coloquei apenas a parte do output que importa. Vamos seguir.</p>
 <h2 id="mudando-language-prefs">Mudando Language prefs</h2>
-<pre><code>gpg/card&gt; lang
+<pre tabindex="0"><code>gpg/card&gt; lang
 Language preferences: ptbr
 
 gpg/card&gt; verify
 
 Language prefs ...: ptbr
 </code></pre><h2 id="mudando-url-da-chave-pública">Mudando URL da chave pública</h2>
-<pre><code>gpg/card&gt; url
+<pre tabindex="0"><code>gpg/card&gt; url
 URL to retrieve public key: https://daltonmatos.com/daltonmatos.pub
 
 gpg/card&gt; verify
@@ -426,7 +423,7 @@ gpg/card&gt; verify
 URL of public key : https://daltonmatos.com/daltonmatos.pub
 </code></pre><p>Essa informação serve para que o gnuPG saiba onde está a chave pública que é o par da chave privada que está dentro a yubikey. Essa URL é útil quando estamos em uma máquina que ainda não possui nossa chave pública.</p>
 <p>Para que o próprio gnuPG busque nossa chave pública e instale localmente:</p>
-<pre><code>$ gpg --card-edit  
+<pre tabindex="0"><code>$ gpg --card-edit  
 
 gpg/card&gt; fetch
 gpg: requesting key from 'https://daltonmatos.com/daltonmatos.pub'
@@ -437,7 +434,7 @@ gpg:              unchanged: 1
 gpg/card&gt; 
 </code></pre><p>Dessa forma, a chave pública estaria corretamente instalada.</p>
 <h2 id="mudando-login-data">Mudando login data</h2>
-<pre><code>gpg/card&gt; login
+<pre tabindex="0"><code>gpg/card&gt; login
 Login data (account name): daltonmatos
 
 gpg/card&gt; verify
@@ -452,7 +449,7 @@ Login data .......: daltonmatos
 <li>Uso o GnupG para move as chaves.</li>
 </ul>
 <p>Para isso preciamos agora editar a chave que queremos move:</p>
-<pre><code>
+<pre tabindex="0"><code>
 gpg --edit-key daltonmatos@gmail.com
 gpg (GnuPG) 2.2.11; Copyright (C) 2018 Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
@@ -477,7 +474,7 @@ ssb  rsa4096/AB8F87FDAD12AD6E
 [ultimate] (1). Dalton Barreto &lt;daltonmatos@gmail.com&gt;
 </code></pre><p>Aqui vamos usar o comando <code>keytocard</code>, isso vai <strong>mover</strong> a chave privada para a yubikey.</p>
 <p>Primeiro precisamos escolher qual sub-chave quremos mover. Vamos começar pela sub-chave <code>rsa4096/05570C19E57F6BB4</code>. Para isso vamos selecioná-la com o comando <code>key</code>.</p>
-<pre><code>gpg&gt; key 2
+<pre tabindex="0"><code>gpg&gt; key 2
 
 sec  rsa4096/389D4E1EC7F29FEF
      created: 2017-02-04  expires: never       usage: SC  
@@ -496,7 +493,7 @@ ssb  rsa4096/AB8F87FDAD12AD6E
 </code></pre><p>Com a sub-chave correta selecionada (repare o <code>*</code> indicando a seleção), podemos movê-la. Para mover basta usar o comando <code>keytocard</code>. A cada sub-chave o gnupg vai perguntar para qual slot você deseja mover, nesse momento você deve escolher o slot correspontende à capacidade da sua sub-chave: Assinatura, Encriptação ou Autenticação.</p>
 <h1 id="mudando-o-pin-e-admin-pin">Mudando o PIN e Admin PIN</h1>
 <p>Agora chegou a hora de mudar os PINs defaut. Para isso edite o cartão e use o comando <code>passwd</code>:</p>
-<pre><code>gpg/card&gt; admin
+<pre tabindex="0"><code>gpg/card&gt; admin
 Admin commands are allowed
 
 gpg/card&gt; passwd
