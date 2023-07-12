@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "print.css",
-	"sourceRoot": "/home/daltonmatos/daltonmatos.com",
+	"sourceRoot": "/home/daltonmatos/src/contrib/daltonmatos.com",
 	"sources": [
 		"themes/hyde-hyde/assets/scss/print.scss",
 		"themes/hyde-hyde/assets/scss/hyde-hyde/_variables.scss",
